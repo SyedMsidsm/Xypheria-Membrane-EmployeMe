@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -10,13 +13,16 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _msgCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
+  final _picker = ImagePicker();
+  
+  bool _showOffer = true;
+  bool _showPhoneReveal = true;
+
   final List<Map<String, dynamic>> _messages = [
     {'text': 'Hello! I saw your application for Shop Assistant. Are you available to start soon?', 'isMe': false, 'time': '10:32 AM'},
     {'text': 'Yes, I can start immediately. I have 2 years experience in similar work.', 'isMe': true, 'time': '10:34 AM'},
     {'text': 'Great! Can you come for a quick meeting tomorrow at the shop?', 'isMe': false, 'time': '10:35 AM'},
     {'text': "Yes, what time? 🚶 I'm only 6 minutes away!", 'isMe': true, 'time': '10:36 AM'},
-    {'type': 'offer', 'isMe': false, 'time': '10:45 AM'},
-    {'type': 'phone_reveal', 'isMe': false, 'time': ''},
   ];
 
   @override
@@ -29,29 +35,61 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     _msgCtrl.clear();
     Future.delayed(const Duration(milliseconds: 100), () {
-      _scrollCtrl.animateTo(_scrollCtrl.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      if (_scrollCtrl.hasClients) {
+        _scrollCtrl.animateTo(_scrollCtrl.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      }
     });
+  }
+
+  Future<void> _pickMedia() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          _messages.add({'text': '📷 Photo shared', 'isMe': true, 'time': 'Now'});
+        });
+      }
+    } catch (e) {
+      debugPrint('Error picking media: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    
+    // Get name from arguments (passed from Applicants page) or fallback to AppState
+    final argName = ModalRoute.of(context)?.settings.arguments as String?;
+    final userName = argName ?? (state.userName.isNotEmpty ? state.userName : 'User Name');
+    
+    final userInitials = userName.split(' ').map((e) => e[0]).take(2).join().toUpperCase();
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(children: [
-          _header(),
+          _header(userName, userInitials),
           _jobContextPill(),
           Expanded(
             child: ListView.builder(
               controller: _scrollCtrl,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              itemCount: _messages.length + 1, // +1 for system message
+              // +1 for system message, +1 for offer, +1 for phone reveal
+              itemCount: _messages.length + 1 + (_showOffer ? 1 : 0) + (_showPhoneReveal ? 1 : 0),
               itemBuilder: (_, i) {
                 if (i == 0) return _systemMessage();
-                final msg = _messages[i - 1];
-                if (msg['type'] == 'offer') return _offerCard();
-                if (msg['type'] == 'phone_reveal') return _phoneRevealCard();
-                return _bubble(msg);
+                
+                int msgIndex = i - 1;
+                if (msgIndex < _messages.length) {
+                  return _bubble(_messages[msgIndex], userInitials);
+                }
+                
+                // Show interaction cards at the end of the list
+                int interactionIndex = msgIndex - _messages.length;
+                if (_showOffer && interactionIndex == 0) return _offerCard();
+                if (_showPhoneReveal && (interactionIndex == 0 || interactionIndex == 1)) return _phoneRevealCard();
+                
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -62,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _header() => Container(
+  Widget _header(String name, String initials) => Container(
     padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
     decoration: const BoxDecoration(color: AppColors.card, border: Border(bottom: BorderSide(color: AppColors.border))),
     child: Row(children: [
@@ -77,19 +115,19 @@ class _ChatScreenState extends State<ChatScreen> {
       const SizedBox(width: 12),
       Container(
         width: 44, height: 44,
-        decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+        decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.navy),
         alignment: Alignment.center,
-        child: const Text('SG', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+        child: Text(initials, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
       ),
       const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          const Text('Sri Ganesh Store', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          Flexible(child: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800), overflow: TextOverflow.ellipsis)),
           const SizedBox(width: 6),
           const Icon(Icons.check_circle, size: 14, color: AppColors.primary),
         ]),
         const SizedBox(height: 2),
-        const Text('Re: Shop Assistant', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+        const Text('Applicant • Shop Assistant', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis),
       ])),
       TapScale(child: Container(
         padding: const EdgeInsets.all(8),
@@ -97,11 +135,38 @@ class _ChatScreenState extends State<ChatScreen> {
         child: const Icon(Icons.call, size: 18),
       )),
       const SizedBox(width: 8),
-      TapScale(child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
-        child: const Icon(Icons.more_vert, size: 18),
-      )),
+      PopupMenuButton<String>(
+        onSelected: (value) {
+          if (value == 'profile') {
+            Navigator.pushNamed(context, '/worker-profile'); 
+          }
+        },
+        offset: const Offset(0, 40),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        itemBuilder: (context) => [
+          const PopupMenuItem(
+            value: 'profile',
+            child: Row(children: [
+              Icon(Icons.person_outline, size: 20, color: AppColors.text),
+              SizedBox(width: 12),
+              Text('View Profile', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            ]),
+          ),
+          const PopupMenuItem(
+            value: 'report',
+            child: Row(children: [
+              Icon(Icons.report_problem_outlined, size: 20, color: AppColors.alert),
+              SizedBox(width: 12),
+              Text('Report User', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.alert)),
+            ]),
+          ),
+        ],
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+          child: const Icon(Icons.more_vert, size: 18),
+        ),
+      ),
     ]),
   );
 
@@ -116,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
     child: Row(children: [
       const Text('🏪', style: TextStyle(fontSize: 16)),
       const SizedBox(width: 8),
-      const Text('Shop Assistant', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      const Flexible(child: Text('Shop Assistant', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700), overflow: TextOverflow.ellipsis)),
       const SizedBox(width: 8),
       const Text('₹12,000/mo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.primary)),
       const Spacer(),
@@ -145,7 +210,7 @@ class _ChatScreenState extends State<ChatScreen> {
     ),
   );
 
-  Widget _bubble(Map<String, dynamic> msg) {
+  Widget _bubble(Map<String, dynamic> msg, String initials) {
     final isMe = msg['isMe'] as bool;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -156,15 +221,15 @@ class _ChatScreenState extends State<ChatScreen> {
           if (!isMe) ...[
             Container(
               width: 32, height: 32,
-              decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.navyLighter),
               alignment: Alignment.center,
-              child: const Text('SG', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+              child: Text(initials, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.navy)),
             ),
             const SizedBox(width: 8),
           ],
           Column(crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start, children: [
             Container(
-              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
+              constraints: const BoxConstraints(maxWidth: 280), // Fixed max width to avoid MediaQuery issues in constrained container
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: isMe ? AppColors.primary : AppColors.card,
@@ -240,13 +305,13 @@ class _ChatScreenState extends State<ChatScreen> {
           // Buttons
           Row(children: [
             Expanded(child: SizedBox(height: 44, child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () { setState(() { _showOffer = false; }); },
               style: ElevatedButton.styleFrom(minimumSize: Size.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [Icon(Icons.check, size: 18), SizedBox(width: 6), Text('Accept')]),
             ))),
             const SizedBox(width: 12),
             Expanded(child: SizedBox(height: 44, child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () { setState(() { _showOffer = false; }); },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.alert),
                 foregroundColor: AppColors.alert,
@@ -284,13 +349,13 @@ class _ChatScreenState extends State<ChatScreen> {
       const SizedBox(height: 16),
       Row(children: [
         Expanded(child: SizedBox(height: 44, child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () { setState(() { _showPhoneReveal = false; }); },
           style: ElevatedButton.styleFrom(minimumSize: Size.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
           child: const Text('Share Number', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
         ))),
         const SizedBox(width: 12),
         Expanded(child: SizedBox(height: 44, child: OutlinedButton(
-          onPressed: () {},
+          onPressed: () { setState(() { _showPhoneReveal = false; }); },
           style: OutlinedButton.styleFrom(
             side: const BorderSide(color: AppColors.border),
             foregroundColor: AppColors.textSecondary,
@@ -332,11 +397,14 @@ class _ChatScreenState extends State<ChatScreen> {
     padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
     color: AppColors.card,
     child: Row(children: [
-      TapScale(child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
-        child: const Icon(Icons.attach_file, size: 20, color: AppColors.textSecondary),
-      )),
+      TapScale(
+        onTap: _pickMedia,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+          child: const Icon(Icons.attach_file, size: 20, color: AppColors.textSecondary),
+        ),
+      ),
       const SizedBox(width: 12),
       Expanded(child: Container(
         height: 48,

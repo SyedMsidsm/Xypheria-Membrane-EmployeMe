@@ -11,25 +11,31 @@ class WorkerProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    
+    // Get name from arguments (passed from Employer Dashboard) or fallback to AppState
+    final argName = ModalRoute.of(context)?.settings.arguments as String?;
+    final userName = argName ?? (state.userName.isNotEmpty ? state.userName : 'User Name');
+    final initials = userName.isNotEmpty ? userName[0].toUpperCase() : 'U';
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 16), child: Column(children: [
-        _profileHeader(state), _trustCard(context, state), _statsRow(context, state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
+        _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
       ]))),
       bottomNavigationBar: const WorkerNav(currentIndex: 4),
     );
   }
 
-  Widget _profileHeader(AppState state) => Container(
+  Widget _profileHeader(AppState state, String name, String initials) => Container(
     decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)])),
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
     child: Column(children: [
       Align(alignment: Alignment.topRight, child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white))),
       Container(width: 88, height: 88, decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary, border: Border.all(color: Colors.white, width: 3)),
-        alignment: Alignment.center, child: Text(state.userName.isNotEmpty ? state.userName[0] : 'U', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))),
+        alignment: Alignment.center, child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))),
       const SizedBox(height: 8), Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
         child: Text(state.tr('available_now'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white))),
-      const SizedBox(height: 8), Text(state.userName.isNotEmpty ? state.userName : 'User Name', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
+      const SizedBox(height: 8), Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
       const SizedBox(height: 2), Text('📍 ${state.location}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
       Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5))),
     ]));

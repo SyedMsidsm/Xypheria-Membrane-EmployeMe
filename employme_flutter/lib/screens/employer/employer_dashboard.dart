@@ -141,8 +141,8 @@ class EmployerDashboard extends StatelessWidget {
         children: [
           _actionTile(Icons.add, state.tr('post_new_job'), AppColors.primary, Colors.white, onTap: () => Navigator.pushNamed(context, '/post-job')),
           _actionTile(Icons.people, state.tr('applicants_label'), AppColors.navyLight, Colors.white, onTap: () => Navigator.pushNamed(context, '/applicants')),
-          _actionTile(Icons.star, state.tr('reviews'), AppColors.card, AppColors.navy, hasBorder: true),
-          _actionTile(Icons.bar_chart, state.tr('analytics'), AppColors.card, AppColors.navy, hasBorder: true),
+          _actionTile(Icons.star, state.tr('reviews'), AppColors.card, AppColors.navy, hasBorder: true, onTap: () => Navigator.pushNamed(context, '/reviews')),
+          _actionTile(Icons.bar_chart, state.tr('analytics'), AppColors.card, AppColors.navy, hasBorder: true, onTap: () => Navigator.pushNamed(context, '/analytics')),
         ],
       ),
     );
@@ -248,7 +248,24 @@ class EmployerDashboard extends StatelessWidget {
                 const SizedBox(width: 8),
                 SizedBox(height: 44, child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.tr('high_interest'))));
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        title: const Text('Boost Posting? 🚀'),
+                        content: const Text('Reach 3x more workers by boosting this job. Cost: ₹99'),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                              Navigator.pushNamed(context, '/payment', arguments: '99');
+                            },
+                            child: const Text('Pay ₹99'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size.zero,
@@ -288,11 +305,26 @@ class EmployerDashboard extends StatelessWidget {
               _applicantRow(
                 context,
                 state,
-                ['Raju K.', 'Suresh M.', 'Priya D.'][i],
-                [state.tr('shop_clean'), state.tr('delivery_partner'), state.tr('cook_shop')][i],
-                ['6 min', '12 min', '8 min'][i],
+                state.userName,
+                state.tr('shop_clean'),
+                '6 min',
               ),
-              if (i < 2) const Divider(height: 1, color: AppColors.border),
+              const Divider(height: 1, color: AppColors.border),
+              _applicantRow(
+                context,
+                state,
+                'Suresh Mallya',
+                state.tr('delivery_partner'),
+                '12 min',
+              ),
+              const Divider(height: 1, color: AppColors.border),
+              _applicantRow(
+                context,
+                state,
+                'Priya Devi',
+                state.tr('cook_shop'),
+                '8 min',
+              ),
             ],
           ]),
         ),
@@ -302,7 +334,7 @@ class EmployerDashboard extends StatelessWidget {
 
   Widget _applicantRow(BuildContext context, AppState state, String name, String skills, String dist) {
     return TapScale(
-      onTap: () => Navigator.pushNamed(context, '/worker-profile'),
+      onTap: () => Navigator.pushNamed(context, '/worker-profile', arguments: name),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(children: [
@@ -322,7 +354,7 @@ class EmployerDashboard extends StatelessWidget {
             Text('🚶 $dist', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary)),
             const SizedBox(height: 6),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/worker-profile'),
+              onTap: () => Navigator.pushNamed(context, '/worker-profile', arguments: name),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.border)),

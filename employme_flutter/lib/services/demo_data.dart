@@ -117,6 +117,7 @@ class DemoData {
       'showUp': '100%',
       'available': 'Immediately',
       'bestMatch': true,
+      'status': 'New',
     },
     {
       'name': 'Suresh Mallya',
@@ -129,6 +130,7 @@ class DemoData {
       'showUp': '90%',
       'available': 'Tomorrow',
       'bestMatch': false,
+      'status': 'Shortlisted',
     },
     {
       'name': 'Priya Devi',
@@ -141,6 +143,7 @@ class DemoData {
       'showUp': '100%',
       'available': 'Immediately',
       'bestMatch': false,
+      'status': 'Contacted',
     },
   ];
 

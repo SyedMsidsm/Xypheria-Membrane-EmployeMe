@@ -30,6 +30,9 @@ import 'screens/worker/earnings_wallet.dart';
 import 'screens/employer/employer_dashboard.dart';
 import 'screens/employer/post_job.dart';
 import 'screens/employer/view_applicants.dart';
+import 'screens/employer/employer_reviews.dart';
+import 'screens/employer/employer_analytics.dart';
+import 'screens/employer/payment_page.dart';
 
 // Chat
 import 'screens/chat/chat_list.dart';
@@ -115,7 +118,10 @@ class EmployMeApp extends StatelessWidget {
         // Employer Flow
         '/employer': (_) => const EmployerDashboard(),
         '/post-job': (_) => const PostJob(),
-        '/applicants': (_) => const ViewApplicants(),
+        '/applicants': (_) => ViewApplicants(),
+        '/reviews': (_) => EmployerReviews(),
+        '/analytics': (_) => EmployerAnalytics(),
+        '/payment': (_) => PaymentPage(),
 
         // Chat Flow
         '/messages': (_) => const ChatList(),
