@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class JobCard extends StatelessWidget {
   final String emoji;
@@ -35,6 +37,7 @@ class JobCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return TapScale(
       onTap: onTap,
       child: Container(
@@ -81,10 +84,10 @@ class JobCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                      child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                        Icon(Icons.check_circle, size: 10, color: AppColors.primaryDark),
-                        SizedBox(width: 3),
-                        Text('Verified', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.check_circle, size: 10, color: AppColors.primaryDark),
+                        const SizedBox(width: 3),
+                        Text(state.tr('verified'), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
                       ]),
                     ),
                   ],
@@ -93,7 +96,7 @@ class JobCard extends StatelessWidget {
                 Wrap(spacing: 6, runSpacing: 4, children: [
                   if (type.isNotEmpty) _tag(type),
                   if (location.isNotEmpty) _tag(location),
-                  if (distance != null) _distanceTag(distance!),
+                  if (distance != null) _distanceTag(distance!, state),
                 ]),
               ])),
             ]),
@@ -118,7 +121,7 @@ class JobCard extends StatelessWidget {
                       color: AppColors.primaryLight,
                       borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
-                    child: const Text('Apply', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+                    child: Text(state.tr('apply_now'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
                   ),
                 ),
             ]),
@@ -134,9 +137,9 @@ class JobCard extends StatelessWidget {
     child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
   );
 
-  Widget _distanceTag(String dist) => Container(
+  Widget _distanceTag(String dist, AppState state) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xs)),
-    child: Text('🚶 $dist', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+    child: Text('🚶 ${state.tr('min_walk', args: {'count': dist.replaceAll(RegExp(r'[^0-9]'), '')})}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
   );
 }

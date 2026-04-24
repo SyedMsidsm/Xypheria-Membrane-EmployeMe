@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/localization_service.dart';
 
 class AppState extends ChangeNotifier {
   // ── Auth & User ──
@@ -137,4 +138,9 @@ class AppState extends ChangeNotifier {
   String _myJobsTab = 'All';
   String get myJobsTab => _myJobsTab;
   void setMyJobsTab(String tab) { _myJobsTab = tab; notifyListeners(); }
+
+  // ── Localization ──
+  String tr(String key, {Map<String, String>? args}) {
+    return LocalizationService.translate(key, _language, args: args);
+  }
 }

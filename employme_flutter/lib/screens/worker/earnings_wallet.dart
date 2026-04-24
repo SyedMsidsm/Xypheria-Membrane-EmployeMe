@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../providers/app_state.dart';
 
 class EarningsWallet extends StatefulWidget {
   const EarningsWallet({super.key});
@@ -9,7 +11,7 @@ class EarningsWallet extends StatefulWidget {
 }
 
 class _EarningsWalletState extends State<EarningsWallet> {
-  String _period = 'This Month';
+  String _period = '';
 
   final _transactions = [
     {'type': 'credit', 'title': 'Sri Ganesh Store', 'desc': 'Shop Assistant — 6 days', 'amount': '+ ₹3,600', 'date': 'Aug 12', 'icon': '🏪'},
@@ -22,23 +24,26 @@ class _EarningsWalletState extends State<EarningsWallet> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    if (_period.isEmpty) _period = state.tr('this_month');
+    
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(child: ListView(
         padding: const EdgeInsets.only(bottom: 24),
-        children: [_header(), _balanceCard(), _quickActions(), _periodSelector(), _earningsChart(), _transactionList()],
+        children: [_header(state), _balanceCard(state), _quickActions(state), _periodSelector(state), _earningsChart(state), _transactionList(state)],
       )),
       bottomNavigationBar: const WorkerNav(currentIndex: 2),
     );
   }
 
-  Widget _header() => Container(
+  Widget _header(AppState state) => Container(
     color: AppColors.card,
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Earnings', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-        Text('ಆದಾಯ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(state.tr('earnings'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+        Text(state.tr('earnings_wallet'), style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
       ]),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -52,7 +57,7 @@ class _EarningsWalletState extends State<EarningsWallet> {
     ]),
   );
 
-  Widget _balanceCard() => Container(
+  Widget _balanceCard(AppState state) => Container(
     margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
     padding: const EdgeInsets.all(24),
     decoration: BoxDecoration(
@@ -62,21 +67,21 @@ class _EarningsWalletState extends State<EarningsWallet> {
     ),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text('Available Balance', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
+        Text(state.tr('available_balance'), style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.2), borderRadius: BorderRadius.circular(AppRadius.sm)),
-          child: const Row(mainAxisSize: MainAxisSize.min, children: [
-            Icon(Icons.account_balance_wallet, size: 12, color: AppColors.primary),
-            SizedBox(width: 4),
-            Text('Wallet', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            const Icon(Icons.account_balance_wallet, size: 12, color: AppColors.primary),
+            const SizedBox(width: 4),
+            Text(state.tr('profile'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
           ]),
         ),
       ]),
       const SizedBox(height: 8),
       const Text('₹18,400', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: -1)),
       const SizedBox(height: 4),
-      Text('Total earned this month', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.6))),
+      Text(state.tr('total_earned_month'), style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.6))),
       const SizedBox(height: 20),
       // Withdraw button
       TapScale(
@@ -86,24 +91,24 @@ class _EarningsWalletState extends State<EarningsWallet> {
           decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(AppRadius.md),
             boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))]),
           alignment: Alignment.center,
-          child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(Icons.account_balance, size: 16, color: Colors.white),
-            SizedBox(width: 8),
-            Text('Withdraw to Bank', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white)),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Icon(Icons.account_balance, size: 16, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(state.tr('withdraw'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white)),
           ]),
         ),
       ),
     ]),
   );
 
-  Widget _quickActions() => Padding(
+  Widget _quickActions(AppState state) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
     child: Row(children: [
-      _action('💰', 'Pending', '₹3,600', AppColors.warning),
+      _action('💰', state.tr('pending'), '₹3,600', AppColors.warning),
       const SizedBox(width: 10),
-      _action('📊', 'This Week', '₹5,100', AppColors.primary),
+      _action('📊', state.tr('this_week'), '₹5,100', AppColors.primary),
       const SizedBox(width: 10),
-      _action('🏆', 'Bonus', '₹500', AppColors.info),
+      _action('🏆', state.tr('show_up'), '₹500', AppColors.info),
     ]),
   );
 
@@ -120,32 +125,35 @@ class _EarningsWalletState extends State<EarningsWallet> {
     ),
   );
 
-  Widget _periodSelector() => Padding(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-    child: Row(children: ['This Week', 'This Month', 'All Time'].map((p) {
-      final active = _period == p;
-      return Expanded(child: Padding(padding: const EdgeInsets.only(right: 8), child: TapScale(
-        onTap: () => setState(() => _period = p),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: active ? AppColors.primary : AppColors.card,
-            borderRadius: BorderRadius.circular(AppRadius.sm),
-            border: Border.all(color: active ? AppColors.primary : AppColors.border),
+  Widget _periodSelector(AppState state) {
+    final periods = [state.tr('this_week'), state.tr('this_month'), state.tr('all_time')];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Row(children: periods.map((p) {
+        final active = _period == p;
+        return Expanded(child: Padding(padding: const EdgeInsets.only(right: 8), child: TapScale(
+          onTap: () => setState(() => _period = p),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: active ? AppColors.primary : AppColors.card,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+              border: Border.all(color: active ? AppColors.primary : AppColors.border),
+            ),
+            alignment: Alignment.center,
+            child: Text(p, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: active ? Colors.white : AppColors.textSecondary)),
           ),
-          alignment: Alignment.center,
-          child: Text(p, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: active ? Colors.white : AppColors.textSecondary)),
-        ),
-      )));
-    }).toList()),
-  );
+        )));
+      }).toList()),
+    );
+  }
 
-  Widget _earningsChart() => Container(
+  Widget _earningsChart(AppState state) => Container(
     margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), border: Border.all(color: AppColors.border)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Earnings Trend', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+      Text(state.tr('earnings_trend'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
       const SizedBox(height: 16),
       SizedBox(height: 120, child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
         ...['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].asMap().entries.map((e) {
@@ -169,12 +177,12 @@ class _EarningsWalletState extends State<EarningsWallet> {
     ]),
   );
 
-  Widget _transactionList() => Padding(
+  Widget _transactionList(AppState state) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Text('Transactions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        GestureDetector(child: const Text('See All', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
+        Text(state.tr('transactions'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        GestureDetector(child: Text(state.tr('see_all'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
       ]),
       const SizedBox(height: 12),
       ..._transactions.map((t) => Padding(

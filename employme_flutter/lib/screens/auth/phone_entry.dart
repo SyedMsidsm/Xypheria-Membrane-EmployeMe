@@ -52,7 +52,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
                   child: const Icon(Icons.arrow_back, size: 20),
                 ),
               ),
-              Text('Step ${_showOtp ? 2 : 1} of 2', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+              Text('${context.watch<AppState>().tr('step')} ${_showOtp ? 2 : 1} ${context.watch<AppState>().tr('of')} 2', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
             ]),
             const SizedBox(height: 12),
             // Progress bar
@@ -87,9 +87,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
     key: const ValueKey('phone'),
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text('Enter your phone', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
-      const SizedBox(height: 4),
-      const Text('ನಿಮ್ಮ ಫೋನ್ ನಂಬರ್ ನಮೂದಿಸಿ', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+      Text(context.watch<AppState>().tr('enter_phone'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
       const SizedBox(height: 24),
       // Phone input
       Container(
@@ -112,11 +110,11 @@ class _PhoneEntryState extends State<PhoneEntry> {
               keyboardType: TextInputType.phone,
               maxLength: 10,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: 1),
-              decoration: const InputDecoration(
-                hintText: '98765 43210',
+              decoration: InputDecoration(
+                hintText: context.watch<AppState>().tr('phone_hint'),
                 counterText: '',
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 fillColor: Colors.transparent,
                 filled: true,
               ),
@@ -126,7 +124,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
         ]),
       ),
       const SizedBox(height: 12),
-      const Text('We will send an OTP to verify your number', style: TextStyle(fontSize: 13, color: AppColors.caption)),
+      Text(context.watch<AppState>().tr('otp_message'), style: const TextStyle(fontSize: 13, color: AppColors.caption)),
     ],
   );
 
@@ -141,7 +139,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
         backgroundColor: _phoneCtrl.text.length == 10 ? AppColors.primary : AppColors.border,
         foregroundColor: _phoneCtrl.text.length == 10 ? Colors.white : AppColors.caption,
       ),
-      child: const Text('Send OTP / OTP ಕಳುಹಿಸಿ'),
+      child: Text(context.watch<AppState>().tr('send_otp')),
     ),
   );
 
@@ -149,9 +147,9 @@ class _PhoneEntryState extends State<PhoneEntry> {
     key: const ValueKey('otp'),
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text('Verify OTP', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+      Text(context.watch<AppState>().tr('verify_otp'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
       const SizedBox(height: 4),
-      Text('Sent to +91 ${_phoneCtrl.text}', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+      Text('${context.watch<AppState>().tr('sent_to')} +91 ${_phoneCtrl.text}', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
       const SizedBox(height: 32),
       // OTP boxes
       Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(4, (i) => Container(
@@ -191,10 +189,10 @@ class _PhoneEntryState extends State<PhoneEntry> {
       // Resend
       Center(
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text("Didn't receive? ", style: TextStyle(fontSize: 13, color: AppColors.caption)),
+          Text("${context.watch<AppState>().tr('didnt_receive')} ", style: const TextStyle(fontSize: 13, color: AppColors.caption)),
           GestureDetector(
             onTap: () {},
-            child: const Text('Resend OTP', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
+            child: Text(context.watch<AppState>().tr('resend_otp'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
           ),
         ]),
       ),
@@ -204,7 +202,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
-          child: const Text('💡 Enter any 4 digits for demo', style: TextStyle(fontSize: 12, color: AppColors.caption)),
+          child: Text(context.watch<AppState>().tr('demo_hint'), style: const TextStyle(fontSize: 12, color: AppColors.caption)),
         ),
       ),
     ],
@@ -229,7 +227,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
         backgroundColor: _otpCtrls.every((c) => c.text.isNotEmpty) ? AppColors.primary : AppColors.border,
         foregroundColor: _otpCtrls.every((c) => c.text.isNotEmpty) ? Colors.white : AppColors.caption,
       ),
-      child: const Text('Verify / ಪರಿಶೀಲಿಸಿ'),
+      child: Text(context.watch<AppState>().tr('verify')),
     ),
   );
 }

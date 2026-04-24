@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../providers/app_state.dart';
 
 class WorkerNav extends StatelessWidget {
   final int currentIndex;
   const WorkerNav({super.key, required this.currentIndex});
 
-  static const _items = [
-    {'icon': Icons.home_rounded, 'activeIcon': Icons.home_rounded, 'label': 'Home', 'route': '/home'},
-    {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': 'Map', 'route': '/map'},
-    {'icon': Icons.work_outline_rounded, 'activeIcon': Icons.work_rounded, 'label': 'My Jobs', 'route': '/my-jobs'},
-    {'icon': Icons.chat_bubble_outline_rounded, 'activeIcon': Icons.chat_bubble_rounded, 'label': 'Chat', 'route': '/messages'},
-    {'icon': Icons.person_outline_rounded, 'activeIcon': Icons.person_rounded, 'label': 'Profile', 'route': '/worker-profile'},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    final items = [
+      {'icon': Icons.home_rounded, 'activeIcon': Icons.home_rounded, 'label': state.tr('home'), 'route': '/home'},
+      {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': state.tr('map'), 'route': '/map'},
+      {'icon': Icons.work_outline_rounded, 'activeIcon': Icons.work_rounded, 'label': state.tr('my_jobs'), 'route': '/my-jobs'},
+      {'icon': Icons.chat_bubble_outline_rounded, 'activeIcon': Icons.chat_bubble_rounded, 'label': state.tr('chat'), 'route': '/messages'},
+      {'icon': Icons.person_outline_rounded, 'activeIcon': Icons.person_rounded, 'label': state.tr('profile'), 'route': '/worker-profile'},
+    ];
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.card,
@@ -26,8 +29,8 @@ class WorkerNav extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: List.generate(_items.length, (i) {
-            final item = _items[i];
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: List.generate(items.length, (i) {
+            final item = items[i];
             final active = i == currentIndex;
             return _NavItem(
               icon: (active ? item['activeIcon'] : item['icon']) as IconData,
@@ -52,16 +55,17 @@ class EmployerNav extends StatelessWidget {
   final int currentIndex;
   const EmployerNav({super.key, required this.currentIndex});
 
-  static const _items = [
-    {'icon': Icons.dashboard_outlined, 'activeIcon': Icons.dashboard_rounded, 'label': 'Home', 'route': '/employer'},
-    {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': 'Workers', 'route': '/map'},
-    {'icon': Icons.add_circle_outline, 'activeIcon': Icons.add_circle_rounded, 'label': 'Post Job', 'route': '/post-job'},
-    {'icon': Icons.people_outline_rounded, 'activeIcon': Icons.people_rounded, 'label': 'Applicants', 'route': '/applicants'},
-    {'icon': Icons.person_outline_rounded, 'activeIcon': Icons.person_rounded, 'label': 'Profile', 'route': '/worker-profile'},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    final items = [
+      {'icon': Icons.dashboard_outlined, 'activeIcon': Icons.dashboard_rounded, 'label': state.tr('home'), 'route': '/employer'},
+      {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': state.tr('workers'), 'route': '/map'},
+      {'icon': Icons.add_circle_outline, 'activeIcon': Icons.add_circle_rounded, 'label': state.tr('post_job'), 'route': '/post-job'},
+      {'icon': Icons.people_outline_rounded, 'activeIcon': Icons.people_rounded, 'label': state.tr('applicants'), 'route': '/applicants'},
+      {'icon': Icons.person_outline_rounded, 'activeIcon': Icons.person_rounded, 'label': state.tr('profile'), 'route': '/worker-profile'},
+    ];
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.card,
@@ -72,8 +76,8 @@ class EmployerNav extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: List.generate(_items.length, (i) {
-            final item = _items[i];
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: List.generate(items.length, (i) {
+            final item = items[i];
             final active = i == currentIndex;
             return _NavItem(
               icon: (active ? item['activeIcon'] : item['icon']) as IconData,

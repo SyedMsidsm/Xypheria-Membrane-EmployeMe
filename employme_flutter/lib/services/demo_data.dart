@@ -25,6 +25,7 @@ class DemoData {
     {'emoji': '📱', 'name': 'Data Entry', 'kn': 'ಡೇಟಾ'},
     {'emoji': '🎨', 'name': 'Painting', 'kn': 'ಬಣ್ಣ'},
     {'emoji': '🧵', 'name': 'Tailoring', 'kn': 'ಹೊಲಿಗೆ'},
+    {'emoji': '✨', 'name': 'Other', 'kn': 'ಇತರೆ'},
   ];
 
   static const List<Map<String, dynamic>> jobs = [

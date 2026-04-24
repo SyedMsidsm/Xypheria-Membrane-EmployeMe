@@ -129,6 +129,7 @@ class SkillsSelection extends StatelessWidget {
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           GestureDetector(
+            onTap: () => _showCustomSkillDialog(context, state),
             child: const Text("Can't find your skill? Add it +",
               style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
           ),
@@ -149,6 +150,53 @@ class SkillsSelection extends StatelessWidget {
             ),
           ),
         ]),
+      ),
+    );
+  }
+
+  void _showCustomSkillDialog(BuildContext context, AppState state) {
+    final TextEditingController ctrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.card,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+        title: Text(state.tr('enter_custom_skill'), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+        content: TextField(
+          controller: ctrl,
+          decoration: InputDecoration(
+            hintText: 'e.g. Carpentry',
+            hintStyle: const TextStyle(color: AppColors.caption),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.md), borderSide: const BorderSide(color: AppColors.border)),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.md), borderSide: const BorderSide(color: AppColors.border)),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.md), borderSide: const BorderSide(color: AppColors.primary)),
+            filled: true,
+            fillColor: AppColors.bg,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx), 
+            child: Text(state.tr('cancel'), style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w600))
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (ctrl.text.trim().isNotEmpty) {
+                state.toggleSkill(ctrl.text.trim());
+                Navigator.pop(ctx);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary, 
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+            ),
+            child: Text(state.tr('add'), style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
       ),
     );
   }
