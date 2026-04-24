@@ -1,0 +1,36 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Flutter
+employme_flutter/.dart_tool/
+employme_flutter/.packages
+employme_flutter/build/
+employme_flutter/.flutter-plugins
+employme_flutter/.flutter-plugins-dependencies
+employme_flutter/android/.gradle/
+employme_flutter/android/app/build/
+employme_flutter/android/build/
+employme_flutter/.pub-cache/
+*.iml
