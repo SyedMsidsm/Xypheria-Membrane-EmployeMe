@@ -235,21 +235,31 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
 
   Widget _quote() => Container(
     margin: const EdgeInsets.all(20),
-    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
       color: const Color(0xFF1E293B),
       borderRadius: BorderRadius.circular(12),
-      border: const Border(left: BorderSide(color: AppColors.primary, width: 4)),
     ),
-    child: Column(children: [
-      const Text(
-        '"For Raju and 500 million like him — their first digital job, just 8 minutes away."',
-        style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.white, height: 1.6),
-        textAlign: TextAlign.center,
-      ),
-      const SizedBox(height: 8),
-      Text('- Team EmployMe, MITE', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5)), textAlign: TextAlign.center),
-    ]),
+    clipBehavior: Clip.antiAlias,
+    child: Stack(
+      children: [
+        Positioned(
+          left: 0, top: 0, bottom: 0,
+          child: Container(width: 4, color: AppColors.primary),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(children: [
+            const Text(
+              '"For Raju and 500 million like him — their first digital job, just 8 minutes away."',
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.white, height: 1.6),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text('- Team EmployMe, MITE', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5)), textAlign: TextAlign.center),
+          ]),
+        ),
+      ],
+    ),
   );
 
   Widget _logo() => Center(

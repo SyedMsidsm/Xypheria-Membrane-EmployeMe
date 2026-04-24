@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class SMSFallback extends StatelessWidget {
   const SMSFallback({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return Scaffold(backgroundColor: AppColors.bg,
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 20), child: Column(children: [
-        _header(), _pyramid(), _impactStatement(), _phoneComparison(), _tagline(),
+        _header(state), _pyramid(), _impactStatement(), _phoneComparison(), _tagline(state),
       ]))));
   }
 
-  Widget _header() => const Padding(padding: EdgeInsets.all(20), child: Column(children: [
-    Text('Works for Everyone', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-    SizedBox(height: 4), Text('ಎಲ್ಲರಿಗೂ ಕೆಲಸ ಮಾಡುತ್ತದೆ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-  ]));
+  Widget _header(AppState state) => Padding(padding: const EdgeInsets.all(20), child: Center(child: Text(state.tr('sms_works_everyone'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700))));
 
   Widget _pyramid() => Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: Column(children: [
     // Tier 1 - Full App
@@ -81,8 +81,5 @@ class SMSFallback extends StatelessWidget {
       ]))),
   ]));
 
-  Widget _tagline() => const Padding(padding: EdgeInsets.all(24), child: Column(children: [
-    Text("We don't leave anyone behind", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-    SizedBox(height: 4), Text('ನಾವು ಯಾರನ್ನೂ ಹಿಂದೆ ಬಿಡುವುದಿಲ್ಲ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-  ]));
+  Widget _tagline(AppState state) => Padding(padding: const EdgeInsets.all(24), child: Center(child: Text(state.tr('dont_leave_behind'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700))));
 }

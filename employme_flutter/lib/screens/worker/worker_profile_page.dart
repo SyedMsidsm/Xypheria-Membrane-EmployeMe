@@ -41,16 +41,16 @@ class WorkerProfilePage extends StatelessWidget {
     child: Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('${state.tr('trust_score')} 🛡️', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        GestureDetector(onTap: () => Navigator.pushNamed(context, '/trust'), child: const Text('What is this?', style: TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600))),
+        GestureDetector(onTap: () => Navigator.pushNamed(context, '/trust'), child: Text(state.tr('what_is_this'), style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600))),
       ]),
       const SizedBox(height: 12),
       Row(children: [
         const TrustGauge(score: 87),
         const SizedBox(width: 20),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Good', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primary)),
+          Text(state.tr('good'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primary)),
           const SizedBox(height: 8), Text('✅ ${state.tr('verified')}', style: const TextStyle(fontSize: 12, color: AppColors.primary)),
-          const SizedBox(height: 4), Text('✅ Community Verified', style: const TextStyle(fontSize: 12, color: AppColors.primary)),
+          const SizedBox(height: 4), Text('✅ ${state.tr('community_verified')}', style: const TextStyle(fontSize: 12, color: AppColors.primary)),
           const SizedBox(height: 4), Text('⏳ ${state.tr('ngo_verification')} — Get verified →', style: const TextStyle(fontSize: 12, color: Color(0xFFF97316))),
         ])),
       ]),
@@ -68,10 +68,11 @@ class WorkerProfilePage extends StatelessWidget {
   Widget _skillsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(state.tr('my_skills'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), Text(state.tr('edit'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))]),
     const SizedBox(height: 10),
-    Wrap(spacing: 8, runSpacing: 8, children: <Widget>[
-      ...['🍳 Cooking', '🧹 Cleaning', '🚚 Delivery', '🏪 Shop Helper'].map((s) => Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
-        child: Text(s, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)))),
-      const Text('+ 2 more', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+    Wrap(spacing: 8, runSpacing: 8, children: [
+      ...state.selectedSkills.map((s) => Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
+        child: Text(state.tr(s), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)))),
+      if (state.selectedSkills.isEmpty)
+         Text(state.tr('no_skills_added'), style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
     ]),
   ]));
 

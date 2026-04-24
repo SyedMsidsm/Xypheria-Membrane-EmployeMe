@@ -13,7 +13,7 @@ class JobDetail extends StatelessWidget {
       backgroundColor: AppColors.bg,
       body: SafeArea(child: Column(children: [
         Expanded(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 80), child: Column(children: [
-          _hero(context), _headerCard(state), _pills(), _stats(state), _about(state), _requirements(state), _perks(state), _employer(state),
+          _hero(context), _headerCard(state), _pills(state), _stats(state), _about(state), _requirements(state), _perks(state), _employer(state),
         ]))),
       ])),
       bottomNavigationBar: _bottom(context, state),
@@ -36,7 +36,7 @@ class JobDetail extends StatelessWidget {
     decoration: BoxDecoration(color: AppColors.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24)), border: const Border(bottom: BorderSide(color: AppColors.border))),
     transform: Matrix4.translationValues(0, -24, 0), padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Shop Assistant', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+      Text(state.tr('shop_assistant'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
       const SizedBox(height: 8),
       Row(children: [
         const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
@@ -46,13 +46,13 @@ class JobDetail extends StatelessWidget {
       ]),
       const SizedBox(height: 6), const Text('📍 Kodialbail Main Road, Mangalore', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
       const SizedBox(height: 20),
-      const Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-        Text('₹12,000', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)), Text('/month', style: TextStyle(fontSize: 16, color: AppColors.caption)),
+      Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+        const Text('₹12,000', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)), Text('/${state.tr('month')}', style: const TextStyle(fontSize: 16, color: AppColors.caption)),
       ]),
     ]));
 
-  Widget _pills() => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), child: Wrap(spacing: 8, children:
-    ['Full Time', 'Retail', 'Immediate Start'].map((p) => Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  Widget _pills(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), child: Wrap(spacing: 8, children:
+    [state.tr('full_time'), state.tr('shop_cat'), state.tr('immediate_start')].map((p) => Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(8)),
       child: Text(p, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary)))).toList()));
 
@@ -71,14 +71,14 @@ class JobDetail extends StatelessWidget {
 
   Widget _requirements(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Text(state.tr('requirements'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), const SizedBox(height: 16),
-    ...['No degree or certificate required', 'Basic Kannada or Hindi communication', 'Honest, punctual, hardworking', 'Can lift boxes (up to 10kg)'].map((r) =>
+    ...[state.tr('no_degree'), state.tr('basic_comm'), state.tr('honest_punctual'), state.tr('lifting')].map((r) =>
       Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Icon(Icons.check_circle, size: 16, color: AppColors.primary), const SizedBox(width: 12), Expanded(child: Text(r, style: const TextStyle(fontSize: 14)))]))),
   ]));
 
   Widget _perks(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Text(state.tr('what_you_get'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), const SizedBox(height: 16),
-    Wrap(spacing: 8, runSpacing: 8, children: ['Free Lunch', 'Weekly Pay', 'Salary Hike', 'Bonus'].map((p) => Container(
+    Wrap(spacing: 8, runSpacing: 8, children: [state.tr('free_lunch'), state.tr('weekly_pay'), state.tr('hike'), state.tr('bonus')].map((p) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(20), border: Border.all(color: AppColors.border)),
       child: Text(p, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)))).toList()),
   ]));
@@ -89,10 +89,10 @@ class JobDetail extends StatelessWidget {
       Container(width: 48, height: 48, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(12)),
         alignment: Alignment.center, child: const Text('SG', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
       const SizedBox(width: 16),
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
         const SizedBox(height: 4), Text('${state.tr('hired', args: {'count': '47'})} • ${state.tr('since', args: {'year': '2022'})}', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-      ]),
+      ])),
     ])));
 
   Widget _bottom(BuildContext ctx, AppState state) => Container(color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../services/demo_data.dart';
+import '../../providers/app_state.dart';
 
 class ChatList extends StatefulWidget {
   const ChatList({super.key});
@@ -19,17 +21,18 @@ class _ChatListState extends State<ChatList> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(children: [
-          _header(),
-          _searchBar(),
+          _header(state),
+          _searchBar(state),
           Expanded(child: ListView.separated(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
             itemCount: _filtered.length,
             separatorBuilder: (_, __) => const Divider(indent: 76, height: 0),
-            itemBuilder: (_, i) => _chatItem(_filtered[i]),
+            itemBuilder: (_, i) => _chatItem(state, _filtered[i]),
           )),
         ]),
       ),
@@ -37,38 +40,38 @@ class _ChatListState extends State<ChatList> {
     );
   }
 
-  Widget _header() => Container(
+  Widget _header(AppState state) => Container(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
     color: AppColors.card,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      const Text('Messages / ಸಂದೇಶಗಳು', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+      Text(state.tr('messages'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xl)),
-        child: Text('${DemoData.chatList.where((c) => (c['unread'] as int) > 0).length} unread', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+        child: Text('${DemoData.chatList.where((c) => (c['unread'] as int) > 0).length} ${state.tr('unread')}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
       ),
     ]),
   );
 
-  Widget _searchBar() => Padding(
+  Widget _searchBar(AppState state) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
     child: Container(
       height: 44,
       decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border)),
       child: TextField(
         onChanged: (v) => setState(() => _search = v),
-        decoration: const InputDecoration(
-          hintText: 'Search conversations...',
-          prefixIcon: Icon(Icons.search, size: 18, color: AppColors.caption),
+        decoration: InputDecoration(
+          hintText: state.tr('search_conversations'),
+          prefixIcon: const Icon(Icons.search, size: 18, color: AppColors.caption),
           border: InputBorder.none, fillColor: Colors.transparent, filled: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
         ),
         style: const TextStyle(fontSize: 14),
       ),
     ),
   );
 
-  Widget _chatItem(Map<String, dynamic> chat) {
+  Widget _chatItem(AppState state, Map<String, dynamic> chat) {
     final unread = (chat['unread'] as int) > 0;
     return TapScale(
       onTap: () => Navigator.pushNamed(context, '/chat'),

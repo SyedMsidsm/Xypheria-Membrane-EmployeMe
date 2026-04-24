@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/app_state.dart';
 import '../../services/demo_data.dart';
+import '../../services/localization_service.dart';
 
 class LanguageSelection extends StatefulWidget {
   const LanguageSelection({super.key});
@@ -64,9 +65,9 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
               child: Column(children: [
-                const Text('Choose Your Language', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.text), textAlign: TextAlign.center),
+                Text(LocalizationService.translate('choose_language', _selected), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.text), textAlign: TextAlign.center),
                 const SizedBox(height: 6),
-                const Text('ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+                Text(LocalizationService.translate('choose_language_subtitle', _selected), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
               ]),
             ),
 
@@ -90,11 +91,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
                         border: Border.all(color: active ? AppColors.primary : AppColors.border, width: active ? 2 : 1),
                       ),
                       child: Stack(children: [
-                        Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Text(lang['script']!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: active ? AppColors.primaryDark : AppColors.text)),
-                          const SizedBox(height: 2),
-                          Text(lang['name']!, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: active ? AppColors.primaryDark : AppColors.textSecondary)),
-                        ])),
+                        Center(child: Text(lang['script']!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: active ? AppColors.primaryDark : AppColors.text))),
                         // Checkmark in top-right
                         Positioned(top: 8, right: 8, child: Container(
                           width: 20, height: 20,
@@ -116,7 +113,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
               child: Column(children: [
-                const Text('More languages coming soon', style: TextStyle(fontSize: 13, color: AppColors.caption, fontWeight: FontWeight.w500)),
+                Text(LocalizationService.translate('more_coming_soon', _selected), style: const TextStyle(fontSize: 13, color: AppColors.caption, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity, height: 56,
@@ -125,11 +122,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
                       context.read<AppState>().setLanguage(_selected);
                       Navigator.pushNamed(context, '/role');
                     },
-                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
-                      Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                      SizedBox(width: 8),
-                      Text('ಮುಂದುವರಿಯಿರಿ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                    ]),
+                    child: Text(LocalizationService.translate('continue', _selected), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                   ),
                 ),
               ]),

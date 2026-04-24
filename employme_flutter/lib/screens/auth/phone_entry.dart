@@ -109,6 +109,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
               controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
               maxLength: 10,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: 1),
               decoration: InputDecoration(
                 hintText: context.watch<AppState>().tr('phone_hint'),

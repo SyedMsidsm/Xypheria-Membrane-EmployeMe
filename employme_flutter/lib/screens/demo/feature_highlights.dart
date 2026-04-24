@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class FeatureHighlights extends StatelessWidget {
   const FeatureHighlights({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return Scaffold(backgroundColor: AppColors.bg,
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 20), child: Column(children: [
-        _header(), _gpsCard(), _resumeCard(), _trustCard(), _techStack(), _algorithm(),
+        _header(state), _gpsCard(state), _resumeCard(state), _trustCard(state), _techStack(), _algorithm(),
       ]))));
   }
 
-  Widget _header() => const Padding(padding: EdgeInsets.all(20), child: Column(children: [
-    Text('What Makes Us Different', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
-    SizedBox(height: 4), Text('ನಮ್ಮನ್ನು ಭಿನ್ನವಾಗಿಸುವುದು ಏನು?', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-  ]));
+  Widget _header(AppState state) => Padding(padding: const EdgeInsets.all(20), child: Center(child: Text(state.tr('different_title'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700))));
 
-  Widget _gpsCard() => Container(margin: const EdgeInsets.symmetric(horizontal: 20), padding: const EdgeInsets.all(20),
+  Widget _gpsCard(AppState state) => Container(margin: const EdgeInsets.symmetric(horizontal: 20), padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)]), borderRadius: BorderRadius.circular(16)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(children: const [Text('📍', style: TextStyle(fontSize: 28)), SizedBox(width: 8), Text('Hyperlocal GPS Matching', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
-      Text('ಹೈಪರ್ಲೋಕಲ್ GPS ಮ್ಯಾಚಿಂಗ್', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.6))),
+      Row(children: [const Text('📍', style: TextStyle(fontSize: 28)), const SizedBox(width: 8), Text(state.tr('gps_title'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
       const SizedBox(height: 12),
       ...['Jobs sorted by walking distance', "Shows '8 min walk' not '0.6km'", 'Walk-to-work = ₹100/day saved'].map((b) =>
         Padding(padding: const EdgeInsets.only(bottom: 6), child: Text('✓ $b', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.85))))),
@@ -29,22 +28,20 @@ class FeatureHighlights extends StatelessWidget {
         child: const Text('3-4x higher conversion ↗', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary)))),
     ]));
 
-  Widget _resumeCard() => Container(margin: const EdgeInsets.fromLTRB(20, 14, 20, 0), padding: const EdgeInsets.all(20),
+  Widget _resumeCard(AppState state) => Container(margin: const EdgeInsets.fromLTRB(20, 14, 20, 0), padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF22C55E), Color(0xFF16A34A)]), borderRadius: BorderRadius.circular(16)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Row(children: [Text('👤', style: TextStyle(fontSize: 28)), SizedBox(width: 8), Text('Zero-Resume Onboarding', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
-      Text('ರೆಸ್ಯೂಮೆ ಇಲ್ಲದೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.7))),
+      Row(children: [const Text('👤', style: TextStyle(fontSize: 28)), const SizedBox(width: 8), Text(state.tr('apply_no_resume'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
       const SizedBox(height: 12),
       ...['Select skills with icons only', '2-minute onboarding', 'Opens access to 400M excluded workers'].map((b) =>
         Padding(padding: const EdgeInsets.only(bottom: 6), child: Text('✓ $b', style: const TextStyle(fontSize: 13, color: Colors.white)))),
       const SizedBox(height: 12), const Text('12-18 month head start vs competitors', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white)),
     ]));
 
-  Widget _trustCard() => Container(margin: const EdgeInsets.fromLTRB(20, 14, 20, 0), padding: const EdgeInsets.all(20),
+  Widget _trustCard(AppState state) => Container(margin: const EdgeInsets.fromLTRB(20, 14, 20, 0), padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(16)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Row(children: [Text('🛡️', style: TextStyle(fontSize: 28)), SizedBox(width: 8), Text('Dual-Layer Verification', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
-      const Text('ದ್ವಿ-ಸ್ತರ ಪರಿಶೀಲನೆ', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+      Row(children: [const Text('🛡️', style: TextStyle(fontSize: 28)), const SizedBox(width: 8), Text(state.tr('dual_verification'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))]),
       const SizedBox(height: 12),
       Row(children: [Text('Layer 1: Aadhaar + AI fraud detection', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.85))), const SizedBox(width: 8),
         Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: AppColors.info, borderRadius: BorderRadius.circular(6)), child: const Text('Auto', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white)))]),

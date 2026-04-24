@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class QuickApply extends StatefulWidget {
   const QuickApply({super.key});
@@ -27,12 +29,13 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 400),
-          child: _step == 2 ? _successView() : _formView(),
+          child: _step == 2 ? _successView(state) : _formView(state),
         ),
       ),
       bottomNavigationBar: _step == 2 ? null : Container(
@@ -50,14 +53,14 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
                 _successCtrl.forward();
               }
             },
-            child: Text(_step == 0 ? 'Continue' : 'Submit Application / ಅರ್ಜಿ ಸಲ್ಲಿಸಿ'),
+            child: Text(_step == 0 ? state.tr('continue_party') : state.tr('submit_application')),
           ),
         ),
       ),
     );
   }
 
-  Widget _formView() => SingleChildScrollView(
+  Widget _formView(AppState state) => SingleChildScrollView(
     key: const ValueKey('form'),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // Header matching React's centered job info
@@ -71,7 +74,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
               child: const Icon(Icons.arrow_back, size: 22),
             ),
             Expanded(child: Column(children: [
-              Text('Applying for...', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+              Text(state.tr('applying_for'), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
               const Text('Shop Assistant', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
               const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
             ])),
@@ -79,7 +82,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
           ]),
           const SizedBox(height: 12),
           Row(children: [
-            Text('Step ${_step + 1} of 2', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            Text(state.tr('step_of', args: {'current': '${_step + 1}', 'total': '2'}), style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
             const SizedBox(width: 8),
             Expanded(child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
@@ -91,18 +94,18 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(_step == 0 ? 'Confirm your details' : 'Confirm Details', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+          Text(_step == 0 ? state.tr('confirm_details') : state.tr('confirm_details'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
-          Text(_step == 0 ? "We'll share these with the employer" : 'ವಿವರಗಳನ್ನು ಖಚಿತಪಡಿಸಿ', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+          Text(state.tr('share_with_employer'), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
           const SizedBox(height: 24),
-          if (_step == 0) ..._formStep1(),
-          if (_step == 1) _formStep2(),
+          if (_step == 0) ..._formStep1(state),
+          if (_step == 1) _formStep2(state),
         ]),
       ),
     ]),
   );
 
-  List<Widget> _formStep1() => [
+  List<Widget> _formStep1(AppState state) => [
     // Profile Summary Card matching React
     Container(
       padding: const EdgeInsets.all(16),
@@ -118,20 +121,20 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
               width: 52, height: 52,
               decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
               alignment: Alignment.center,
-              child: const Text('R', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+              child: Text(state.userName[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
             ),
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Raju Kumar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              Text(state.userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
               const SizedBox(height: 6),
-              Wrap(spacing: 6, children: ['🧹 Cleaning', '🏪 Shop Helper'].map((s) => Container(
+              Wrap(spacing: 6, children: ['🧹 ${state.tr('Cleaning')}', '🏪 ${state.tr('Shop Helper')}'].map((s) => Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
                 child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
               )).toList()),
             ]),
           ]),
-          const Positioned(top: 0, right: 0, child: Text('Edit', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
+          Positioned(top: 0, right: 0, child: Text(state.tr('change'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
         ]),
         const SizedBox(height: 10),
         const Text('📍 Kodialbail — 🚶 6 min away', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
@@ -145,9 +148,9 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
     ),
     const SizedBox(height: 24),
     // When can you start?
-    const Text('When can you start?', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    Text(state.tr('when_start'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     const SizedBox(height: 12),
-    ...['Today', 'Tomorrow', 'This Week', 'Discuss'].map((opt) => Padding(
+    ...[state.tr('today'), state.tr('tomorrow'), state.tr('this_week'), state.tr('discuss')].map((opt) => Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: TapScale(
         onTap: () => setState(() => _availability = opt),
@@ -172,7 +175,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
     )),
     // Optional message
     const SizedBox(height: 24),
-    const Text('Add a message (optional)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+    Text(state.tr('add_message'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
     const SizedBox(height: 8),
     Container(
       decoration: BoxDecoration(
@@ -180,17 +183,17 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.border, width: 1.5),
       ),
-      child: const TextField(
+      child: TextField(
         maxLines: 3,
         decoration: InputDecoration(
-          hintText: 'Hi, I am interested in this position. I have experience in shop work...',
+          hintText: state.tr('msg_placeholder'),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.all(16),
-          hintStyle: TextStyle(fontSize: 14, color: AppColors.caption),
+          contentPadding: const EdgeInsets.all(16),
+          hintStyle: const TextStyle(fontSize: 14, color: AppColors.caption),
           fillColor: Colors.transparent,
           filled: true,
         ),
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       ),
     ),
     const Align(alignment: Alignment.centerRight, child: Padding(
@@ -199,7 +202,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
     )),
   ];
 
-  Widget _formStep2() => Container(
+  Widget _formStep2(AppState state) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), border: Border.all(color: AppColors.border), boxShadow: AppShadows.card),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -229,7 +232,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
     ]),
   );
 
-  Widget _successView() => Center(
+  Widget _successView(AppState state) => Center(
     key: const ValueKey('success'),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -247,18 +250,16 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
           ),
         ),
         const SizedBox(height: 20),
-        const Text('Application Sent! 🎉', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
-        const SizedBox(height: 6),
-        const Text('ಅರ್ಜಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+        Text(state.tr('application_sent'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
         const SizedBox(height: 12),
-        const Text('Sri Ganesh Provision Store will contact you soon',
-          style: TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
+        Text(state.tr('contact_soon', args: {'company': 'Sri Ganesh Provision Store'}),
+          style: const TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
           textAlign: TextAlign.center),
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
-          child: const Text('Usually within 2 hours', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)),
+          child: Text(state.tr('usually_within'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)),
         ),
         const SizedBox(height: 32),
         Row(children: [
@@ -268,19 +269,19 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
               side: const BorderSide(color: AppColors.border, width: 1.5),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text('View Application', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.text)),
+            child: Text(state.tr('view_application'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.text)),
           ))),
           const SizedBox(width: 10),
           Expanded(child: SizedBox(height: 48, child: ElevatedButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
             style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            child: const Text('Find More Jobs', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            child: Text(state.tr('find_more_jobs'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
           ))),
         ]),
         const SizedBox(height: 20),
         GestureDetector(
-          child: const Text('Share with a friend who needs work →',
-            style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
+          child: Text(state.tr('share_friend'),
+            style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
         ),
       ]),
     ),

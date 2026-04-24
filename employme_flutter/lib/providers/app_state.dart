@@ -56,6 +56,7 @@ class AppState extends ChangeNotifier {
     if (_selectedSkills.contains(skill)) {
       _selectedSkills.remove(skill);
     } else {
+      if (_selectedSkills.length >= 5) return;
       _selectedSkills.add(skill);
     }
     notifyListeners();

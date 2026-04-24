@@ -45,13 +45,14 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(children: [
-          _header(),
-          _earningsCard(),
-          _tabs(),
+          _header(state),
+          _earningsCard(state),
+          _tabs(state),
           Expanded(child: _jobsList()),
         ]),
       ),
@@ -59,11 +60,11 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _header() => Container(
+  Widget _header(AppState state) => Container(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
     color: AppColors.card,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      const Text('My Jobs / ನನ್ನ ಕೆಲಸಗಳು', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+      Text(state.tr('my_jobs'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
       TapScale(child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
@@ -72,7 +73,7 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
     ]),
   );
 
-  Widget _earningsCard() => Container(
+  Widget _earningsCard(AppState state) => Container(
     margin: const EdgeInsets.fromLTRB(20, 12, 20, 0),
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
@@ -83,22 +84,22 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       Column(children: [
         const Text('₹18,400', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white)),
-        Text('Total Earned', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
+        Text(state.tr('total_earned'), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
       ]),
       Container(width: 1, height: 36, color: Colors.white.withOpacity(0.3)),
       Column(children: [
         const Text('12', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white)),
-        Text('Jobs Done', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
+        Text(state.tr('jobs_done_label'), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
       ]),
       Container(width: 1, height: 36, color: Colors.white.withOpacity(0.3)),
       Column(children: [
         const Text('100%', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white)),
-        Text('Show-up', style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
+        Text(state.tr('show_up'), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
       ]),
     ]),
   );
 
-  Widget _tabs() => Padding(
+  Widget _tabs(AppState state) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
     child: Container(
       height: 40,
@@ -113,7 +114,7 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
         indicator: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(AppRadius.sm)),
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
-        tabs: const [Tab(text: 'All'), Tab(text: 'Pending'), Tab(text: 'Active'), Tab(text: 'Done')],
+        tabs: [Tab(text: state.tr('all')), Tab(text: state.tr('pending')), Tab(text: state.tr('active')), Tab(text: state.tr('done'))],
       ),
     ),
   );

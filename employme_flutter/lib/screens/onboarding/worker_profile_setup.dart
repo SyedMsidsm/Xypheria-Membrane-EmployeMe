@@ -17,7 +17,7 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
       backgroundColor: AppColors.bg,
       body: SafeArea(child: Column(children: [
         Expanded(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 100), child: Column(children: [
-          _banner(), _photoSection(), _form(), _experience(), _languages(), _emergency(),
+          _banner(), _photoSection(), _form(), _experience(), _languages(),
         ]))),
       ])),
       bottomNavigationBar: Container(color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -93,21 +93,7 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
     }).toList()),
   ]));
 
-  Widget _emergency() => Padding(padding: const EdgeInsets.all(20), child: Container(
-    padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16),
-      border: const Border(left: BorderSide(color: AppColors.alert, width: 4), top: BorderSide(color: AppColors.border), right: BorderSide(color: AppColors.border), bottom: BorderSide(color: AppColors.border)),
-      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)]),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Add Emergency Contact', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-      const SizedBox(height: 4), const Text('Builds trust with employers', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-      const SizedBox(height: 16),
-      Row(children: [
-        Expanded(child: TextFormField(decoration: const InputDecoration(hintText: 'Name', contentPadding: EdgeInsets.symmetric(horizontal: 12)))),
-        const SizedBox(width: 8),
-        Expanded(child: TextFormField(decoration: const InputDecoration(hintText: 'Phone', contentPadding: EdgeInsets.symmetric(horizontal: 12)))),
-      ]),
-    ]),
-  ));
+
 
   Widget _inputLabel(String t) => Padding(padding: const EdgeInsets.only(bottom: 8),
     child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text)));

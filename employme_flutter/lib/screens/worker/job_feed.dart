@@ -14,12 +14,22 @@ class JobFeed extends StatefulWidget {
 
 class _JobFeedState extends State<JobFeed> {
   final _searchController = TextEditingController();
-  String _activeCategory = 'All Jobs';
+  String _activeCategoryKey = 'all_jobs_cat';
 
   List<Map<String, dynamic>> get _filteredJobs {
     var jobs = DemoData.jobs;
-    if (_activeCategory != 'All Jobs' && _activeCategory != 'ಎಲ್ಲಾ ಕೆಲಸಗಳು') {
-      jobs = jobs.where((j) => (j['type'] as String).toLowerCase().contains(_activeCategory.toLowerCase()) || (j['title'] as String).toLowerCase().contains(_activeCategory.toLowerCase())).toList();
+    if (_activeCategoryKey != 'all_jobs_cat') {
+      // Find the English name for filtering since DemoData is in English
+      final filterMap = {
+        'cooking_cat': 'Cooking',
+        'delivery_cat': 'Delivery',
+        'cleaning_cat': 'Cleaning',
+        'shop_cat': 'Shop',
+        'labour_cat': 'Labour',
+        'repair_cat': 'Repair',
+      };
+      final filterVal = filterMap[_activeCategoryKey] ?? '';
+      jobs = jobs.where((j) => (j['type'] as String).toLowerCase().contains(filterVal.toLowerCase()) || (j['title'] as String).toLowerCase().contains(filterVal.toLowerCase())).toList();
     }
     if (_searchController.text.isNotEmpty) {
       final q = _searchController.text.toLowerCase();
@@ -35,14 +45,14 @@ class _JobFeedState extends State<JobFeed> {
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(children: [
-          _appBar(state),
+          _appBar(context, state),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(bottom: 24),
               children: [
                 _searchBar(state),
                 _urgentBanner(state),
-                _categories(state),
+                _categories(context, state),
                 _sectionHeader(state),
                 ..._filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -50,10 +60,10 @@ class _JobFeedState extends State<JobFeed> {
                     emoji: j['emoji'] as String,
                     title: state.language == 'kn' ? (j['title_kn'] ?? j['title']) : j['title'] as String,
                     company: j['company'] as String,
-                    type: j['type'] as String,
-                    location: j['location'] as String,
+                    type: state.language == 'kn' ? (j['type_kn'] ?? j['type']) : j['type'] as String,
+                    location: state.language == 'kn' ? (j['location_kn'] ?? j['location']) : j['location'] as String,
                     salary: j['salary'] as String,
-                    period: j['period'] as String,
+                    period: state.language == 'kn' ? (j['period_kn'] ?? j['period']) : j['period'] as String,
                     distance: j['distance'] as String?,
                     verified: j['verified'] as bool? ?? false,
                     bookmarked: state.isBookmarked(j['title'] as String),
@@ -94,18 +104,23 @@ class _JobFeedState extends State<JobFeed> {
     );
   }
 
-  Widget _appBar(AppState state) => Container(
+  Widget _appBar(BuildContext context, AppState state) => Container(
     color: AppColors.card,
     padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
     child: Row(children: [
-      Container(
-        width: 36, height: 36,
-        decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle),
-        alignment: Alignment.center,
-        child: Text(state.userName.isNotEmpty ? state.userName[0] : 'U', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+      TapScale(
+        onTap: () => Navigator.pushNamed(context, '/worker-profile'),
+        child: Row(children: [
+          Container(
+            width: 36, height: 36,
+            decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle),
+            alignment: Alignment.center,
+            child: Text(state.userName.isNotEmpty ? state.userName[0] : 'U', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+          ),
+          const SizedBox(width: 10),
+          Text('${state.tr('hi')}, ${state.userName.split(' ')[0]}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        ]),
       ),
-      const SizedBox(width: 10),
-      Text('${state.tr('hi')}, ${state.userName.split(' ')[0]}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       const Spacer(),
       TapScale(
         child: Container(
@@ -181,6 +196,7 @@ class _JobFeedState extends State<JobFeed> {
   Widget _urgentBanner(AppState state) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
     child: TapScale(
+      onTap: () => Navigator.pushNamed(context, '/search'),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -206,10 +222,8 @@ class _JobFeedState extends State<JobFeed> {
     ),
   );
 
-  Widget _categories(AppState state) {
-    final cats = state.language == 'kn' 
-      ? ['ಎಲ್ಲಾ ಕೆಲಸಗಳು', 'ಅಡುಗೆ', 'ಡೆಲಿವರಿ', 'ಶುಚಿಗೊಳಿಸುವಿಕೆ', 'ಅಂಗಡಿ', 'ಕಾರ್ಮಿಕ', 'ದುರಸ್ತಿ']
-      : ['All Jobs', 'Cooking', 'Delivery', 'Cleaning', 'Shop', 'Labour', 'Repair'];
+  Widget _categories(BuildContext context, AppState state) {
+    final catKeys = ['all_jobs_cat', 'cooking_cat', 'delivery_cat', 'cleaning_cat', 'shop_cat', 'labour_cat', 'repair_cat'];
     
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
@@ -217,12 +231,12 @@ class _JobFeedState extends State<JobFeed> {
         height: 36,
         child: ListView(
           scrollDirection: Axis.horizontal,
-          children: cats.map((cat) {
-            final active = _activeCategory == cat;
+          children: catKeys.map((key) {
+            final active = _activeCategoryKey == key;
             return Padding(
               padding: const EdgeInsets.only(right: 8),
               child: TapScale(
-                onTap: () => setState(() => _activeCategory = cat),
+                onTap: () => setState(() => _activeCategoryKey = key),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -232,7 +246,7 @@ class _JobFeedState extends State<JobFeed> {
                     border: Border.all(color: active ? AppColors.primary : AppColors.border),
                     boxShadow: active ? AppShadows.primaryGlow(0.15) : null,
                   ),
-                  child: Text(cat, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: active ? Colors.white : AppColors.text)),
+                  child: Text(state.tr(key), style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: active ? Colors.white : AppColors.text)),
                 ),
               ),
             );
@@ -243,16 +257,10 @@ class _JobFeedState extends State<JobFeed> {
   }
 
   Widget _sectionHeader(AppState state) => Padding(
-    padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+    padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-      Text('${_filteredJobs.length} ${state.tr('all_jobs').toLowerCase()}', style: const TextStyle(fontSize: 13, color: AppColors.caption)),
+      GestureDetector(child: Text(state.tr('view_all', args: {'count': '${_filteredJobs.length}'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
     ]),
   );
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 }

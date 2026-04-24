@@ -39,10 +39,20 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(children: [
-          _header(state),
           Expanded(child: SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 20),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: AppColors.card, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+                    child: const Icon(Icons.arrow_back, size: 20, color: AppColors.text),
+                  ),
+                ),
+              ),
               _title(state), _map(), _locationCard(state), _travelSection(state), _daysSection(state), _timingSection(state), _availableNow(state),
             ]),
           )),
@@ -58,24 +68,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
     );
   }
 
-  Widget _header(AppState state) => Container(
-    color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-    child: Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        GestureDetector(onTap: () => Navigator.pop(context), child: const Icon(Icons.arrow_back, size: 22)),
-        Text('${state.tr('step')} 3 ${state.tr('of')} 3', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-      ]),
-      const SizedBox(height: 12),
-      Row(children: [
-        _bar(AppColors.primary), const SizedBox(width: 4),
-        _bar(AppColors.primary), const SizedBox(width: 4),
-        Expanded(child: Container(height: 4, decoration: BoxDecoration(borderRadius: BorderRadius.circular(2),
-          gradient: const LinearGradient(colors: [AppColors.primary, AppColors.border], stops: [0.7, 0.7])))),
-      ]),
-    ]),
-  );
 
-  Widget _bar(Color c) => Expanded(child: Container(height: 4, decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(2))));
 
   Widget _title(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Text(state.tr('location_title'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.text)),

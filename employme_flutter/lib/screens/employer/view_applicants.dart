@@ -40,10 +40,26 @@ class _ViewApplicantsState extends State<ViewApplicants> {
       child: const Text('Sort: Distance ▼', style: TextStyle(fontSize: 11, color: AppColors.textSecondary))),
   ]));
 
-  Widget _applicantCard(Map<String, dynamic> a) => Container(margin: const EdgeInsets.fromLTRB(20, 12, 20, 0), padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12)],
-      border: (a['bestMatch'] as bool) ? const Border(left: BorderSide(color: Color(0xFFD97706), width: 4)) : null),
-    child: Column(children: [
+  Widget _applicantCard(Map<String, dynamic> a) {
+    final bool isBest = a['bestMatch'] as bool;
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12)],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          if (isBest)
+            Positioned(
+              left: 0, top: 0, bottom: 0,
+              child: Container(width: 4, color: const Color(0xFFD97706)),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(children: [
       if (a['bestMatch'] as bool) Align(alignment: Alignment.centerRight, child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3), decoration: BoxDecoration(color: const Color(0xFFFFFBEB), borderRadius: BorderRadius.circular(10)),
         child: const Text('⭐ BEST MATCH', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xFFD97706))))),
       Row(children: [
@@ -66,5 +82,9 @@ class _ViewApplicantsState extends State<ViewApplicants> {
         const SizedBox(width: 8),
         Expanded(flex: 2, child: SizedBox(height: 40, child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: const Text('✅ Shortlist')))),
       ]),
-    ]));
+    ])),
+        ],
+      ),
+    );
+  }
 }
