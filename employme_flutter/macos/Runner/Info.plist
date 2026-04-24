@@ -28,5 +28,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSCameraUsageDescription</key>
+	<string>EmployMe needs camera access to take your profile photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>EmployMe needs photo library access to upload your profile photo</string>
 </dict>
 </plist>

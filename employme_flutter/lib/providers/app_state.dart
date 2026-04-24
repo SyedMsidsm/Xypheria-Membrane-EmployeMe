@@ -20,6 +20,7 @@ class AppState extends ChangeNotifier {
   void login(String phone) { _phone = phone; _isLoggedIn = true; notifyListeners(); }
 
   // ── User Profile ──
+  String? _profileImagePath;
   String _userName = 'Raju Kumar';
   int _age = 24;
   String _gender = 'Male';
@@ -31,6 +32,7 @@ class AppState extends ChangeNotifier {
   int _totalEarned = 18400;
 
   String get userName => _userName;
+  String? get profileImagePath => _profileImagePath;
   int get age => _age;
   String get gender => _gender;
   String get location => _location;
@@ -45,6 +47,11 @@ class AppState extends ChangeNotifier {
     if (age != null) _age = age;
     if (gender != null) _gender = gender;
     if (exp != null) _experience = exp;
+    notifyListeners();
+  }
+
+  void setProfileImage(String path) {
+    _profileImagePath = path;
     notifyListeners();
   }
 

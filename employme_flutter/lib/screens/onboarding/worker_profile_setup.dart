@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/app_state.dart';
 
 class WorkerProfileSetup extends StatefulWidget {
   const WorkerProfileSetup({super.key});
@@ -10,6 +14,50 @@ class WorkerProfileSetup extends StatefulWidget {
 class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
   int _exp = 3;
   final Set<String> _langs = {'Kannada', 'Hindi'};
+  final ImagePicker _picker = ImagePicker();
+  String? _localImagePath; // Local state until saved
+
+  @override
+  void initState() {
+    super.initState();
+    // Load existing profile image from AppState if available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = context.read<AppState>();
+      if (state.profileImagePath != null) {
+        setState(() => _localImagePath = state.profileImagePath);
+      }
+    });
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
+      if (image != null) {
+        setState(() => _localImagePath = image.path);
+        if (mounted) {
+          context.read<AppState>().setProfileImage(image.path);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              source == ImageSource.camera
+                  ? 'Could not open camera. Please check permissions.'
+                  : 'Could not open gallery. Please check permissions.',
+            ),
+            backgroundColor: AppColors.alert,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,26 +82,80 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
     GestureDetector(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: Colors.white12, shape: BoxShape.circle), child: const Icon(Icons.arrow_back, size: 20, color: Colors.white))),
     const SizedBox(height: 16),
     const Text('Complete your profile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
-    const SizedBox(height: 4), Text('Get 3x more job views!', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
+    const SizedBox(height: 4), Text('Get 3x more job views!', style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.7))),
     const SizedBox(height: 16),
     Row(children: [Expanded(child: Container(height: 6, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white24),
-      child: FractionallySizedBox(alignment: Alignment.centerLeft, widthFactor: 0.6, child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: AppColors.primary))))),
-      const SizedBox(width: 12), const Text('60%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white)),
+      child: FractionallySizedBox(alignment: Alignment.centerLeft, widthFactor: _localImagePath != null ? 0.8 : 0.6, child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: AppColors.primary))))),
+      const SizedBox(width: 12), Text(_localImagePath != null ? '80%' : '60%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white)),
     ]),
   ]));
 
   Widget _photoSection() => Padding(padding: const EdgeInsets.fromLTRB(20, 32, 20, 0), child: Column(children: [
-    Container(width: 100, height: 100, decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.primary, width: 2, style: BorderStyle.solid), color: AppColors.primaryLight),
-      child: const Icon(Icons.camera_alt, size: 28, color: AppColors.primary)),
+    // Profile photo avatar — tap to take photo
+    GestureDetector(
+      onTap: () => _pickImage(ImageSource.camera),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutBack,
+        width: 100, height: 100,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.primary, width: 2),
+          color: AppColors.primaryLight,
+          boxShadow: _localImagePath != null
+              ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 16, spreadRadius: 2)]
+              : [],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: _localImagePath != null
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.file(
+                    File(_localImagePath!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const Icon(Icons.camera_alt, size: 28, color: AppColors.primary),
+                  ),
+                  // Camera overlay on hover
+                  Positioned(
+                    bottom: 0, left: 0, right: 0,
+                    child: Container(
+                      height: 28,
+                      color: Colors.black45,
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.camera_alt, size: 14, color: Colors.white),
+                    ),
+                  ),
+                ],
+              )
+            : const Icon(Icons.camera_alt, size: 28, color: AppColors.primary),
+      ),
+    ),
     const SizedBox(height: 16),
     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      _outlineBtn(Icons.camera_alt, 'Take Photo'), const SizedBox(width: 8), _outlineBtn(Icons.upload, 'Upload'),
+      _photoBtn(Icons.camera_alt, 'Take Photo', () => _pickImage(ImageSource.camera)),
+      const SizedBox(width: 8),
+      _photoBtn(Icons.upload, 'Upload', () => _pickImage(ImageSource.gallery)),
     ]),
   ]));
 
-  Widget _outlineBtn(IconData icon, String label) => Container(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border), color: AppColors.card),
-    child: Row(children: [Icon(icon, size: 16, color: AppColors.text), const SizedBox(width: 6), Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600))]));
+  Widget _photoBtn(IconData icon, String label, VoidCallback onTap) => GestureDetector(
+    onTap: onTap,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+        color: AppColors.card,
+      ),
+      child: Row(children: [
+        Icon(icon, size: 16, color: AppColors.primary),
+        const SizedBox(width: 6),
+        Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+      ]),
+    ),
+  );
 
   Widget _form() => Padding(padding: const EdgeInsets.fromLTRB(20, 24, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     _inputLabel('Full Name'),
@@ -92,8 +194,6 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
           child: Text('${sel ? '✓ ' : ''}$l', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: sel ? Colors.white : AppColors.text))));
     }).toList()),
   ]));
-
-
 
   Widget _inputLabel(String t) => Padding(padding: const EdgeInsets.only(bottom: 8),
     child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text)));

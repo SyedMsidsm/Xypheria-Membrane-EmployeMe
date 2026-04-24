@@ -1,12 +1,92 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/trust_gauge.dart';
 import '../../providers/app_state.dart';
 
-class WorkerProfilePage extends StatelessWidget {
+class WorkerProfilePage extends StatefulWidget {
   const WorkerProfilePage({super.key});
+
+  @override
+  State<WorkerProfilePage> createState() => _WorkerProfilePageState();
+}
+
+class _WorkerProfilePageState extends State<WorkerProfilePage> {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _changeProfilePhoto() async {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.card,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: 20),
+            const Text('Update Profile Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: Container(
+                width: 44, height: 44,
+                decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.camera_alt, color: AppColors.primary),
+              ),
+              title: const Text('Take Photo', style: TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: const Text('Open camera to take a new photo', style: TextStyle(fontSize: 12, color: AppColors.caption)),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            const SizedBox(height: 8),
+            ListTile(
+              leading: Container(
+                width: 44, height: 44,
+                decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.photo_library, color: AppColors.primary),
+              ),
+              title: const Text('Choose from Gallery', style: TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: const Text('Upload photo from your device', style: TextStyle(fontSize: 12, color: AppColors.caption)),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
+      if (image != null && mounted) {
+        context.read<AppState>().setProfileImage(image.path);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(source == ImageSource.camera
+                ? 'Could not open camera. Please check permissions.'
+                : 'Could not open gallery. Please check permissions.'),
+            backgroundColor: AppColors.alert,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +110,53 @@ class WorkerProfilePage extends StatelessWidget {
     decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)])),
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
     child: Column(children: [
-      Align(alignment: Alignment.topRight, child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white))),
-      Container(width: 88, height: 88, decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.primary, border: Border.all(color: Colors.white, width: 3)),
-        alignment: Alignment.center, child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))),
+      Align(alignment: Alignment.topRight, child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white))),
+      // Profile photo — tap to change
+      GestureDetector(
+        onTap: _changeProfilePhoto,
+        child: Stack(
+          children: [
+            Container(
+              width: 88, height: 88,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary,
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 12)],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: state.profileImagePath != null
+                  ? Image.file(File(state.profileImagePath!), fit: BoxFit.cover, width: 88, height: 88,
+                      errorBuilder: (_, __, ___) => Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))))
+                  : Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))),
+            ),
+            // Camera badge
+            Positioned(
+              bottom: 0, right: 0,
+              child: Container(
+                width: 28, height: 28,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: const Icon(Icons.camera_alt, size: 14, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
       const SizedBox(height: 8), Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
         child: Text(state.tr('available_now'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white))),
       const SizedBox(height: 8), Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
-      const SizedBox(height: 2), Text('📍 ${state.location}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
-      Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5))),
+      const SizedBox(height: 2), Text('📍 ${state.location}', style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.7))),
+      Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.5))),
     ]));
 
   Widget _trustCard(BuildContext context, AppState state) => Transform.translate(offset: const Offset(0, -20), child: GestureDetector(
     onTap: () => Navigator.pushNamed(context, '/trust'),
     child: Container(margin: const EdgeInsets.symmetric(horizontal: 20),
-    padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20)]),
+    padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20)]),
     child: Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('${state.tr('trust_score')} 🛡️', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
@@ -68,7 +181,7 @@ class WorkerProfilePage extends StatelessWidget {
     _statBox('100%', state.tr('show_up'), () => Navigator.pushNamed(context, '/trust')),
   ].map((w) => Expanded(child: Padding(padding: const EdgeInsets.only(right: 8), child: w))).toList()));
 
-  Widget _statBox(String n, String l, [VoidCallback? onTap]) => GestureDetector(onTap: onTap, child: Container(padding: const EdgeInsets.symmetric(vertical: 12), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)]),
+  Widget _statBox(String n, String l, [VoidCallback? onTap]) => GestureDetector(onTap: onTap, child: Container(padding: const EdgeInsets.symmetric(vertical: 12), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4)]),
     child: Column(children: [Text(n, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary)), const SizedBox(height: 2), Text(l, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary))])));
 
   Widget _skillsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -102,7 +215,7 @@ class WorkerProfilePage extends StatelessWidget {
     const SizedBox(height: 12), Center(child: Text(state.tr('view_all_reviews', args: {'count': '12'}), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
   ]));
 
-  Widget _reviewCard(AppState state, String emoji, String name, String date, int stars, String text, List<String> badges) => Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)]),
+  Widget _reviewCard(AppState state, String emoji, String name, String date, int stars, String text, List<String> badges) => Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4)]),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Container(width: 36, height: 36, decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight), alignment: Alignment.center, child: Text(emoji, style: const TextStyle(fontSize: 14))), const SizedBox(width: 10), Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))]), Text(date, style: const TextStyle(fontSize: 12, color: AppColors.caption))]),
       const SizedBox(height: 6), Text('⭐' * stars, style: const TextStyle(fontSize: 14)),
