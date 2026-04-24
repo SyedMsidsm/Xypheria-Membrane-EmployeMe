@@ -11,11 +11,12 @@ class _ChatScreenState extends State<ChatScreen> {
   final _msgCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
   final List<Map<String, dynamic>> _messages = [
-    {'text': 'Hi! I saw your profile. We have an opening for Shop Assistant.', 'isMe': false, 'time': '10:30 AM'},
-    {'text': 'Thank you! I am interested. What are the timings?', 'isMe': true, 'time': '10:32 AM'},
-    {'text': 'Morning 9 AM to 6 PM, 6 days a week. Salary is ₹12,000/month.', 'isMe': false, 'time': '10:33 AM'},
-    {'text': 'That sounds good! When can I start?', 'isMe': true, 'time': '10:35 AM'},
-    {'type': 'offer', 'title': '🎉 Job Offer', 'job': 'Shop Assistant', 'salary': '₹12,000/mo', 'company': 'Sri Ganesh Store', 'isMe': false, 'time': '10:36 AM'},
+    {'text': 'Hello! I saw your application for Shop Assistant. Are you available to start soon?', 'isMe': false, 'time': '10:32 AM'},
+    {'text': 'Yes, I can start immediately. I have 2 years experience in similar work.', 'isMe': true, 'time': '10:34 AM'},
+    {'text': 'Great! Can you come for a quick meeting tomorrow at the shop?', 'isMe': false, 'time': '10:35 AM'},
+    {'text': "Yes, what time? 🚶 I'm only 6 minutes away!", 'isMe': true, 'time': '10:36 AM'},
+    {'type': 'offer', 'isMe': false, 'time': '10:45 AM'},
+    {'type': 'phone_reveal', 'isMe': false, 'time': ''},
   ];
 
   @override
@@ -39,14 +40,17 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(children: [
           _header(),
+          _jobContextPill(),
           Expanded(
             child: ListView.builder(
               controller: _scrollCtrl,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              itemCount: _messages.length,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              itemCount: _messages.length + 1, // +1 for system message
               itemBuilder: (_, i) {
-                final msg = _messages[i];
-                if (msg['type'] == 'offer') return _offerCard(msg);
+                if (i == 0) return _systemMessage();
+                final msg = _messages[i - 1];
+                if (msg['type'] == 'offer') return _offerCard();
+                if (msg['type'] == 'phone_reveal') return _phoneRevealCard();
                 return _bubble(msg);
               },
             ),
@@ -59,138 +63,286 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _header() => Container(
-    padding: const EdgeInsets.fromLTRB(6, 8, 16, 8),
-    decoration: BoxDecoration(color: AppColors.card, border: Border(bottom: BorderSide(color: AppColors.border.withOpacity(0.5))), boxShadow: AppShadows.soft),
+    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+    decoration: const BoxDecoration(color: AppColors.card, border: Border(bottom: BorderSide(color: AppColors.border))),
     child: Row(children: [
-      IconButton(icon: const Icon(Icons.arrow_back, size: 20), onPressed: () => Navigator.pop(context)),
-      Container(
-        width: 40, height: 40,
-        decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle),
-        alignment: Alignment.center,
-        child: const Text('SG', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+      TapScale(
+        onTap: () => Navigator.pop(context),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+          child: const Icon(Icons.arrow_back, size: 20),
+        ),
       ),
-      const SizedBox(width: 10),
+      const SizedBox(width: 12),
+      Container(
+        width: 44, height: 44,
+        decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+        alignment: Alignment.center,
+        child: const Text('SG', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+      ),
+      const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          const Text('Sri Ganesh Store', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+          const Text('Sri Ganesh Store', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
           const SizedBox(width: 6),
           const Icon(Icons.check_circle, size: 14, color: AppColors.primary),
         ]),
-        Row(children: [
-          Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
-          const SizedBox(width: 4),
-          Text('Online • Shop Assistant', style: TextStyle(fontSize: 12, color: AppColors.caption)),
-        ]),
+        const SizedBox(height: 2),
+        const Text('Re: Shop Assistant', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
       ])),
       TapScale(child: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle),
-        child: const Icon(Icons.call, size: 18, color: AppColors.primary),
+        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+        child: const Icon(Icons.call, size: 18),
+      )),
+      const SizedBox(width: 8),
+      TapScale(child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+        child: const Icon(Icons.more_vert, size: 18),
       )),
     ]),
+  );
+
+  Widget _jobContextPill() => Container(
+    margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    decoration: BoxDecoration(
+      color: AppColors.primaryLight,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Row(children: [
+      const Text('🏪', style: TextStyle(fontSize: 16)),
+      const SizedBox(width: 8),
+      const Text('Shop Assistant', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      const SizedBox(width: 8),
+      const Text('₹12,000/mo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.primary)),
+      const Spacer(),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
+        child: const Text('Active', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white)),
+      ),
+    ]),
+  );
+
+  Widget _systemMessage() => Center(
+    child: Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: const [
+        Icon(Icons.info_outline, size: 14, color: AppColors.textSecondary),
+        SizedBox(width: 6),
+        Text('Chat started • Nov 12, 2025', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
+      ]),
+    ),
   );
 
   Widget _bubble(Map<String, dynamic> msg) {
     final isMe = msg['isMe'] as bool;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.72),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: isMe ? AppColors.primary : AppColors.card,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(16),
-                topRight: const Radius.circular(16),
-                bottomLeft: Radius.circular(isMe ? 16 : 4),
-                bottomRight: Radius.circular(isMe ? 4 : 16),
-              ),
-              boxShadow: isMe ? null : AppShadows.soft,
-              border: isMe ? null : Border.all(color: AppColors.border.withOpacity(0.5)),
+          if (!isMe) ...[
+            Container(
+              width: 32, height: 32,
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
+              alignment: Alignment.center,
+              child: const Text('SG', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
             ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(msg['text'], style: TextStyle(fontSize: 14, color: isMe ? Colors.white : AppColors.text, height: 1.4)),
-              const SizedBox(height: 4),
-              Text(msg['time'], style: TextStyle(fontSize: 10, color: isMe ? Colors.white.withOpacity(0.7) : AppColors.caption)),
-            ]),
-          ),
+            const SizedBox(width: 8),
+          ],
+          Column(crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start, children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isMe ? AppColors.primary : AppColors.card,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(16),
+                  topRight: const Radius.circular(16),
+                  bottomLeft: Radius.circular(isMe ? 16 : 4),
+                  bottomRight: Radius.circular(isMe ? 4 : 16),
+                ),
+                border: isMe ? null : Border.all(color: AppColors.border),
+              ),
+              child: Text(msg['text'], style: TextStyle(fontSize: 14, color: isMe ? Colors.white : AppColors.text, height: 1.5)),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: EdgeInsets.only(left: isMe ? 0 : 8, right: isMe ? 8 : 0),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Text(msg['time'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.caption)),
+                if (isMe) ...[
+                  const SizedBox(width: 4),
+                  const Text('✓✓', style: TextStyle(fontSize: 11, color: AppColors.primary)),
+                ],
+              ]),
+            ),
+          ]),
         ],
       ),
     );
   }
 
-  Widget _offerCard(Map<String, dynamic> msg) => Padding(
+  // React-matching job offer card with green banner
+  Widget _offerCard() => Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFFF0FDF4), Color(0xFFECFDF5)]),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
         boxShadow: AppShadows.card,
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(msg['title'], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
-        const SizedBox(height: 8),
+      clipBehavior: Clip.antiAlias,
+      child: Column(children: [
+        // Green banner header
         Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border)),
-          child: Row(children: [
-            Container(width: 40, height: 40, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
-              alignment: Alignment.center, child: const Text('🏪', style: TextStyle(fontSize: 20))),
-            const SizedBox(width: 10),
-            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(msg['job'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-              Text(msg['company'], style: const TextStyle(fontSize: 12, color: AppColors.caption)),
-            ])),
-            Text(msg['salary'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
-          ]),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          color: AppColors.primary,
+          child: const Text('🎉 JOB OFFER', textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5)),
         ),
-        const SizedBox(height: 12),
-        Row(children: [
-          Expanded(child: SizedBox(height: 40, child: OutlinedButton(onPressed: () {}, child: const Text('Decline')))),
-          const SizedBox(width: 10),
-          Expanded(child: SizedBox(height: 40, child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(minimumSize: Size.zero),
-            child: const Text('Accept ✓', style: TextStyle(fontSize: 14)),
-          ))),
-        ]),
+        Padding(padding: const EdgeInsets.all(20), child: Column(children: [
+          const Text('Shop Assistant', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 6),
+          const Text('₹12,000/month • Full Time', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
+          const SizedBox(height: 12),
+          // Details
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(12)),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: const [
+                Text('Start: ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+                Text('Monday, Nov 14', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+              ]),
+              const SizedBox(height: 4),
+              Row(children: const [
+                Text('Hours: ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+                Text('9 AM – 6 PM, Mon–Sat', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+              ]),
+            ]),
+          ),
+          const SizedBox(height: 20),
+          // Buttons
+          Row(children: [
+            Expanded(child: SizedBox(height: 44, child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(minimumSize: Size.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [Icon(Icons.check, size: 18), SizedBox(width: 6), Text('Accept')]),
+            ))),
+            const SizedBox(width: 12),
+            Expanded(child: SizedBox(height: 44, child: OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.alert),
+                foregroundColor: AppColors.alert,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [Icon(Icons.close, size: 18), SizedBox(width: 6), Text('Decline')]),
+            ))),
+          ]),
+          const SizedBox(height: 12),
+          const Text('Offer expires in 24 hours', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.alert)),
+        ])),
       ]),
     ),
   );
 
-  Widget _quickReplies() => SizedBox(
-    height: 36,
-    child: ListView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: ['Yes, I am interested', 'When can I start?', 'What is the salary?', 'I need directions'].map((reply) => Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: TapScale(
-          onTap: () { setState(() { _messages.add({'text': reply, 'isMe': true, 'time': 'Now'}); }); },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xl)),
-            child: Text(reply, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+  // Phone Reveal Card — matches React
+  Widget _phoneRevealCard() => Container(
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: AppColors.border, style: BorderStyle.solid),
+    ),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: const [
+        Text('🔒', style: TextStyle(fontSize: 16)),
+        SizedBox(width: 8),
+        Text('Share your phone number?', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+      ]),
+      const SizedBox(height: 8),
+      const Text('Sri Ganesh Store wants to contact you directly.', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
+      const SizedBox(height: 6),
+      const Text('📞 Your number stays private until you accept', style: TextStyle(fontSize: 12, color: AppColors.caption, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 16),
+      Row(children: [
+        Expanded(child: SizedBox(height: 44, child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(minimumSize: Size.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+          child: const Text('Share Number', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+        ))),
+        const SizedBox(width: 12),
+        Expanded(child: SizedBox(height: 44, child: OutlinedButton(
+          onPressed: () {},
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: AppColors.border),
+            foregroundColor: AppColors.textSecondary,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
-        ),
-      )).toList(),
+          child: const Text('Keep Hidden', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+        ))),
+      ]),
+    ]),
+  );
+
+  Widget _quickReplies() => Container(
+    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    decoration: const BoxDecoration(color: AppColors.card, border: Border(top: BorderSide(color: AppColors.border))),
+    child: SizedBox(
+      height: 36,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: ["Yes, I'm interested 👍", 'When do I start?', "What's the pay?", "I'm on my way"].map((reply) => Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: TapScale(
+            onTap: () { setState(() { _messages.add({'text': reply, 'isMe': true, 'time': 'Now'}); }); },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.bg,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Text(reply, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
+            ),
+          ),
+        )).toList(),
+      ),
     ),
   );
 
   Widget _inputBar() => Container(
-    padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-    decoration: BoxDecoration(color: AppColors.card, border: Border(top: BorderSide(color: AppColors.border.withOpacity(0.5)))),
+    padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+    color: AppColors.card,
     child: Row(children: [
-      Expanded(
-        child: Container(
-          height: 44,
-          decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.xl)),
-          child: TextField(
+      TapScale(child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)),
+        child: const Icon(Icons.attach_file, size: 20, color: AppColors.textSecondary),
+      )),
+      const SizedBox(width: 12),
+      Expanded(child: Container(
+        height: 48,
+        decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(24), border: Border.all(color: AppColors.border)),
+        child: Row(children: [
+          Expanded(child: TextField(
             controller: _msgCtrl,
             onSubmitted: (_) => _send(),
             decoration: const InputDecoration(
@@ -199,19 +351,20 @@ class _ChatScreenState extends State<ChatScreen> {
               contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               fillColor: Colors.transparent,
               filled: true,
-              hintStyle: TextStyle(fontSize: 14, color: AppColors.caption),
+              hintStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.caption),
             ),
-            style: const TextStyle(fontSize: 14),
-          ),
-        ),
-      ),
-      const SizedBox(width: 8),
+            style: const TextStyle(fontSize: 15),
+          )),
+          const Padding(padding: EdgeInsets.only(right: 12), child: Icon(Icons.emoji_emotions_outlined, size: 20, color: AppColors.textSecondary)),
+        ]),
+      )),
+      const SizedBox(width: 12),
       TapScale(
         onTap: _send,
         child: Container(
-          width: 44, height: 44,
+          width: 48, height: 48,
           decoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle, boxShadow: AppShadows.primaryGlow(0.2)),
-          child: const Icon(Icons.send_rounded, size: 18, color: Colors.white),
+          child: const Icon(Icons.send_rounded, size: 20, color: Colors.white),
         ),
       ),
     ]),

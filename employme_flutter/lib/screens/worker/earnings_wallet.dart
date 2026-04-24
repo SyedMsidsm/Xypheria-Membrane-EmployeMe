@@ -147,7 +147,7 @@ class _EarningsWalletState extends State<EarningsWallet> {
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text('Earnings Trend', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
       const SizedBox(height: 16),
-      SizedBox(height: 100, child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+      SizedBox(height: 120, child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
         ...['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].asMap().entries.map((e) {
           final heights = [0.4, 0.6, 0.3, 0.8, 1.0, 0.5, 0.0];
           final isToday = e.key == 4;

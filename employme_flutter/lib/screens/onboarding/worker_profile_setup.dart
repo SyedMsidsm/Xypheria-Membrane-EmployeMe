@@ -95,9 +95,9 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
 
   Widget _emergency() => Padding(padding: const EdgeInsets.all(20), child: Container(
     padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: AppColors.border), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)]),
+      border: const Border(left: BorderSide(color: AppColors.alert, width: 4), top: BorderSide(color: AppColors.border), right: BorderSide(color: AppColors.border), bottom: BorderSide(color: AppColors.border)),
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)]),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(width: 4, height: 40, color: AppColors.alert),
       const Text('Add Emergency Contact', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
       const SizedBox(height: 4), const Text('Builds trust with employers', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
       const SizedBox(height: 16),

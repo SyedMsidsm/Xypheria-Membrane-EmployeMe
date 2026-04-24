@@ -17,6 +17,7 @@ class EmployerDashboard extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 24),
           children: [
             _header(state),
+            _postJobCTA(context),
             _quickActions(context),
             _activePostings(context),
             _recentApplicants(context),
@@ -27,180 +28,273 @@ class EmployerDashboard extends StatelessWidget {
     );
   }
 
+  // React-matching navy header
   Widget _header(AppState state) => Container(
-    decoration: const BoxDecoration(
-      gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)]),
-    ),
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+    color: AppColors.navy,
+    padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // Top row
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text('Good morning, ${state.userName.split(' ')[0]}!',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+        Row(children: [
+          Icon(Icons.notifications_outlined, size: 20, color: Colors.white.withOpacity(0.8)),
+          const SizedBox(width: 12),
+          Container(
+            width: 36, height: 36,
+            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+            alignment: Alignment.center,
+            child: Text(state.userName[0], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white)),
+          ),
+        ]),
+      ]),
+      const SizedBox(height: 16),
+      // Business info
       Row(children: [
         Container(
-          width: 44, height: 44,
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), shape: BoxShape.circle),
-          alignment: Alignment.center,
-          child: const Text('🏢', style: TextStyle(fontSize: 22)),
+          width: 48, height: 48,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.1)),
+          child: const Icon(Icons.store, size: 24, color: Colors.white),
         ),
         const SizedBox(width: 12),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Hi, ${state.userName.split(' ')[0]}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
-          Text('Employer Dashboard', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
-        ])),
-        TapScale(
-          onTap: () {},
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
-            child: const Icon(Icons.settings, size: 20, color: Colors.white),
+          const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
+            child: const Text('Verified Business', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
           ),
-        ),
+        ])),
       ]),
       const SizedBox(height: 20),
-      // Stats row
+      // Stats pills
       Row(children: [
-        _stat('3', 'Active Posts', Icons.work_rounded),
-        const SizedBox(width: 12),
-        _stat('12', 'Applicants', Icons.people_rounded),
-        const SizedBox(width: 12),
-        _stat('87%', 'Fill Rate', Icons.trending_up_rounded),
+        for (final s in ['3 Active Posts', '47 Applicants', '2 Hired']) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+            child: Text(s, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
+          ),
+          if (s != '2 Hired') const SizedBox(width: 8),
+        ],
       ]),
     ]),
   );
 
-  Widget _stat(String value, String label, IconData icon) => Expanded(
+  // Find workers CTA — overlapping navy section
+  Widget _postJobCTA(BuildContext context) => Transform.translate(
+    offset: const Offset(0, -20),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TapScale(
+        onTap: () => Navigator.pushNamed(context, '/post-job'),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppShadows.elevated,
+          ),
+          child: Row(children: [
+            Container(
+              width: 48, height: 48,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.2)),
+              child: const Icon(Icons.add, size: 24, color: Colors.white),
+            ),
+            const SizedBox(width: 16),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text('Find workers now', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+              const SizedBox(height: 4),
+              Text('Post a job in 90 seconds!', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.8))),
+            ])),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+              child: const Text('FREE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.white)),
+            ),
+            const SizedBox(width: 6),
+            const Icon(Icons.chevron_right, size: 20, color: Colors.white),
+          ]),
+        ),
+      ),
+    ),
+  );
+
+  // Quick Actions — 2x2 grid matching React
+  Widget _quickActions(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+    child: GridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.9,
+      children: [
+        _actionTile(Icons.add, 'Post New Job', AppColors.primary, Colors.white, onTap: () => Navigator.pushNamed(context, '/post-job')),
+        _actionTile(Icons.people, 'Applicants', AppColors.navyLight, Colors.white, onTap: () => Navigator.pushNamed(context, '/applicants')),
+        _actionTile(Icons.star, 'Reviews', AppColors.card, AppColors.navy, hasBorder: true),
+        _actionTile(Icons.bar_chart, 'Analytics', AppColors.card, AppColors.navy, hasBorder: true),
+      ],
+    ),
+  );
+
+  Widget _actionTile(IconData icon, String label, Color bg, Color fg, {bool hasBorder = false, VoidCallback? onTap}) => TapScale(
+    onTap: onTap,
     child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(AppRadius.md)),
-      child: Column(children: [
-        Icon(icon, size: 18, color: AppColors.primary),
-        const SizedBox(height: 6),
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-        Text(label, style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7))),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(16),
+        border: hasBorder ? Border.all(color: AppColors.border) : null,
+        boxShadow: AppShadows.card,
+      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(icon, size: 24, color: fg),
+        const SizedBox(height: 8),
+        Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: fg)),
       ]),
     ),
   );
 
-  Widget _quickActions(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Quick Actions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-      const SizedBox(height: 12),
-      Row(children: [
-        Expanded(child: TapScale(
-          onTap: () => Navigator.pushNamed(context, '/post-job'),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              boxShadow: AppShadows.primaryGlow(0.2),
-            ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(width: 40, height: 40, decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(AppRadius.md)),
-                child: const Icon(Icons.add, color: Colors.white)),
-              const SizedBox(height: 12),
-              const Text('Post Job', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-              Text('ಕೆಲಸ ಪೋಸ್ಟ್ ಮಾಡಿ', style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7))),
-            ]),
-          ),
-        )),
-        const SizedBox(width: 12),
-        Expanded(child: TapScale(
-          onTap: () => Navigator.pushNamed(context, '/applicants'),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.card,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.border),
-              boxShadow: AppShadows.card,
-            ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(width: 40, height: 40, decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.md)),
-                child: const Icon(Icons.people, color: AppColors.primaryDark)),
-              const SizedBox(height: 12),
-              const Text('Applicants', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-              const Text('ಅರ್ಜಿದಾರರು', style: TextStyle(fontSize: 11, color: AppColors.caption)),
-            ]),
-          ),
-        )),
-      ]),
-    ]),
-  );
-
+  // Active Postings — matching React's left-border cards
   Widget _activePostings(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+    padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Text('Active Postings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        GestureDetector(child: const Text('See All', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
+        const Text('Active Postings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+        GestureDetector(child: const Text('View All (3)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
       ]),
+      const SizedBox(height: 16),
+      _activeCard('Shop Assistant', '3 days', 47, true),
       const SizedBox(height: 12),
-      _postingCard('🏪', 'Shop Assistant', '₹12,000/mo', '5 applicants', AppColors.primary),
-      const SizedBox(height: 10),
-      _postingCard('🍳', 'Kitchen Helper', '₹500/day', '3 applicants', AppColors.info),
+      _activeCard('Delivery Partner', '7 days', 12, false),
     ]),
   );
 
-  Widget _postingCard(String emoji, String title, String salary, String apps, Color accent) => TapScale(
-    child: Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), border: Border.all(color: AppColors.border), boxShadow: AppShadows.card),
-      child: Row(children: [
-        Container(width: 44, height: 44, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md)),
-          alignment: Alignment.center, child: Text(emoji, style: const TextStyle(fontSize: 22))),
-        const SizedBox(width: 12),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(salary, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-        ])),
+  Widget _activeCard(String title, String expires, int applicants, bool highInterest) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(16),
+      border: const Border(left: BorderSide(color: AppColors.primary, width: 4)),
+      boxShadow: AppShadows.card,
+    ),
+    child: Column(children: [
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 6),
+          Row(children: [
+            Icon(Icons.access_time, size: 14, color: highInterest ? AppColors.alert : AppColors.textSecondary),
+            const SizedBox(width: 6),
+            Text('Expires in $expires', style: TextStyle(fontSize: 12, fontWeight: highInterest ? FontWeight.w600 : FontWeight.w500, color: highInterest ? AppColors.alert : AppColors.textSecondary)),
+          ]),
+        ]),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(color: accent.withOpacity(0.1), borderRadius: BorderRadius.circular(AppRadius.sm)),
-          child: Text(apps, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: accent)),
+          decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
+          child: const Text('ACTIVE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
         ),
       ]),
-    ),
+      const SizedBox(height: 16),
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(12)),
+        child: Row(children: [
+          const Icon(Icons.people, size: 16, color: AppColors.primary),
+          const SizedBox(width: 6),
+          Text('$applicants applicants', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          if (highInterest) ...[
+            const SizedBox(width: 12),
+            const Icon(Icons.local_fire_department, size: 16, color: AppColors.alert),
+            const SizedBox(width: 6),
+            const Text('High Interest', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.alert)),
+          ],
+        ]),
+      ),
+      const SizedBox(height: 16),
+      Row(children: [
+        Expanded(child: SizedBox(height: 44, child: OutlinedButton(
+          onPressed: () {},
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: AppColors.border),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          child: Text('View Applicants ($applicants)', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text)),
+        ))),
+        const SizedBox(width: 8),
+        SizedBox(height: 44, child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: const [
+            Text('Boost', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+            SizedBox(width: 6),
+            Icon(Icons.local_fire_department, size: 14),
+          ]),
+        )),
+      ]),
+    ]),
   );
 
+  // Recent Applicants — matching React's list style
   Widget _recentApplicants(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+    padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Text('Recent Applicants', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        GestureDetector(
-          onTap: () => Navigator.pushNamed(context, '/applicants'),
-          child: const Text('View All', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)),
+      const Text('Recent Applicants', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+      const SizedBox(height: 16),
+      Container(
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border),
+          boxShadow: AppShadows.card,
         ),
-      ]),
-      const SizedBox(height: 12),
-      ...['Raju Kumar', 'Suresh Mallya', 'Priya Devi'].asMap().entries.map((e) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: TapScale(
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border), boxShadow: AppShadows.soft),
-            child: Row(children: [
-              Container(
-                width: 40, height: 40,
-                decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle),
-                alignment: Alignment.center,
-                child: Text(e.value[0], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(e.value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                Text(['Shop Assistant', 'Kitchen Helper', 'Delivery'][e.key], style: const TextStyle(fontSize: 12, color: AppColors.caption)),
-              ])),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: e.key == 0 ? AppColors.primaryLight : AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.xs)),
-                child: Text(e.key == 0 ? '⭐ Best Match' : '${[87, 72, 65][e.key]} Trust', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: e.key == 0 ? AppColors.primaryDark : AppColors.textSecondary)),
-              ),
-            ]),
-          ),
-        ),
-      )),
+        clipBehavior: Clip.antiAlias,
+        child: Column(children: [
+          for (int i = 0; i < 3; i++) ...[
+            _applicantRow(
+              ['Raju K.', 'Suresh M.', 'Priya D.'][i],
+              ['Shop • Clean', 'Delivery', 'Cook • Shop'][i],
+              ['6 min', '12 min', '8 min'][i],
+            ),
+            if (i < 2) const Divider(height: 1, color: AppColors.border),
+          ],
+        ]),
+      ),
     ]),
+  );
+
+  Widget _applicantRow(String name, String skills, String dist) => TapScale(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(children: [
+        Container(
+          width: 44, height: 44,
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
+          alignment: Alignment.center,
+          child: Text(name[0], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+        ),
+        const SizedBox(width: 16),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 2),
+          Text(skills, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+        ])),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text('🚶 $dist', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary)),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.border)),
+            child: const Text('View', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+          ),
+        ]),
+      ]),
+    ),
   );
 }

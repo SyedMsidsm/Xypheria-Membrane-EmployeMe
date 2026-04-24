@@ -10,7 +10,7 @@ class QuickApply extends StatefulWidget {
 
 class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateMixin {
   int _step = 0; // 0 = form, 1 = confirm, 2 = success
-  String _availability = 'Immediately';
+  String _availability = 'Today';
   String _timing = 'Morning (6 AM - 12 PM)';
   late AnimationController _successCtrl;
   late Animation<double> _successScale;
@@ -50,7 +50,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
                 _successCtrl.forward();
               }
             },
-            child: Text(_step == 0 ? 'Continue' : 'Submit Application ✓'),
+            child: Text(_step == 0 ? 'Continue' : 'Submit Application / ಅರ್ಜಿ ಸಲ್ಲಿಸಿ'),
           ),
         ),
       ),
@@ -59,78 +59,143 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
 
   Widget _formView() => SingleChildScrollView(
     key: const ValueKey('form'),
-    padding: const EdgeInsets.all(20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(children: [
-        GestureDetector(
-          onTap: () { if (_step > 0) setState(() => _step--); else Navigator.pop(context); },
-          child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: AppColors.card, shape: BoxShape.circle, border: Border.all(color: AppColors.border)), child: const Icon(Icons.arrow_back, size: 20)),
-        ),
-        const Spacer(),
-        Text('Step ${_step + 1} of 2', style: const TextStyle(fontSize: 13, color: AppColors.caption, fontWeight: FontWeight.w500)),
-      ]),
-      const SizedBox(height: 8),
-      ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: LinearProgressIndicator(value: (_step + 1) / 2, minHeight: 4, backgroundColor: AppColors.border, valueColor: const AlwaysStoppedAnimation(AppColors.primary)),
+      // Header matching React's centered job info
+      Container(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+        decoration: const BoxDecoration(color: AppColors.card, border: Border(bottom: BorderSide(color: AppColors.border))),
+        child: Column(children: [
+          Row(children: [
+            GestureDetector(
+              onTap: () { if (_step > 0) setState(() => _step--); else Navigator.pop(context); },
+              child: const Icon(Icons.arrow_back, size: 22),
+            ),
+            Expanded(child: Column(children: [
+              Text('Applying for...', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+              const Text('Shop Assistant', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+              const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
+            ])),
+            const SizedBox(width: 22), // Balance the back button
+          ]),
+          const SizedBox(height: 12),
+          Row(children: [
+            Text('Step ${_step + 1} of 2', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            const SizedBox(width: 8),
+            Expanded(child: ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: LinearProgressIndicator(value: (_step + 1) / 2, minHeight: 3, backgroundColor: AppColors.border, valueColor: const AlwaysStoppedAnimation(AppColors.primary)),
+            )),
+          ]),
+        ]),
       ),
-      const SizedBox(height: 24),
-      Text(_step == 0 ? 'Quick Apply' : 'Confirm Details', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-      const SizedBox(height: 4),
-      Text(_step == 0 ? 'ತ್ವರಿತ ಅರ್ಜಿ' : 'ವಿವರಗಳನ್ನು ಖಚಿತಪಡಿಸಿ', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-      const SizedBox(height: 24),
-      if (_step == 0) ..._formStep1(),
-      if (_step == 1) _formStep2(),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(_step == 0 ? 'Confirm your details' : 'Confirm Details', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 4),
+          Text(_step == 0 ? "We'll share these with the employer" : 'ವಿವರಗಳನ್ನು ಖಚಿತಪಡಿಸಿ', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+          const SizedBox(height: 24),
+          if (_step == 0) ..._formStep1(),
+          if (_step == 1) _formStep2(),
+        ]),
+      ),
     ]),
   );
 
   List<Widget> _formStep1() => [
+    // Profile Summary Card matching React
+    Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primary, width: 1.5),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Stack(children: [
+          Row(children: [
+            Container(
+              width: 52, height: 52,
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+              alignment: Alignment.center,
+              child: const Text('R', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+            ),
+            const SizedBox(width: 12),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text('Raju Kumar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
+              Wrap(spacing: 6, children: ['🧹 Cleaning', '🏪 Shop Helper'].map((s) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
+                child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
+              )).toList()),
+            ]),
+          ]),
+          const Positioned(top: 0, right: 0, child: Text('Edit', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
+        ]),
+        const SizedBox(height: 10),
+        const Text('📍 Kodialbail — 🚶 6 min away', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        Wrap(spacing: 8, children: ['✅ Phone Verified', '✅ Community Verified'].map((b) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
+          child: Text(b, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
+        )).toList()),
+      ]),
+    ),
+    const SizedBox(height: 24),
+    // When can you start?
     const Text('When can you start?', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    const SizedBox(height: 10),
-    ...['Immediately', 'Tomorrow', 'This Week', 'Next Week'].map((opt) => Padding(
+    const SizedBox(height: 12),
+    ...['Today', 'Tomorrow', 'This Week', 'Discuss'].map((opt) => Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: TapScale(
         onTap: () => setState(() => _availability = opt),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(14),
+          height: 56,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: _availability == opt ? AppColors.primary.withOpacity(0.05) : AppColors.card,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: _availability == opt ? AppColors.primary : AppColors.border, width: _availability == opt ? 2 : 1),
-            boxShadow: AppShadows.soft,
+            color: _availability == opt ? AppColors.primaryLight : AppColors.card,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: _availability == opt ? AppColors.primary : AppColors.border, width: _availability == opt ? 2 : 1.5),
           ),
-          child: Row(children: [
-            Text(opt, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _availability == opt ? AppColors.primaryDark : AppColors.text)),
-            const Spacer(),
-            if (_availability == opt) const Icon(Icons.check_circle, size: 18, color: AppColors.primary),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            if (_availability == opt) ...[
+              const Icon(Icons.check, size: 18, color: AppColors.primary),
+              const SizedBox(width: 8),
+            ],
+            Text(opt, style: TextStyle(fontSize: 15, fontWeight: _availability == opt ? FontWeight.w700 : FontWeight.w500)),
           ]),
         ),
       ),
     )),
-    const SizedBox(height: 16),
-    const Text('Preferred Timing', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    const SizedBox(height: 10),
-    ...['Morning (6 AM - 12 PM)', 'Afternoon (12 PM - 6 PM)', 'Evening (6 PM - 10 PM)', 'Flexible'].map((opt) => Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: TapScale(
-        onTap: () => setState(() => _timing = opt),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: _timing == opt ? AppColors.primary.withOpacity(0.05) : AppColors.card,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: _timing == opt ? AppColors.primary : AppColors.border, width: _timing == opt ? 2 : 1),
-            boxShadow: AppShadows.soft,
-          ),
-          child: Row(children: [
-            Text(opt, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _timing == opt ? AppColors.primaryDark : AppColors.text)),
-            const Spacer(),
-            if (_timing == opt) const Icon(Icons.check_circle, size: 18, color: AppColors.primary),
-          ]),
-        ),
+    // Optional message
+    const SizedBox(height: 24),
+    const Text('Add a message (optional)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+    const SizedBox(height: 8),
+    Container(
+      decoration: BoxDecoration(
+        color: AppColors.bg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border, width: 1.5),
       ),
+      child: const TextField(
+        maxLines: 3,
+        decoration: InputDecoration(
+          hintText: 'Hi, I am interested in this position. I have experience in shop work...',
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(16),
+          hintStyle: TextStyle(fontSize: 14, color: AppColors.caption),
+          fillColor: Colors.transparent,
+          filled: true,
+        ),
+        style: TextStyle(fontSize: 14),
+      ),
+    ),
+    const Align(alignment: Alignment.centerRight, child: Padding(
+      padding: EdgeInsets.only(top: 4),
+      child: Text('0/200', style: TextStyle(fontSize: 12, color: AppColors.caption)),
     )),
   ];
 
@@ -166,41 +231,58 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
 
   Widget _successView() => Center(
     key: const ValueKey('success'),
-    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      ScaleTransition(
-        scale: _successScale,
-        child: Container(
-          width: 100, height: 100,
-          decoration: BoxDecoration(
-            color: AppColors.primaryLight,
-            shape: BoxShape.circle,
-            boxShadow: AppShadows.primaryGlow(0.2),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        ScaleTransition(
+          scale: _successScale,
+          child: Container(
+            width: 80, height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.primaryLight,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.primary, width: 3),
+            ),
+            child: const Icon(Icons.check_rounded, size: 40, color: AppColors.primary),
           ),
-          child: const Icon(Icons.check_rounded, size: 56, color: AppColors.primary),
         ),
-      ),
-      const SizedBox(height: 24),
-      const Text('Application Sent! 🎉', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-      const SizedBox(height: 8),
-      const Text('ಅರ್ಜಿ ಕಳುಹಿಸಲಾಗಿದೆ!', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
-      const SizedBox(height: 4),
-      const Text('The employer will review your profile', style: TextStyle(fontSize: 14, color: AppColors.caption)),
-      const SizedBox(height: 32),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: SizedBox(
-          width: double.infinity, height: 56,
-          child: ElevatedButton(
+        const SizedBox(height: 20),
+        const Text('Application Sent! 🎉', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
+        const SizedBox(height: 6),
+        const Text('ಅರ್ಜಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+        const SizedBox(height: 12),
+        const Text('Sri Ganesh Provision Store will contact you soon',
+          style: TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
+          textAlign: TextAlign.center),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
+          child: const Text('Usually within 2 hours', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)),
+        ),
+        const SizedBox(height: 32),
+        Row(children: [
+          Expanded(child: SizedBox(height: 48, child: OutlinedButton(
+            onPressed: () => Navigator.pushNamed(context, '/my-jobs'),
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColors.border, width: 1.5),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('View Application', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.text)),
+          ))),
+          const SizedBox(width: 10),
+          Expanded(child: SizedBox(height: 48, child: ElevatedButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
-            child: const Text('Back to Jobs'),
-          ),
+            style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text('Find More Jobs', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+          ))),
+        ]),
+        const SizedBox(height: 20),
+        GestureDetector(
+          child: const Text('Share with a friend who needs work →',
+            style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
         ),
-      ),
-      const SizedBox(height: 12),
-      TextButton(
-        onPressed: () => Navigator.pushNamed(context, '/my-jobs'),
-        child: const Text('View My Applications →', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
-      ),
-    ]),
+      ]),
+    ),
   );
 }

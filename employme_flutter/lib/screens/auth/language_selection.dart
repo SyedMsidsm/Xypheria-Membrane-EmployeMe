@@ -11,7 +11,7 @@ class LanguageSelection extends StatefulWidget {
 }
 
 class _LanguageSelectionState extends State<LanguageSelection> with SingleTickerProviderStateMixin {
-  String _selected = 'en';
+  String _selected = 'kn'; // React defaults to Kannada
   late AnimationController _ctrl;
   late Animation<double> _fadeIn;
 
@@ -33,62 +33,108 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeIn,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // Progress
-              Row(children: [
-                Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(4), child: LinearProgressIndicator(value: 0.25, minHeight: 4, backgroundColor: AppColors.border, valueColor: const AlwaysStoppedAnimation(AppColors.primary)))),
-                const SizedBox(width: 12),
-                const Text('1/4', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.caption)),
+          child: Column(children: [
+            // Header with logo + progress dots
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Column(children: [
+                // Logo row
+                Row(children: [
+                  Container(
+                    width: 32, height: 32,
+                    decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(10)),
+                    child: const Icon(Icons.handshake_rounded, size: 18, color: Colors.white),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('EmployMe', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text)),
+                ]),
+                // Progress dots
+                const SizedBox(height: 16),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(width: 12, height: 12, decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary)),
+                  const SizedBox(width: 8),
+                  Container(width: 8, height: 8, margin: const EdgeInsets.only(top: 2), decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.border)),
+                  const SizedBox(width: 8),
+                  Container(width: 8, height: 8, margin: const EdgeInsets.only(top: 2), decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.border)),
+                ]),
               ]),
-              const SizedBox(height: 32),
-              const Text('Choose your language', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.text)),
-              const SizedBox(height: 4),
-              const Text('ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ', style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
-              const SizedBox(height: 24),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.6,
-                  children: DemoData.languages.map((lang) {
-                    final active = _selected == lang['code'];
-                    return TapScale(
-                      onTap: () => setState(() => _selected = lang['code']!),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          color: active ? AppColors.primary.withOpacity(0.05) : AppColors.card,
-                          borderRadius: BorderRadius.circular(AppRadius.lg),
-                          border: Border.all(color: active ? AppColors.primary : AppColors.border, width: active ? 2 : 1.5),
-                          boxShadow: active ? AppShadows.primaryGlow(0.08) : AppShadows.soft,
-                        ),
-                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Text(lang['script']!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: active ? AppColors.primary : AppColors.text)),
-                          const SizedBox(height: 4),
-                          Text(lang['name']!, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: active ? AppColors.primaryDark : AppColors.textSecondary)),
-                        ]),
+            ),
+
+            // Title
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
+              child: Column(children: [
+                const Text('Choose Your Language', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.text), textAlign: TextAlign.center),
+                const SizedBox(height: 6),
+                const Text('ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+              ]),
+            ),
+
+            // Language Grid
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                childAspectRatio: 1.8,
+                children: DemoData.languages.map((lang) {
+                  final active = _selected == lang['code'];
+                  return TapScale(
+                    onTap: () => setState(() => _selected = lang['code']!),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        color: active ? AppColors.primaryLight : AppColors.card,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: active ? AppColors.primary : AppColors.border, width: active ? 2 : 1),
                       ),
-                    );
-                  }).toList(),
-                ),
+                      child: Stack(children: [
+                        Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          Text(lang['script']!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: active ? AppColors.primaryDark : AppColors.text)),
+                          const SizedBox(height: 2),
+                          Text(lang['name']!, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: active ? AppColors.primaryDark : AppColors.textSecondary)),
+                        ])),
+                        // Checkmark in top-right
+                        Positioned(top: 8, right: 8, child: Container(
+                          width: 20, height: 20,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: active ? AppColors.primary : Colors.transparent,
+                            border: Border.all(color: active ? AppColors.primary : AppColors.border, width: 2),
+                          ),
+                          child: active ? const Icon(Icons.check, size: 12, color: Colors.white) : null,
+                        )),
+                      ]),
+                    ),
+                  );
+                }).toList(),
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<AppState>().setLanguage(_selected);
-                    Navigator.pushNamed(context, '/role');
-                  },
-                  child: const Text('Continue / ಮುಂದುವರಿಯಿರಿ'),
+            ),
+
+            // Bottom
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+              child: Column(children: [
+                const Text('More languages coming soon', style: TextStyle(fontSize: 13, color: AppColors.caption, fontWeight: FontWeight.w500)),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity, height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AppState>().setLanguage(_selected);
+                      Navigator.pushNamed(context, '/role');
+                    },
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                      Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                      SizedBox(width: 8),
+                      Text('ಮುಂದುವರಿಯಿರಿ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                    ]),
+                  ),
                 ),
-              ),
-            ]),
-          ),
+              ]),
+            ),
+          ]),
         ),
       ),
     );
