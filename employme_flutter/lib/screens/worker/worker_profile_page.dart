@@ -100,7 +100,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 16), child: Column(children: [
-        _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
+        _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _aboutSection(state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
       ]))),
       bottomNavigationBar: const WorkerNav(currentIndex: 4),
     );
@@ -110,7 +110,10 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)])),
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
     child: Column(children: [
-      Align(alignment: Alignment.topRight, child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white))),
+      Align(alignment: Alignment.topRight, child: GestureDetector(
+        onTap: () => Navigator.pushNamed(context, '/edit-profile'),
+        child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white)),
+      )),
       // Profile photo — tap to change
       GestureDetector(
         onTap: _changeProfilePhoto,
@@ -149,7 +152,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
       const SizedBox(height: 8), Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
         child: Text(state.tr('available_now'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white))),
       const SizedBox(height: 8), Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
-      const SizedBox(height: 2), Text('📍 ${state.location}', style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.7))),
+      const SizedBox(height: 2), Text('📍 ${state.location} • ${state.gender}, ${state.age}', style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.7))),
       Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.5))),
     ]));
 
@@ -185,7 +188,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     child: Column(children: [Text(n, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary)), const SizedBox(height: 2), Text(l, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary))])));
 
   Widget _skillsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(state.tr('my_skills'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), Text(state.tr('edit'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))]),
+    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(state.tr('my_skills'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), GestureDetector(onTap: () => Navigator.pushNamed(context, '/edit-profile'), child: Text(state.tr('edit'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)))]),
     const SizedBox(height: 10),
     Wrap(spacing: 8, runSpacing: 8, children: [
       ...state.selectedSkills.map((s) => Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
@@ -195,18 +198,37 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     ]),
   ]));
 
+  Widget _aboutSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    const Text('About Me', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    const SizedBox(height: 8),
+    Text(state.aboutMe.isNotEmpty ? state.aboutMe : 'No details provided yet.', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
+  ]));
+
   Widget _availabilitySection(AppState state) => Container(margin: const EdgeInsets.fromLTRB(20, 16, 20, 0), padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(state.tr('my_availability'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
       const SizedBox(height: 10),
-      Row(children: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].asMap().entries.map((e) => Padding(padding: const EdgeInsets.only(right: 6),
-        child: Container(width: 36, height: 36, decoration: BoxDecoration(shape: BoxShape.circle, color: e.key < 5 ? AppColors.primary : AppColors.border),
-          alignment: Alignment.center, child: Text(e.value, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: e.key < 5 ? Colors.white : AppColors.caption))))).toList()),
+      Row(children: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) {
+        final selected = state.availableDays.contains(day);
+        return Padding(padding: const EdgeInsets.only(right: 6),
+        child: Container(width: 36, height: 36, decoration: BoxDecoration(shape: BoxShape.circle, color: selected ? AppColors.primary : AppColors.border),
+          alignment: Alignment.center, child: Text(day, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: selected ? Colors.white : AppColors.caption))));
+      }).toList()),
       const SizedBox(height: 10),
       Wrap(spacing: 8, children: [Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-        child: Text('🌅 ${state.tr('morning')}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary))),
-        Text('Available: ${state.tr('immediately')}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary))]),
+        child: Text('${_getTimingIcon(state.preferredTiming)} ${state.preferredTiming}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary))),
+        Text('Available: ${state.availableNow ? state.tr('immediately') : 'Not right now'}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary))]),
     ]));
+
+  String _getTimingIcon(String timing) {
+    switch (timing) {
+      case 'Morning': return '🌅';
+      case 'Afternoon': return '☀️';
+      case 'Evening': return '🌙';
+      case 'Night': return '🌃';
+      default: return '🕐';
+    }
+  }
 
   Widget _reviewsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Text('${state.tr('work_history')} ⭐ 4.8 (12 reviews)', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),

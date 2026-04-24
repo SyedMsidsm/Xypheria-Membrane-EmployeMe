@@ -22,6 +22,7 @@ class AppState extends ChangeNotifier {
   // ── User Profile ──
   String? _profileImagePath;
   String _userName = 'Raju Kumar';
+  String _aboutMe = 'Hardworking professional with a knack for quick learning and reliable delivery.';
   int _age = 24;
   String _gender = 'Male';
   String _location = 'Kodialbail, Mangalore';
@@ -32,18 +33,21 @@ class AppState extends ChangeNotifier {
   int _totalEarned = 18400;
 
   String get userName => _userName;
+  String get aboutMe => _aboutMe;
   String? get profileImagePath => _profileImagePath;
   int get age => _age;
   String get gender => _gender;
   String get location => _location;
+  void setLocation(String loc) { _location = loc; notifyListeners(); }
   int get experience => _experience;
   int get trustScore => _trustScore;
   double get rating => _rating;
   int get jobsDone => _jobsDone;
   int get totalEarned => _totalEarned;
 
-  void updateProfile({String? name, int? age, String? gender, int? exp}) {
+  void updateProfile({String? name, String? aboutMe, int? age, String? gender, int? exp}) {
     if (name != null) _userName = name;
+    if (aboutMe != null) _aboutMe = aboutMe;
     if (age != null) _age = age;
     if (gender != null) _gender = gender;
     if (exp != null) _experience = exp;

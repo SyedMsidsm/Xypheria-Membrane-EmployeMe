@@ -22,6 +22,7 @@ import 'screens/worker/job_detail.dart';
 import 'screens/worker/quick_apply.dart';
 import 'screens/worker/my_jobs.dart';
 import 'screens/worker/worker_profile_page.dart';
+import 'screens/worker/edit_profile.dart';
 import 'screens/worker/notifications.dart';
 import 'screens/worker/nearby_jobs_map.dart';
 import 'screens/worker/earnings_wallet.dart';
@@ -113,6 +114,7 @@ class EmployMeApp extends StatelessWidget {
         '/my-jobs': (_) => const MyJobs(),
         '/earnings': (_) => const EarningsWallet(),
         '/worker-profile': (_) => const WorkerProfilePage(),
+        '/edit-profile': (_) => const EditProfilePage(),
         '/notifications': (_) => const NotificationsScreen(),
 
         // Employer Flow
