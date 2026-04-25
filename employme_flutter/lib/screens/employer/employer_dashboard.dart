@@ -35,7 +35,7 @@ class EmployerDashboard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('${state.tr('good_morning')}, ${state.userName.split(' ')[0]}!',
+          Text('${state.tr('good_morning')}, ${state.businessName}!',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
           Row(children: [
             GestureDetector(
@@ -48,7 +48,7 @@ class EmployerDashboard extends StatelessWidget {
                 width: 36, height: 36,
                 decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
                 alignment: Alignment.center,
-                child: Text(state.userName[0], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
+                child: Text(state.businessName.isNotEmpty ? state.businessName[0] : 'B', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
               ),
             ),
           ]),
