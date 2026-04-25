@@ -64,7 +64,7 @@ class EmployerNav extends StatelessWidget {
       {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': state.tr('workers'), 'route': '/map'},
       {'icon': Icons.add_circle_outline, 'activeIcon': Icons.add_circle_rounded, 'label': state.tr('post_job'), 'route': '/post-job'},
       {'icon': Icons.people_outline_rounded, 'activeIcon': Icons.people_rounded, 'label': state.tr('applicants'), 'route': '/applicants'},
-      {'icon': Icons.person_outline_rounded, 'activeIcon': Icons.person_rounded, 'label': state.tr('profile'), 'route': '/worker-profile'},
+      {'icon': Icons.chat_outlined, 'activeIcon': Icons.chat_rounded, 'label': state.tr('chat'), 'route': '/messages'},
     ];
 
     return Container(

@@ -13,12 +13,6 @@ class MyJobs extends StatefulWidget {
 class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
 
-  final _jobs = [
-    {'emoji': '🏪', 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'status': 'active', 'started': 'Started Aug 1'},
-    {'emoji': '🍳', 'title': 'Kitchen Helper', 'company': 'Hotel Udupi', 'salary': '₹500/day', 'status': 'pending', 'started': 'Applied Aug 3'},
-    {'emoji': '🚚', 'title': 'Delivery Partner', 'company': 'QuickMart', 'salary': '₹600/day', 'status': 'completed', 'started': 'Jul 15 - Jul 30'},
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -28,10 +22,10 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
   @override
   void dispose() { _tabCtrl.dispose(); super.dispose(); }
 
-  List<Map<String, String>> get _filteredJobs {
+  List<Map<String, String>> _filteredJobs(AppState state) {
     final tab = ['all', 'pending', 'active', 'completed'][_tabCtrl.index];
-    if (tab == 'all') return _jobs;
-    return _jobs.where((j) => j['status'] == tab).toList();
+    if (tab == 'all') return state.jobs;
+    return state.jobs.where((j) => j['status'] == tab).toList();
   }
 
   Color _statusColor(String status) {
@@ -53,7 +47,7 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
           _header(state),
           _earningsCard(state),
           _tabs(state),
-          Expanded(child: _jobsList()),
+          Expanded(child: _jobsList(state)),
         ]),
       ),
       bottomNavigationBar: const WorkerNav(currentIndex: 2),
@@ -119,11 +113,13 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
     ),
   );
 
-  Widget _jobsList() => ListView.builder(
+  Widget _jobsList(AppState state) {
+    final jobs = _filteredJobs(state);
+    return ListView.builder(
     padding: const EdgeInsets.all(20),
-    itemCount: _filteredJobs.length,
+    itemCount: jobs.length,
     itemBuilder: (_, i) {
-      final job = _filteredJobs[i];
+      final job = jobs[i];
       final status = job['status']!;
       final color = _statusColor(status);
       return Padding(
@@ -168,4 +164,5 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
       );
     },
   );
+  }
 }

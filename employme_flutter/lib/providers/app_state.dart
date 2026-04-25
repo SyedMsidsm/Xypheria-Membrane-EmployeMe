@@ -17,7 +17,15 @@ class AppState extends ChangeNotifier {
   bool get isEmployer => _role == 'employer';
 
   void setLanguage(String lang) { _language = lang; notifyListeners(); }
-  void setRole(String r) { _role = r; notifyListeners(); }
+  void setRole(String r) { 
+    _role = r; 
+    if (r == 'employer') {
+      _userName = 'Sri Ganesh Store';
+    } else {
+      _userName = 'Raju Kumar';
+    }
+    notifyListeners(); 
+  }
   void login(String phone) { _phone = phone; _isLoggedIn = true; notifyListeners(); }
 
   // ── User Profile ──
@@ -147,7 +155,31 @@ class AppState extends ChangeNotifier {
   int get unreadNotifications => _unreadNotifications;
   void markAllRead() { _unreadNotifications = 0; notifyListeners(); }
 
-  // ── My Jobs Tab ──
+  // ── Chat & Messages ──
+  String getChatId(String otherPersonName) {
+    if (otherPersonName.isEmpty) return _userName;
+    final sorted = [_userName, otherPersonName]..sort();
+    return sorted.join('_');
+  }
+
+  final Map<String, List<Map<String, dynamic>>> _messagesByChatId = {
+    'Raju Kumar_Sri Ganesh Store': [
+      {'text': 'Hello! I saw your application for Shop Assistant. Are you available to start soon?', 'sender': 'Sri Ganesh Store', 'time': '10:32 AM'},
+      {'text': 'Yes, I can start immediately. I have 2 years experience in similar work.', 'sender': 'Raju Kumar', 'time': '10:34 AM'},
+      {'text': 'Great! Can you come for a quick meeting tomorrow at the shop?', 'sender': 'Sri Ganesh Store', 'time': '10:35 AM'},
+      {'text': "Yes, what time? 🚶 I'm only 6 minutes away!", 'sender': 'Raju Kumar', 'time': '10:36 AM'},
+    ],
+  };
+
+  List<Map<String, dynamic>> getMessages(String chatId) => _messagesByChatId[chatId] ?? [];
+
+  void sendMessage(String chatId, String text) {
+    if (!_messagesByChatId.containsKey(chatId)) _messagesByChatId[chatId] = [];
+    _messagesByChatId[chatId]!.add({'text': text, 'sender': _userName, 'time': 'Now'});
+    notifyListeners();
+  }
+
+  // ── My Jobs & Offers ──
   String _myJobsTab = 'All';
   String get myJobsTab => _myJobsTab;
   void setMyJobsTab(String tab) { _myJobsTab = tab; notifyListeners(); }
@@ -185,6 +217,44 @@ class AppState extends ChangeNotifier {
 
   void addJobPosting(JobPosting job) {
     _jobPostings.insert(0, job);
+    notifyListeners();
+  }
+
+  // ── Worker Jobs ──
+  final List<Map<String, String>> _jobs = [
+    {'emoji': '🏪', 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'status': 'active', 'started': 'Started Aug 1'},
+    {'emoji': '🍳', 'title': 'Kitchen Helper', 'company': 'Hotel Udupi', 'salary': '₹500/day', 'status': 'pending', 'started': 'Applied Aug 3'},
+    {'emoji': '🚚', 'title': 'Delivery Partner', 'company': 'QuickMart', 'salary': '₹600/day', 'status': 'completed', 'started': 'Jul 15 - Jul 30'},
+  ];
+  List<Map<String, String>> get jobs => _jobs;
+
+  final Map<String, String> _offerStatusByChatId = {
+    'Raju Kumar_Sri Ganesh Store': 'pending',
+  };
+
+  String getOfferStatus(String chatId) => _offerStatusByChatId[chatId] ?? 'none';
+
+  void sendJobOffer(String chatId) {
+    _offerStatusByChatId[chatId] = 'pending';
+    notifyListeners();
+  }
+
+  void acceptJobOffer(String chatId) {
+    _offerStatusByChatId[chatId] = 'accepted';
+    // Add the new job as active
+    _jobs.insert(0, {
+      'emoji': '🏪',
+      'title': 'Shop Assistant',
+      'company': 'Sri Ganesh Store',
+      'salary': '₹12,000/mo',
+      'status': 'active',
+      'started': 'Started Today'
+    });
+    notifyListeners();
+  }
+
+  void declineJobOffer(String chatId) {
+    _offerStatusByChatId[chatId] = 'declined';
     notifyListeners();
   }
 
