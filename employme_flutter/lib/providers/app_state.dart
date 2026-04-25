@@ -234,6 +234,10 @@ class AppState extends ChangeNotifier {
       'distance': 'Just added',
       'verified': true,
       'isUrgent': p.isUrgent,
+      'description': p.description,
+      'requirements': p.requirements,
+      'timing': p.timing,
+      'peopleNeeded': p.peopleNeeded,
     }).toList();
     
     final demoJobs = DemoData.jobs.map((j) => {

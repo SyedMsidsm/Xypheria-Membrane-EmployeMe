@@ -71,7 +71,7 @@ class _JobFeedState extends State<JobFeed> {
                     distance: j['distance'] as String?,
                     verified: j['verified'] as bool? ?? false,
                     bookmarked: state.isBookmarked(j['title'] as String),
-                    onTap: () => Navigator.pushNamed(context, '/job-detail'),
+                    onTap: () => Navigator.pushNamed(context, '/job-detail', arguments: j),
                     onApply: () => Navigator.pushNamed(context, '/apply'),
                     onBookmark: () => state.toggleBookmark(j['title'] as String),
                   ),
