@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/job_card.dart';
-import '../../services/demo_data.dart';
 import '../../providers/app_state.dart';
 
 class JobFeed extends StatefulWidget {
@@ -19,11 +18,12 @@ class _JobFeedState extends State<JobFeed> {
 
   List<Map<String, dynamic>> _getFilteredJobs(AppState state) {
     var jobs = state.workerFeedJobs;
+    
     if (_showOnlyUrgent) {
-      jobs = jobs.where((j) => j['isUrgent'] == true).toList();
+      jobs = jobs.where((j) => (j['isUrgent'] ?? false) == true).toList();
     }
+
     if (_activeCategoryKey != 'all_jobs_cat') {
-      // Find the English name for filtering since DemoData is in English
       final filterMap = {
         'cooking_cat': 'Cooking',
         'delivery_cat': 'Delivery',
@@ -35,6 +35,7 @@ class _JobFeedState extends State<JobFeed> {
       final filterVal = filterMap[_activeCategoryKey] ?? '';
       jobs = jobs.where((j) => (j['type'] as String).toLowerCase().contains(filterVal.toLowerCase()) || (j['title'] as String).toLowerCase().contains(filterVal.toLowerCase())).toList();
     }
+    
     if (_searchController.text.isNotEmpty) {
       final q = _searchController.text.toLowerCase();
       jobs = jobs.where((j) => (j['title'] as String).toLowerCase().contains(q) || (j['company'] as String).toLowerCase().contains(q)).toList();
@@ -45,6 +46,11 @@ class _JobFeedState extends State<JobFeed> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final filteredJobs = _getFilteredJobs(state);
+
+    // Safety check: if somehow an employer lands here, redirect them or show worker UI
+    // But since routes are separate now, this is mostly for the Worker role.
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -57,8 +63,8 @@ class _JobFeedState extends State<JobFeed> {
                 _searchBar(state),
                 _urgentBanner(state),
                 _categories(context, state),
-                _sectionHeader(state, _getFilteredJobs(state).length),
-                ..._getFilteredJobs(state).map((j) => Padding(
+                _sectionHeader(state, filteredJobs.length),
+                ...filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                   child: JobCard(
                     icon: j['icon'] as IconData,
@@ -76,7 +82,7 @@ class _JobFeedState extends State<JobFeed> {
                     onBookmark: () => state.toggleBookmark(j['title'] as String),
                   ),
                 )),
-                if (_getFilteredJobs(state).isEmpty)
+                if (filteredJobs.isEmpty)
                   Padding(
                     padding: const EdgeInsets.all(40),
                     child: Column(children: [

@@ -19,6 +19,7 @@ class EmployerDashboard extends StatelessWidget {
           children: [
             _header(context, state),
             _postJobCTA(context, state),
+            _availableWorkers(context, state),
             _quickActions(context, state),
             _activePostings(context, state),
             _recentApplicants(context, state),
@@ -98,7 +99,7 @@ class EmployerDashboard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: TapScale(
-          onTap: () => Navigator.pushNamed(context, '/post-job'),
+          onTap: () => _showUrgentCandidates(context, state),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -129,6 +130,175 @@ class EmployerDashboard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showUrgentCandidates(BuildContext context, AppState state) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        decoration: const BoxDecoration(
+          color: AppColors.bg,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              width: 40, height: 4,
+              decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2)),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Urgent Candidates', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                  IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('These workers are active near you and ready to join immediately.', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                itemCount: state.applicants.length,
+                itemBuilder: (context, index) {
+                  final w = state.applicants[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50, height: 50,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
+                          alignment: Alignment.center,
+                          child: Text(w['name'][0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(w['name'], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  const Icon(Icons.location_on, size: 12, color: AppColors.primary),
+                                  const SizedBox(width: 4),
+                                  Text(w['distance'], style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                                  const SizedBox(width: 12),
+                                  const Icon(Icons.star, size: 12, color: Colors.orange),
+                                  const SizedBox(width: 4),
+                                  const Text('4.8', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/worker-profile', arguments: w['name']);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            minimumSize: const Size(0, 36),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: const Text('View', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _availableWorkers(BuildContext context, AppState state) {
+    final workers = state.applicants; 
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Ready to Work Soon', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+              Text('Live • ${workers.length}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary)),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 110,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: workers.length,
+            itemBuilder: (context, index) {
+              final w = workers[index];
+              return TapScale(
+                onTap: () => Navigator.pushNamed(context, '/worker-profile', arguments: w['name']),
+                child: Container(
+                  width: 90,
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            width: 44, height: 44,
+                            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
+                            alignment: Alignment.center,
+                            child: Text(w['name'][0], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+                          ),
+                          Positioned(
+                            right: 0, bottom: 0,
+                            child: Container(
+                              width: 12, height: 12,
+                              decoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle, border: Border.all(color: AppColors.card, width: 2)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(w['name'].split(' ')[0], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700), maxLines: 1),
+                      Text(w['distance'], style: const TextStyle(fontSize: 10, color: AppColors.caption)),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 

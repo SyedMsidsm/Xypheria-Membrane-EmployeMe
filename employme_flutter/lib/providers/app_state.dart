@@ -186,34 +186,7 @@ class AppState extends ChangeNotifier {
   void setMyJobsTab(String tab) { _myJobsTab = tab; notifyListeners(); }
 
   // ── Employer Job Postings ──
-  final List<JobPosting> _jobPostings = [
-    JobPosting(
-      title: 'Shop Assistant',
-      category: 'Retail & Shop',
-      pay: '500',
-      payPeriod: 'per day',
-      timing: '9:00 AM - 6:00 PM',
-      peopleNeeded: 3,
-      type: 'Part Time',
-      description: 'Help manage daily shop operations.',
-      requirements: ['Kannada speaking'],
-      isUrgent: true,
-      postedAt: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    JobPosting(
-      title: 'Delivery Partner',
-      category: 'Delivery',
-      pay: '300',
-      payPeriod: 'per day',
-      timing: '10:00 AM - 4:00 PM',
-      peopleNeeded: 7,
-      type: 'Daily Wage',
-      description: 'Deliver goods to local customers.',
-      requirements: ['Bike license'],
-      isUrgent: false,
-      postedAt: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-  ];
+  final List<JobPosting> _jobPostings = [];
   List<JobPosting> get jobPostings => _jobPostings;
 
   void addJobPosting(JobPosting job) {
@@ -221,9 +194,9 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Combine Employer Job Postings with Demo Jobs for Worker Feed
+  // Combine Employer Job Postings for Feed
   List<Map<String, dynamic>> get workerFeedJobs {
-    final postedAsMaps = _jobPostings.map((p) => {
+    return _jobPostings.map((p) => {
       'emoji': _getEmojiForCategory(p.category),
       'title': p.title,
       'company': _userName.isNotEmpty && isEmployer ? _userName : 'Local Business',
@@ -239,13 +212,6 @@ class AppState extends ChangeNotifier {
       'timing': p.timing,
       'peopleNeeded': p.peopleNeeded,
     }).toList();
-    
-    final demoJobs = DemoData.jobs.map((j) => {
-      ...j, 
-      'isUrgent': false,
-    }).toList();
-    
-    return [...postedAsMaps, ...demoJobs];
   }
 
   String _getEmojiForCategory(String cat) {

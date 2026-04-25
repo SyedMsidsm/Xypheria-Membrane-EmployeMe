@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../providers/app_state.dart';
+import '../../services/demo_data.dart';
 
 class NearbyJobsMap extends StatefulWidget {
   const NearbyJobsMap({super.key});
@@ -22,14 +25,6 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
   bool _showAlert = false;
   // TODO: Add Ola Maps API Key here. If empty, falls back to OpenStreetMap.
   final String _olaMapsApiKey = ''; 
-
-  final _baseJobs = [
-    {'icon': Icons.storefront, 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'urgent': true, 'verified': true},
-    {'icon': Icons.restaurant, 'title': 'Kitchen Helper', 'company': 'Hotel Udupi', 'salary': '₹500/day', 'urgent': false, 'verified': true},
-    {'icon': Icons.local_shipping, 'title': 'Delivery Partner', 'company': 'QuickMart', 'salary': '₹600/day', 'urgent': false, 'verified': false},
-    {'icon': Icons.cleaning_services, 'title': 'House Cleaner', 'company': 'CleanHome Services', 'salary': '₹400/day', 'urgent': true, 'verified': true},
-    {'icon': Icons.construction, 'title': 'Construction Helper', 'company': 'BuildRight', 'salary': '₹700/day', 'urgent': false, 'verified': false},
-  ];
 
   List<Map<String, dynamic>> _dynamicJobs = [];
 
@@ -58,14 +53,27 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
 
   void _setLocation(LatLng loc) {
     if (!mounted) return;
+    final state = context.read<AppState>();
+
     setState(() {
       _currentLocation = loc;
       _isLoadingLocation = false;
-      _dynamicJobs = _baseJobs.asMap().entries.map((e) {
+      
+      final source = state.jobPostings.map((j) => {
+              'icon': _getIconForCategory(j.category),
+              'title': j.title,
+              'company': state.userName.isNotEmpty && state.isEmployer ? state.userName : 'Local Business',
+              'salary': '₹${j.pay}/${j.payPeriod}',
+              'urgent': j.isUrgent,
+              'verified': true,
+            }).toList();
+
+      _dynamicJobs = source.asMap().entries.map((e) {
         final i = e.key;
         final j = e.value;
-        final dLat = (i % 2 == 0 ? 1 : -1) * (0.003 + (i * 0.004));
-        final dLng = (i % 3 == 0 ? 1 : -1) * (0.003 + (i * 0.004));
+        // Deterministic offsets based on title hash or index to keep positions stable
+        final dLat = (i % 2 == 0 ? 1 : -1) * (0.003 + (i * 0.002));
+        final dLng = (i % 3 == 0 ? 1 : -1) * (0.003 + (i * 0.002));
         final jLat = loc.latitude + dLat;
         final jLng = loc.longitude + dLng;
         
@@ -81,7 +89,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
           'lng': jLng,
           'time': time,
           'mode': useWalk ? 'walk' : 'transit',
-          'score': 100 - time, // simple AI score based on ETA
+          'score': 100 - time,
         };
       }).toList();
       _dynamicJobs.sort((a, b) => (b['score'] as int).compareTo(a['score'] as int));
@@ -91,6 +99,13 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) setState(() => _showAlert = true);
     });
+  }
+
+  IconData _getIconForCategory(String cat) {
+    if (cat.contains('Shop') || cat.contains('Retail')) return Icons.storefront;
+    if (cat.contains('Delivery')) return Icons.local_shipping;
+    if (cat.contains('Cook') || cat.contains('Food')) return Icons.restaurant;
+    return Icons.construction;
   }
 
   @override
@@ -113,9 +128,11 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
           builder: (_, scrollCtrl) => _bottomSheet(scrollCtrl),
         ),
         // Geofenced Alert
-        if (_showAlert) _buildZoneAlert(),
+        if (_showAlert && !context.read<AppState>().isEmployer) _buildZoneAlert(),
       ]),
-      bottomNavigationBar: const WorkerNav(currentIndex: 1),
+      bottomNavigationBar: context.watch<AppState>().isEmployer 
+          ? const EmployerNav(currentIndex: 1) 
+          : const WorkerNav(currentIndex: 1),
     );
   }
 
@@ -183,12 +200,12 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
                   boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 12)]),
               ),
             ),
-            // Job Pins
+            // Job/Worker Pins
             ..._dynamicJobs.map((j) => Marker(
               point: LatLng(j['lat'] as double, j['lng'] as double),
               width: 60, height: 60,
               alignment: Alignment.topCenter,
-              child: _jobPin(j),
+              child: _itemPin(j),
             )),
           ],
         ),
@@ -196,62 +213,72 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     );
   }
 
-  Widget _jobPin(Map<String, dynamic> job) => TapScale(
-    onTap: () => Navigator.pushNamed(context, '/job-detail'),
-    child: Column(mainAxisSize: MainAxisSize.min, children: [
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-        decoration: BoxDecoration(
-          color: (job['urgent'] as bool) ? AppColors.alert : AppColors.card,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
-          boxShadow: AppShadows.elevated,
-          border: Border.all(color: (job['urgent'] as bool) ? AppColors.alert : AppColors.border),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(job['mode'] == 'walk' ? Icons.directions_walk : Icons.directions_bus, size: 10, color: (job['urgent'] as bool) ? Colors.white : AppColors.text),
-            const SizedBox(width: 2),
-            Text('${job['time']}m', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: (job['urgent'] as bool) ? Colors.white : AppColors.text)),
-          ],
-        ),
-      ),
-      CustomPaint(size: const Size(8, 5), painter: _TrianglePainter(color: (job['urgent'] as bool) ? AppColors.alert : AppColors.card)),
-      Container(
-        width: 32, height: 32,
-        decoration: BoxDecoration(
-          color: AppColors.card, shape: BoxShape.circle,
-          boxShadow: AppShadows.card,
-          border: Border.all(color: AppColors.primary, width: 2),
-        ),
-        alignment: Alignment.center,
-        child: Icon(job['icon'] as IconData, size: 18, color: AppColors.primaryDark),
-      ),
-    ]),
-  );
+  Widget _itemPin(Map<String, dynamic> item) {
+    final state = context.read<AppState>();
+    final isEmployer = state.isEmployer;
+    final bool isUrgent = (item['urgent'] ?? false) as bool;
 
-  Widget _topBar() => Container(
-    margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), boxShadow: AppShadows.elevated),
-    child: Row(children: [
-      GestureDetector(onTap: () => Navigator.pop(context), child: const Icon(Icons.arrow_back, size: 20)),
-      const SizedBox(width: 12),
-      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Nearby Jobs', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-        Text('${_dynamicJobs.length} opportunities in commute zone', style: const TextStyle(fontSize: 12, color: AppColors.caption)),
-      ])),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xl)),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
-          const SizedBox(width: 4),
-          const Text('Live', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
-        ]),
-      ),
-    ]),
-  );
+    return TapScale(
+      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : null),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          decoration: BoxDecoration(
+            color: isUrgent ? AppColors.alert : AppColors.card,
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+            boxShadow: AppShadows.elevated,
+            border: Border.all(color: isUrgent ? AppColors.alert : AppColors.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(item['mode'] == 'walk' ? Icons.directions_walk : Icons.directions_bus, size: 10, color: isUrgent ? Colors.white : AppColors.text),
+              const SizedBox(width: 2),
+              Text('${item['time']}m', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: isUrgent ? Colors.white : AppColors.text)),
+            ],
+          ),
+        ),
+        CustomPaint(size: const Size(8, 5), painter: _TrianglePainter(color: isUrgent ? AppColors.alert : AppColors.card)),
+        Container(
+          width: 32, height: 32,
+          decoration: BoxDecoration(
+            color: AppColors.card, shape: BoxShape.circle,
+            boxShadow: AppShadows.card,
+            border: Border.all(color: AppColors.primary, width: 2),
+          ),
+          alignment: Alignment.center,
+          child: Icon(item['icon'] as IconData, size: 18, color: AppColors.primaryDark),
+        ),
+      ]),
+    );
+  }
+
+  Widget _topBar() {
+    final state = context.watch<AppState>();
+    final isEmployer = state.isEmployer;
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), boxShadow: AppShadows.elevated),
+      child: Row(children: [
+        GestureDetector(onTap: () => Navigator.pop(context), child: const Icon(Icons.arrow_back, size: 20)),
+        const SizedBox(width: 12),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(isEmployer ? 'Your Job Locations' : 'Nearby Jobs', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(isEmployer ? '${_dynamicJobs.length} active postings on map' : '${_dynamicJobs.length} opportunities in commute zone', style: const TextStyle(fontSize: 12, color: AppColors.caption)),
+        ])),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xl)),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
+            const SizedBox(width: 4),
+            const Text('Live', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
+          ]),
+        ),
+      ]),
+    );
+  }
 
   Widget _filterChips() => Padding(
     padding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
@@ -313,7 +340,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('${_dynamicJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(context.read<AppState>().isEmployer ? 'Your Postings' : '${_dynamicJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
@@ -332,53 +359,59 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     ]),
   );
 
-  Widget _sheetJobCard(Map<String, dynamic> job) => TapScale(
-    onTap: () => Navigator.pushNamed(context, '/job-detail'),
-    child: Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border)),
-      child: Column(
-        children: [
-          Row(children: [
-            Container(
-              width: 44, height: 44,
-              decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.sm)),
-              alignment: Alignment.center,
-              child: Icon(job['icon'] as IconData, size: 24, color: AppColors.primaryDark),
-            ),
-            const SizedBox(width: 12),
-            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(children: [
-                Text(job['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                if (job['urgent'] as bool) ...[const SizedBox(width: 6),
-                  Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1), decoration: BoxDecoration(color: AppColors.alert.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
-                    child: const Text('URGENT', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: AppColors.alert)))],
-              ]),
-              const SizedBox(height: 2),
-              Text(job['company'] as String, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
-            ])),
-            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(job['salary'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
-              const SizedBox(height: 4),
+  Widget _sheetJobCard(Map<String, dynamic> item) {
+    final state = context.read<AppState>();
+    final isEmployer = state.isEmployer;
+    final bool isUrgent = (item['urgent'] ?? false) as bool;
+
+    return TapScale(
+      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : null),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border)),
+        child: Column(
+          children: [
+            Row(children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(color: AppColors.primaryLight.withOpacity(0.5), borderRadius: BorderRadius.circular(4)),
-                child: Text('AI Match: ${job['score']}%', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
+                width: 44, height: 44,
+                decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.sm)),
+                alignment: Alignment.center,
+                child: Icon(item['icon'] as IconData, size: 24, color: AppColors.primaryDark),
               ),
+              const SizedBox(width: 12),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  Text(item['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  if (isUrgent) ...[const SizedBox(width: 6),
+                    Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1), decoration: BoxDecoration(color: AppColors.alert.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
+                      child: Text(isEmployer ? 'READY' : 'URGENT', style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: AppColors.alert)))],
+                ]),
+                const SizedBox(height: 2),
+                Text((item['company'] ?? (isEmployer ? 'Trusted Worker' : 'Local Business')) as String, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
+              ])),
+              Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Text((item['salary'] ?? '₹500/day') as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(color: AppColors.primaryLight.withOpacity(0.5), borderRadius: BorderRadius.circular(4)),
+                  child: Text('AI Match: ${item['score']}%', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
+                ),
+              ]),
             ]),
-          ]),
-          const SizedBox(height: 10),
-          Row(children: [
-            Icon(job['mode'] == 'walk' ? Icons.directions_walk : Icons.directions_bus, size: 14, color: AppColors.textSecondary),
-            const SizedBox(width: 4),
-            Text('${job['time']} min ${job['mode']}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
-            const Spacer(),
-            const Text('View Route', style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600)),
-          ]),
-        ],
+            const SizedBox(height: 10),
+            Row(children: [
+              Icon(item['mode'] == 'walk' ? Icons.directions_walk : Icons.directions_bus, size: 14, color: AppColors.textSecondary),
+              const SizedBox(width: 4),
+              Text('${item['time']} min ${item['mode']}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
+              const Spacer(),
+              Text(isEmployer ? 'View Stats' : 'View Route', style: const TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600)),
+            ]),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _buildZoneAlert() => Positioned(
     top: 130, left: 16, right: 16,
