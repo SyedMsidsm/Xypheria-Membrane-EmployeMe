@@ -60,7 +60,6 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       
       final source = state.workerFeedJobs.map((j) => {
               'emoji': j['emoji'],
-              'icon': _getIconForCategory(j['title']),
               'title': j['title'],
               'company': j['company'],
               'salary': '${j['salary']}${j['period']}',
