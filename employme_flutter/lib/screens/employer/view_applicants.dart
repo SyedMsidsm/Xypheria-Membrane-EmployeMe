@@ -88,7 +88,11 @@ class _ViewApplicantsState extends State<ViewApplicants> {
                   const SizedBox(height: 6), Wrap(spacing: 4, children: (a['skills'] as List<String>).map((s) => Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: isShortlisted ? AppColors.border : AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
                     child: Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.check_circle, size: 10, color: isShortlisted ? AppColors.caption : AppColors.primary), const SizedBox(width: 4), Text(s, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: isShortlisted ? AppColors.caption : AppColors.primary))]))).toList()),
                   const SizedBox(height: 4), Row(children: [Icon(Icons.directions_walk, size: 14, color: isShortlisted ? AppColors.caption : AppColors.primary), const SizedBox(width: 4), Text('${a['distance']}', style: TextStyle(fontSize: 12, color: isShortlisted ? AppColors.caption : AppColors.primary, fontWeight: FontWeight.w600))]),
-                  Row(children: [const Icon(Icons.star, size: 14, color: Color(0xFFF59E0B)), const SizedBox(width: 4), Text('${a['rating']} | ${a['jobsDone']} jobs done | ${a['showUp']} show-up', style: const TextStyle(fontSize: 12, color: AppColors.caption))]),
+                  Row(children: [
+                    const Icon(Icons.star, size: 14, color: Color(0xFFF59E0B)), 
+                    const SizedBox(width: 4), 
+                    Expanded(child: Text('${a['rating']} • ${a['jobsDone']} jobs • ${a['showUp']} show-up', style: const TextStyle(fontSize: 11, color: AppColors.caption), overflow: TextOverflow.ellipsis)),
+                  ]),
                 ])),
               ]),
               const SizedBox(height: 12),
@@ -97,9 +101,14 @@ class _ViewApplicantsState extends State<ViewApplicants> {
                   onPressed: () => Navigator.pushNamed(context, '/chat', arguments: a['name']), 
                   style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [Icon(Icons.chat_bubble_outline, size: 16), SizedBox(width: 6), Text('Message')])))),
                 const SizedBox(width: 8),
-                Expanded(flex: 2, child: SizedBox(height: 40, child: ElevatedButton(
+                Expanded(flex: 3, child: SizedBox(height: 40, child: ElevatedButton(
                   onPressed: isShortlisted ? null : () => context.read<AppState>().shortlistApplicant(a['name']), 
-                  style: ElevatedButton.styleFrom(backgroundColor: isShortlisted ? AppColors.border : AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(isShortlisted ? Icons.check_circle : Icons.check_circle_outline, size: 16), const SizedBox(width: 6), Text(isShortlisted ? 'Shortlisted' : 'Shortlist')])))),
+                  style: ElevatedButton.styleFrom(backgroundColor: isShortlisted ? AppColors.border : AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), 
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Icon(isShortlisted ? Icons.check_circle : Icons.check_circle_outline, size: 16, color: Colors.white), 
+                    const SizedBox(width: 6), 
+                    Flexible(child: Text(isShortlisted ? 'Shortlisted' : 'Shortlist', style: const TextStyle(color: Colors.white, fontSize: 13), overflow: TextOverflow.ellipsis))
+                  ])))),
               ]),
             ]),
           ),
