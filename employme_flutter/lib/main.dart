@@ -122,10 +122,10 @@ class EmployMeApp extends StatelessWidget {
         // Employer Flow
         '/employer': (_) => const EmployerDashboard(),
         '/post-job': (_) => const PostJob(),
-        '/applicants': (_) => ViewApplicants(),
-        '/reviews': (_) => EmployerReviews(),
-        '/analytics': (_) => EmployerAnalytics(),
-        '/payment': (_) => PaymentPage(),
+        '/applicants': (_) => const ViewApplicants(),
+        '/reviews': (_) => const EmployerReviews(),
+        '/analytics': (_) => const EmployerAnalytics(),
+        '/payment': (_) => const PaymentPage(),
         '/view-all-jobs': (_) => const ViewAllJobs(),
         '/employer-profile': (_) => const EmployerProfile(),
 

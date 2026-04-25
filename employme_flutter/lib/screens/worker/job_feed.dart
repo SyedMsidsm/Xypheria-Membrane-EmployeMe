@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/job_card.dart';
-import '../../services/demo_data.dart';
 import '../../providers/app_state.dart';
 
 class JobFeed extends StatefulWidget {
@@ -19,11 +18,12 @@ class _JobFeedState extends State<JobFeed> {
 
   List<Map<String, dynamic>> _getFilteredJobs(AppState state) {
     var jobs = state.workerFeedJobs;
+    
     if (_showOnlyUrgent) {
-      jobs = jobs.where((j) => j['isUrgent'] == true).toList();
+      jobs = jobs.where((j) => (j['isUrgent'] ?? false) == true).toList();
     }
+
     if (_activeCategoryKey != 'all_jobs_cat') {
-      // Find the English name for filtering since DemoData is in English
       final filterMap = {
         'cooking_cat': 'Cooking',
         'delivery_cat': 'Delivery',
@@ -35,6 +35,7 @@ class _JobFeedState extends State<JobFeed> {
       final filterVal = filterMap[_activeCategoryKey] ?? '';
       jobs = jobs.where((j) => (j['type'] as String).toLowerCase().contains(filterVal.toLowerCase()) || (j['title'] as String).toLowerCase().contains(filterVal.toLowerCase())).toList();
     }
+    
     if (_searchController.text.isNotEmpty) {
       final q = _searchController.text.toLowerCase();
       jobs = jobs.where((j) => (j['title'] as String).toLowerCase().contains(q) || (j['company'] as String).toLowerCase().contains(q)).toList();
@@ -45,6 +46,8 @@ class _JobFeedState extends State<JobFeed> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final filteredJobs = _getFilteredJobs(state);
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -55,10 +58,10 @@ class _JobFeedState extends State<JobFeed> {
               padding: const EdgeInsets.only(bottom: 24),
               children: [
                 _searchBar(state),
-                _urgentBanner(state),
-                _categories(context, state),
-                _sectionHeader(state, _getFilteredJobs(state).length),
-                ..._getFilteredJobs(state).map((j) => Padding(
+                if (!state.isEmployer) _urgentBanner(state),
+                if (!state.isEmployer) _categories(context, state),
+                _sectionHeader(state, filteredJobs.length),
+                ...filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                   child: JobCard(
                     emoji: j['emoji'] as String,
@@ -76,7 +79,7 @@ class _JobFeedState extends State<JobFeed> {
                     onBookmark: () => state.toggleBookmark(j['title'] as String),
                   ),
                 )),
-                if (_getFilteredJobs(state).isEmpty)
+                if (filteredJobs.isEmpty)
                   Padding(
                     padding: const EdgeInsets.all(40),
                     child: Column(children: [
@@ -104,7 +107,9 @@ class _JobFeedState extends State<JobFeed> {
           child: const Icon(Icons.auto_awesome, size: 22, color: Colors.white),
         ),
       ),
-      bottomNavigationBar: const WorkerNav(currentIndex: 0),
+      bottomNavigationBar: state.isEmployer 
+          ? const EmployerNav(currentIndex: 0) 
+          : const WorkerNav(currentIndex: 0),
     );
   }
 
@@ -113,7 +118,7 @@ class _JobFeedState extends State<JobFeed> {
     padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
     child: Row(children: [
       TapScale(
-        onTap: () => Navigator.pushNamed(context, '/worker-profile'),
+        onTap: () => Navigator.pushNamed(context, state.isEmployer ? '/employer-profile' : '/worker-profile'),
         child: Row(children: [
           Container(
             width: 36, height: 36,
@@ -276,7 +281,7 @@ class _JobFeedState extends State<JobFeed> {
   Widget _sectionHeader(AppState state, int count) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+      Text(state.isEmployer ? 'Your Postings' : state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
       GestureDetector(child: Text(state.tr('view_all', args: {'count': '$count'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
     ]),
   );
