@@ -34,6 +34,8 @@ import 'screens/employer/view_applicants.dart';
 import 'screens/employer/employer_reviews.dart';
 import 'screens/employer/employer_analytics.dart';
 import 'screens/employer/payment_page.dart';
+import 'screens/employer/view_all_jobs.dart';
+import 'screens/employer/employer_profile.dart';
 
 // Chat
 import 'screens/chat/chat_list.dart';
@@ -124,6 +126,8 @@ class EmployMeApp extends StatelessWidget {
         '/reviews': (_) => EmployerReviews(),
         '/analytics': (_) => EmployerAnalytics(),
         '/payment': (_) => PaymentPage(),
+        '/view-all-jobs': (_) => const ViewAllJobs(),
+        '/employer-profile': (_) => const EmployerProfile(),
 
         // Chat Flow
         '/messages': (_) => const ChatList(),

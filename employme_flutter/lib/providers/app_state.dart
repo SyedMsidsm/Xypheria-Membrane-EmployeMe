@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/localization_service.dart';
+import '../models/job_posting.dart';
 
 class AppState extends ChangeNotifier {
   // ── Auth & User ──
@@ -150,6 +151,42 @@ class AppState extends ChangeNotifier {
   String _myJobsTab = 'All';
   String get myJobsTab => _myJobsTab;
   void setMyJobsTab(String tab) { _myJobsTab = tab; notifyListeners(); }
+
+  // ── Employer Job Postings ──
+  final List<JobPosting> _jobPostings = [
+    JobPosting(
+      title: 'Shop Assistant',
+      category: 'Retail & Shop',
+      pay: '500',
+      payPeriod: 'per day',
+      timing: '9:00 AM - 6:00 PM',
+      peopleNeeded: 3,
+      type: 'Part Time',
+      description: 'Help manage daily shop operations.',
+      requirements: ['Kannada speaking'],
+      isUrgent: true,
+      postedAt: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    JobPosting(
+      title: 'Delivery Partner',
+      category: 'Delivery',
+      pay: '300',
+      payPeriod: 'per day',
+      timing: '10:00 AM - 4:00 PM',
+      peopleNeeded: 7,
+      type: 'Daily Wage',
+      description: 'Deliver goods to local customers.',
+      requirements: ['Bike license'],
+      isUrgent: false,
+      postedAt: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+  ];
+  List<JobPosting> get jobPostings => _jobPostings;
+
+  void addJobPosting(JobPosting job) {
+    _jobPostings.insert(0, job);
+    notifyListeners();
+  }
 
   // ── Localization ──
   String tr(String key, {Map<String, String>? args}) {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../providers/app_state.dart';
+import '../../models/job_posting.dart';
 
 class EmployerDashboard extends StatelessWidget {
   const EmployerDashboard({super.key});
@@ -42,7 +43,7 @@ class EmployerDashboard extends StatelessWidget {
               child: Icon(Icons.notifications_outlined, size: 20, color: Colors.white.withOpacity(0.8))),
             const SizedBox(width: 12),
             TapScale(
-              onTap: () => Navigator.pushNamed(context, '/worker-profile'),
+              onTap: () => Navigator.pushNamed(context, '/employer-profile'),
               child: Container(
                 width: 36, height: 36,
                 decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
@@ -60,19 +61,22 @@ class EmployerDashboard extends StatelessWidget {
             child: const Icon(Icons.store, size: 24, color: Colors.white),
           ),
           const SizedBox(width: 12),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(state.tr('business_name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
-              child: Text(state.tr('verified_business'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
-            ),
-          ])),
+          Expanded(child: GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/employer-profile'),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(state.tr('business_name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
+                child: Text(state.tr('verified_business'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
+              ),
+            ]),
+          )),
         ]),
         const SizedBox(height: 20),
         Row(children: [
-          _statBadge(state.tr('active_posts_count', args: {'count': '3'})),
+          _statBadge(state.tr('active_posts_count', args: {'count': '${state.jobPostings.length}'})),
           const SizedBox(width: 8),
           _statBadge('${47} ${state.tr('applicants_label')}'),
           const SizedBox(width: 8),
@@ -168,24 +172,34 @@ class EmployerDashboard extends StatelessWidget {
   }
 
   Widget _activePostings(BuildContext context, AppState state) {
+    final jobs = state.jobPostings;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(state.tr('active_postings'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/applicants'),
-            child: Text(state.tr('view_all', args: {'count': '3'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
+            onTap: () => Navigator.pushNamed(context, '/view-all-jobs'),
+            child: Text(state.tr('view_all', args: {'count': '${jobs.length}'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
         ]),
         const SizedBox(height: 16),
-        _activeCard(context, state, state.tr('shop_assistant'), '3', true),
-        _activeCard(context, state, state.tr('delivery_partner'), '7', false),
+        if (jobs.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
+            child: const Center(child: Text('No active postings. Post your first job!', style: TextStyle(color: AppColors.textSecondary))),
+          )
+        else
+          ...jobs.take(2).map((job) => _activeCard(context, state, job)),
       ]),
     );
   }
 
-  Widget _activeCard(BuildContext context, AppState state, String title, String expires, bool highInterest) {
+  Widget _activeCard(BuildContext context, AppState state, JobPosting job) {
+    final bool highInterest = job.isUrgent;
     final applicants = highInterest ? 47 : 12;
+    final expires = highInterest ? '3' : '7';
+    
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -205,7 +219,7 @@ class EmployerDashboard extends StatelessWidget {
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                  Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 6),
                   Row(children: [
                     Icon(Icons.access_time, size: 14, color: highInterest ? AppColors.alert : AppColors.textSecondary),

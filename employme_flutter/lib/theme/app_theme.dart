@@ -190,6 +190,19 @@ class AppTheme {
         trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? AppColors.primary : AppColors.border),
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: AppColors.card,
+        hourMinuteTextColor: AppColors.primary,
+        dayPeriodTextColor: AppColors.primary,
+        dialHandColor: AppColors.primary,
+        dialBackgroundColor: AppColors.bg,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        cancelButtonStyle: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
+        confirmButtonStyle: TextButton.styleFrom(
+          foregroundColor: AppColors.primary,
+          textStyle: const TextStyle(fontWeight: FontWeight.w800),
+        ),
+      ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
