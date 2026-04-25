@@ -19,7 +19,6 @@ class EmployerDashboard extends StatelessWidget {
           children: [
             _header(context, state),
             _postJobCTA(context, state),
-            _availableWorkers(context, state),
             _quickActions(context, state),
             _activePostings(context, state),
             _recentApplicants(context, state),
@@ -234,73 +233,6 @@ class EmployerDashboard extends StatelessWidget {
     );
   }
 
-  Widget _availableWorkers(BuildContext context, AppState state) {
-    final workers = state.applicants; 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Ready to Work Soon', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-              Text('Live • ${workers.length}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary)),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 110,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: workers.length,
-            itemBuilder: (context, index) {
-              final w = workers[index];
-              return TapScale(
-                onTap: () => Navigator.pushNamed(context, '/worker-profile', arguments: w['name']),
-                child: Container(
-                  width: 90,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.card,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: 44, height: 44,
-                            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
-                            alignment: Alignment.center,
-                            child: Text(w['name'][0], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
-                          ),
-                          Positioned(
-                            right: 0, bottom: 0,
-                            child: Container(
-                              width: 12, height: 12,
-                              decoration: BoxDecoration(color: AppColors.primary, shape: BoxShape.circle, border: Border.all(color: AppColors.card, width: 2)),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(w['name'].split(' ')[0], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700), maxLines: 1),
-                      Text(w['distance'], style: const TextStyle(fontSize: 10, color: AppColors.caption)),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
 
   Widget _quickActions(BuildContext context, AppState state) {
     return Padding(
