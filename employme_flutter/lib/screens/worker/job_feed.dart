@@ -213,7 +213,7 @@ class _JobFeedState extends State<JobFeed> {
 
   Widget _featuredCarousel(BuildContext context, AppState state, List<Map<String, dynamic>> featured) {
     return SizedBox(
-      height: 210,
+      height: 240,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -517,7 +517,7 @@ class _FeaturedJobCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -540,14 +540,14 @@ class _FeaturedJobCard extends StatelessWidget {
                       const Icon(Icons.verified_rounded, size: 14, color: Colors.white),
                     ],
                   ]),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   // Emoji
-                  Text(job['emoji'] as String? ?? '💼', style: const TextStyle(fontSize: 28)),
-                  const SizedBox(height: 6),
+                  Text(job['emoji'] as String? ?? '💼', style: const TextStyle(fontSize: 24)),
+                  const SizedBox(height: 4),
                   // Title
-                  Text(title, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700), maxLines: 2, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 2),
-                  Text(job['company'] as String, style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(job['company'] as String, style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
                   const Spacer(),
                   // Salary
                   Container(

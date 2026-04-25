@@ -35,17 +35,41 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
 
   Future<void> _initLocation() async {
     try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _setLocation(const LatLng(12.8716, 74.8436));
+        return;
+      }
+
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
+      if (permission == LocationPermission.deniedForever) {
+        _setLocation(const LatLng(12.8716, 74.8436));
+        return;
+      }
       if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
-        final pos = await Geolocator.getCurrentPosition();
+        // Try last known position first (faster)
+        final lastKnown = await Geolocator.getLastKnownPosition();
+        if (lastKnown != null) {
+          _setLocation(LatLng(lastKnown.latitude, lastKnown.longitude));
+          return;
+        }
+        // Fall back to current position with timeout
+        final pos = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.medium,
+            timeLimit: Duration(seconds: 10),
+          ),
+        );
         _setLocation(LatLng(pos.latitude, pos.longitude));
       } else {
         _setLocation(const LatLng(12.8716, 74.8436));
       }
     } catch (e) {
+      debugPrint('Location error: $e');
       _setLocation(const LatLng(12.8716, 74.8436));
     }
   }
