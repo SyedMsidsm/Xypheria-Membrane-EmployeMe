@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 
 import 'theme/app_theme.dart';
 import 'providers/app_state.dart';
@@ -55,7 +54,6 @@ import 'screens/demo/sms_fallback.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppState(),
@@ -75,9 +73,8 @@ class EmployMeApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: '/',
       builder: (context, child) {
-        // On web/desktop, constrain to phone width for proper mobile preview
         final isNarrow = MediaQuery.of(context).size.width <= 500;
-        if (isNarrow) return child!; // Native mobile — render as-is
+        if (isNarrow) return child!;
         return Container(
           color: const Color(0xFF0F172A),
           child: Center(
@@ -87,10 +84,7 @@ class EmployMeApp extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.bg,
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 40,
-                    ),
+                    BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 40),
                   ],
                 ),
                 clipBehavior: Clip.antiAlias,

@@ -266,7 +266,8 @@ class AppState extends ChangeNotifier {
 
     final demoJobs = DemoData.jobs.map((j) => {
       ...j, 
-      'isUrgent': false,
+      'isUrgent': j['isUrgent'] ?? false,
+      'isFeatured': j['isFeatured'] ?? false,
     }).toList();
     
     return [...postedAsMaps, ...demoJobs];
