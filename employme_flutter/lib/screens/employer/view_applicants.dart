@@ -95,4 +95,3 @@ class _ViewApplicantsState extends State<ViewApplicants> {
     );
   }
 }
-}
