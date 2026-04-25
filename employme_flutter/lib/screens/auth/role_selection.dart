@@ -81,7 +81,7 @@ class RoleSelection extends StatelessWidget {
                 _RoleCard(
                   onTap: () {
                     context.read<AppState>().setRole('employer');
-                    Navigator.pushNamed(context, '/employer-home');
+                    Navigator.pushNamed(context, '/phone');
                   },
                   iconWidget: Container(
                     width: 52, height: 52,
