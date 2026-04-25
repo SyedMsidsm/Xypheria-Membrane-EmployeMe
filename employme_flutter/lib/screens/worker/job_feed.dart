@@ -48,6 +48,9 @@ class _JobFeedState extends State<JobFeed> {
     final state = context.watch<AppState>();
     final filteredJobs = _getFilteredJobs(state);
 
+    // Safety check: if somehow an employer lands here, redirect them or show worker UI
+    // But since routes are separate now, this is mostly for the Worker role.
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -58,8 +61,8 @@ class _JobFeedState extends State<JobFeed> {
               padding: const EdgeInsets.only(bottom: 24),
               children: [
                 _searchBar(state),
-                if (!state.isEmployer) _urgentBanner(state),
-                if (!state.isEmployer) _categories(context, state),
+                _urgentBanner(state),
+                _categories(context, state),
                 _sectionHeader(state, filteredJobs.length),
                 ...filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -107,9 +110,7 @@ class _JobFeedState extends State<JobFeed> {
           child: const Icon(Icons.auto_awesome, size: 22, color: Colors.white),
         ),
       ),
-      bottomNavigationBar: state.isEmployer 
-          ? const EmployerNav(currentIndex: 0) 
-          : const WorkerNav(currentIndex: 0),
+      bottomNavigationBar: const WorkerNav(currentIndex: 0),
     );
   }
 
@@ -118,7 +119,7 @@ class _JobFeedState extends State<JobFeed> {
     padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
     child: Row(children: [
       TapScale(
-        onTap: () => Navigator.pushNamed(context, state.isEmployer ? '/employer-profile' : '/worker-profile'),
+        onTap: () => Navigator.pushNamed(context, '/worker-profile'),
         child: Row(children: [
           Container(
             width: 36, height: 36,
@@ -281,7 +282,7 @@ class _JobFeedState extends State<JobFeed> {
   Widget _sectionHeader(AppState state, int count) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(state.isEmployer ? 'Your Postings' : state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+      Text(state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
       GestureDetector(child: Text(state.tr('view_all', args: {'count': '$count'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
     ]),
   );

@@ -108,7 +108,7 @@ class EmployMeApp extends StatelessWidget {
         '/profile-setup': (_) => const WorkerProfileSetup(),
 
         // Worker Flow
-        '/home': (_) => const JobFeed(),
+        '/worker-home': (_) => const JobFeed(),
         '/search': (_) => const JobSearch(),
         '/map': (_) => const NearbyJobsMap(),
         '/job-detail': (_) => const JobDetail(),
@@ -120,7 +120,7 @@ class EmployMeApp extends StatelessWidget {
         '/notifications': (_) => const NotificationsScreen(),
 
         // Employer Flow
-        '/employer': (_) => const EmployerDashboard(),
+        '/employer-home': (_) => const EmployerDashboard(),
         '/post-job': (_) => const PostJob(),
         '/applicants': (_) => const ViewApplicants(),
         '/reviews': (_) => const EmployerReviews(),

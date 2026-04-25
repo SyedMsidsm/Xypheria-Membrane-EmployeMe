@@ -12,7 +12,7 @@ class WorkerNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final items = [
-      {'icon': Icons.home_rounded, 'activeIcon': Icons.home_rounded, 'label': state.tr('home'), 'route': '/home'},
+      {'icon': Icons.home_rounded, 'activeIcon': Icons.home_rounded, 'label': state.tr('home'), 'route': '/worker-home'},
       {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': state.tr('map'), 'route': '/map'},
       {'icon': Icons.work_outline_rounded, 'activeIcon': Icons.work_rounded, 'label': state.tr('my_jobs'), 'route': '/my-jobs'},
       {'icon': Icons.chat_outlined, 'activeIcon': Icons.chat_rounded, 'label': state.tr('chat'), 'route': '/messages'},
@@ -60,7 +60,7 @@ class EmployerNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final items = [
-      {'icon': Icons.dashboard_outlined, 'activeIcon': Icons.dashboard_rounded, 'label': state.tr('home'), 'route': '/employer'},
+      {'icon': Icons.dashboard_outlined, 'activeIcon': Icons.dashboard_rounded, 'label': state.tr('home'), 'route': '/employer-home'},
       {'icon': Icons.map_outlined, 'activeIcon': Icons.map_rounded, 'label': state.tr('workers'), 'route': '/map'},
       {'icon': Icons.add_circle_outline, 'activeIcon': Icons.add_circle_rounded, 'label': state.tr('post_job'), 'route': '/post-job'},
       {'icon': Icons.people_outline_rounded, 'activeIcon': Icons.people_rounded, 'label': state.tr('applicants'), 'route': '/applicants'},
