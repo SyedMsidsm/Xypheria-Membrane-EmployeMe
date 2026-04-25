@@ -61,9 +61,9 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       _isLoadingLocation = false;
       
       final source = state.jobPostings.map((j) => {
-              'emoji': j.emoji,
+              'emoji': _getEmojiForCategory(j.category),
               'title': j.title,
-              'company': j.company,
+              'company': state.userName.isNotEmpty && state.isEmployer ? state.userName : 'Local Business',
               'salary': '₹${j.pay}/${j.payPeriod}',
               'urgent': j.isUrgent,
               'verified': true,
@@ -100,6 +100,13 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) setState(() => _showAlert = true);
     });
+  }
+
+  String _getEmojiForCategory(String cat) {
+    if (cat.contains('Shop') || cat.contains('Retail')) return '🏪';
+    if (cat.contains('Delivery')) return '🚚';
+    if (cat.contains('Cook') || cat.contains('Food')) return '🍳';
+    return '👷';
   }
 
   @override
