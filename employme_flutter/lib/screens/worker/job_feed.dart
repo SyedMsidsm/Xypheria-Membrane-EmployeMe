@@ -16,6 +16,19 @@ class _JobFeedState extends State<JobFeed> {
   String _activeCategoryKey = 'all_jobs_cat';
   bool _showOnlyUrgent = false;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is Map<String, dynamic> && args.containsKey('query')) {
+        setState(() {
+          _searchController.text = args['query'] ?? '';
+        });
+      }
+    });
+  }
+
   List<Map<String, dynamic>> _getFilteredJobs(AppState state) {
     var jobs = state.workerFeedJobs;
     
@@ -38,7 +51,11 @@ class _JobFeedState extends State<JobFeed> {
     
     if (_searchController.text.isNotEmpty) {
       final q = _searchController.text.toLowerCase();
-      jobs = jobs.where((j) => (j['title'] as String).toLowerCase().contains(q) || (j['company'] as String).toLowerCase().contains(q)).toList();
+      jobs = jobs.where((j) => 
+        (j['title'] as String).toLowerCase().contains(q) || 
+        (j['company'] as String).toLowerCase().contains(q) ||
+        (j['type'] as String).toLowerCase().contains(q)
+      ).toList();
     }
     return jobs;
   }
@@ -97,18 +114,6 @@ class _JobFeedState extends State<JobFeed> {
             ),
           ),
         ]),
-      ),
-      floatingActionButton: TapScale(
-        onTap: () {},
-        child: Container(
-          width: 52, height: 52,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
-            shape: BoxShape.circle,
-            boxShadow: AppShadows.primaryGlow(0.3),
-          ),
-          child: const Icon(Icons.auto_awesome, size: 22, color: Colors.white),
-        ),
       ),
       bottomNavigationBar: const WorkerNav(currentIndex: 0),
     );
