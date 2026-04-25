@@ -61,6 +61,7 @@ class AppState extends ChangeNotifier {
   // ── User Profile ──
   String? _profileImagePath;
   String _userName = 'Raju Kumar';
+  String _businessName = 'Sri Ganesh Provision Store';
   String _aboutMe = 'Hardworking professional with a knack for quick learning and reliable delivery.';
   int _age = 24;
   String _gender = 'Male';
@@ -72,6 +73,7 @@ class AppState extends ChangeNotifier {
   int _totalEarned = 18400;
 
   String get userName => _userName;
+  String get businessName => _businessName;
   String get aboutMe => _aboutMe;
   String? get profileImagePath => _profileImagePath;
   int get age => _age;
@@ -84,8 +86,9 @@ class AppState extends ChangeNotifier {
   int get jobsDone => _jobsDone;
   int get totalEarned => _totalEarned;
 
-  void updateProfile({String? name, String? aboutMe, int? age, String? gender, int? exp}) {
+  void updateProfile({String? name, String? businessName, String? aboutMe, int? age, String? gender, int? exp}) {
     if (name != null) _userName = name;
+    if (businessName != null) _businessName = businessName;
     if (aboutMe != null) _aboutMe = aboutMe;
     if (age != null) _age = age;
     if (gender != null) _gender = gender;

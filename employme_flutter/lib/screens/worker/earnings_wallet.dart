@@ -13,25 +13,25 @@ class EarningsWallet extends StatefulWidget {
 class _EarningsWalletState extends State<EarningsWallet> {
   String _period = '';
 
-  final _transactions = [
-    {'type': 'credit', 'title': 'Sri Ganesh Store', 'desc': 'Shop Assistant — 6 days', 'amount': '+ ₹3,600', 'date': 'Aug 12', 'icon': '🏪'},
-    {'type': 'credit', 'title': 'Hotel Udupi Delights', 'desc': 'Kitchen Helper — 3 days', 'amount': '+ ₹1,500', 'date': 'Aug 10', 'icon': '🍳'},
-    {'type': 'withdraw', 'title': 'UPI Transfer', 'desc': 'To SBI ••4521', 'amount': '- ₹4,000', 'date': 'Aug 8', 'icon': '🏧'},
-    {'type': 'credit', 'title': 'QuickMart Grocery', 'desc': 'Delivery — 5 deliveries', 'amount': '+ ₹3,000', 'date': 'Aug 5', 'icon': '🚚'},
-    {'type': 'bonus', 'title': 'Reliability Bonus', 'desc': '100% show-up rate reward', 'amount': '+ ₹500', 'date': 'Aug 1', 'icon': '🎉'},
-    {'type': 'withdraw', 'title': 'UPI Transfer', 'desc': 'To SBI ••4521', 'amount': '- ₹5,000', 'date': 'Jul 28', 'icon': '🏧'},
-  ];
-
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     if (_period.isEmpty) _period = state.tr('this_month');
     
+    final transactions = [
+      {'type': 'credit', 'title': state.businessName, 'desc': 'Shop Assistant — 6 days', 'amount': '+ ₹3,600', 'date': 'Aug 12', 'icon': '🏪'},
+      {'type': 'credit', 'title': 'Hotel Udupi Delights', 'desc': 'Kitchen Helper — 3 days', 'amount': '+ ₹1,500', 'date': 'Aug 10', 'icon': '🍳'},
+      {'type': 'withdraw', 'title': 'UPI Transfer', 'desc': 'To SBI ••4521', 'amount': '- ₹4,000', 'date': 'Aug 8', 'icon': '🏧'},
+      {'type': 'credit', 'title': 'QuickMart Grocery', 'desc': 'Delivery — 5 deliveries', 'amount': '+ ₹3,000', 'date': 'Aug 5', 'icon': '🚚'},
+      {'type': 'bonus', 'title': 'Reliability Bonus', 'desc': '100% show-up rate reward', 'amount': '+ ₹500', 'date': 'Aug 1', 'icon': '🎉'},
+      {'type': 'withdraw', 'title': 'UPI Transfer', 'desc': 'To SBI ••4521', 'amount': '- ₹5,000', 'date': 'Jul 28', 'icon': '🏧'},
+    ];
+    
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(child: ListView(
         padding: const EdgeInsets.only(bottom: 24),
-        children: [_header(state), _balanceCard(state), _quickActions(state), _periodSelector(state), _earningsChart(state), _transactionList(state)],
+        children: [_header(state), _balanceCard(state), _quickActions(state), _periodSelector(state), _earningsChart(state), _transactionList(state, transactions)],
       )),
       bottomNavigationBar: const WorkerNav(currentIndex: 2),
     );
@@ -177,7 +177,7 @@ class _EarningsWalletState extends State<EarningsWallet> {
     ]),
   );
 
-  Widget _transactionList(AppState state) => Padding(
+  Widget _transactionList(AppState state, List<Map<String, dynamic>> transactions) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -185,7 +185,7 @@ class _EarningsWalletState extends State<EarningsWallet> {
         GestureDetector(child: Text(state.tr('see_all'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.moneyGreen))),
       ]),
       const SizedBox(height: 12),
-      ..._transactions.map((t) => Padding(
+      ...transactions.map((t) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Container(
           padding: const EdgeInsets.all(14),

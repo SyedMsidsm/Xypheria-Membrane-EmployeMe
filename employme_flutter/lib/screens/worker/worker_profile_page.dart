@@ -234,7 +234,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
 
   Widget _reviewsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Row(children: [Text(state.tr('work_history'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), const SizedBox(width: 6), const Icon(Icons.star, size: 16, color: Color(0xFFF59E0B)), const Text(' 4.8 (12 reviews)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))]),
-    const SizedBox(height: 12), _reviewCard(state, Icons.storefront, 'Sri Ganesh Store', 'Aug 2025', 5, 'Excellent worker, very punctual and honest', [state.tr('on_time'), state.tr('honest'), state.tr('hardworking')]),
+    const SizedBox(height: 12), _reviewCard(state, Icons.storefront, state.businessName, 'Aug 2025', 5, 'Excellent worker, very punctual and honest', [state.tr('on_time'), state.tr('honest'), state.tr('hardworking')]),
     const SizedBox(height: 10), _reviewCard(state, Icons.restaurant, 'Hotel Udupi', 'Jul 2025', 4, 'Good worker, reliable and quick to learn', [state.tr('reliable'), state.tr('would_rehire')]),
     const SizedBox(height: 12), Center(child: Text(state.tr('view_all_reviews', args: {'count': '12'}), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
   ]));

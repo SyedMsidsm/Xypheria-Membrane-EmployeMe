@@ -48,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
     
     // Get name from arguments (passed from Applicants page or chat list)
     final argName = ModalRoute.of(context)?.settings.arguments as String?;
-    final userName = argName ?? (state.isEmployer ? 'Raju Kumar' : 'Sri Ganesh Store');
+    final userName = argName ?? (state.isEmployer ? 'Raju Kumar' : state.businessName);
     final chatId = state.getChatId(userName);
     state.listenToMessages(chatId); // Sync with Firestore
     final messages = state.getMessages(chatId);

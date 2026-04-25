@@ -76,7 +76,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
             Expanded(child: Column(children: [
               Text(state.tr('applying_for'), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
               const Text('Shop Assistant', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
+              Text(state.businessName, style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
             ])),
             const SizedBox(width: 22), // Balance the back button
           ]),
@@ -213,9 +213,9 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
         Container(width: 48, height: 48, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md)),
           alignment: Alignment.center, child: const Icon(Icons.storefront, size: 24, color: AppColors.primaryDark)),
         const SizedBox(width: 12),
-        const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Shop Assistant', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Shop Assistant', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(state.businessName, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
         ])),
       ]),
       const Divider(height: 24),
@@ -255,7 +255,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
         const SizedBox(height: 20),
         Text(state.tr('application_sent'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.primary)),
         const SizedBox(height: 12),
-        Text(state.tr('contact_soon', args: {'company': 'Sri Ganesh Provision Store'}),
+        Text(state.tr('contact_soon', args: {'company': state.businessName}),
           style: const TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
           textAlign: TextAlign.center),
         const SizedBox(height: 12),

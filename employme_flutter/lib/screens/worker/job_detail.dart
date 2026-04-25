@@ -15,7 +15,7 @@ class JobDetail extends StatelessWidget {
     final j = job ?? {
       'emoji': '🏪',
       'title': state.tr('shop_assistant'),
-      'company': 'Sri Ganesh Provision Store',
+      'company': state.businessName,
       'location': 'Kodialbail Main Road, Mangalore',
       'salary': '₹12,000',
       'period': '/${state.tr('month')}',

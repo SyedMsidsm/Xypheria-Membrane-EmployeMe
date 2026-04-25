@@ -172,7 +172,7 @@ class _BusinessVerificationState extends State<BusinessVerification> {
             onPressed: _isValid
                 ? () {
                     // Save business name to AppState
-                    context.read<AppState>().updateProfile(name: _nameCtrl.text.trim());
+                    context.read<AppState>().updateProfile(businessName: _nameCtrl.text.trim());
                     // Verification complete! Go to employer dashboard
                     Navigator.pushReplacementNamed(context, '/employer-home');
                   }

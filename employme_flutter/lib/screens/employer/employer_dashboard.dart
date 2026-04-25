@@ -64,7 +64,7 @@ class EmployerDashboard extends StatelessWidget {
           Expanded(child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/employer-profile'),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(state.tr('business_name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white)),
+              Text(state.businessName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white)),
               const SizedBox(height: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
