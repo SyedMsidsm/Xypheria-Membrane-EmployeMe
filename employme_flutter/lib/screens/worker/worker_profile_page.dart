@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
@@ -100,7 +101,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 16), child: Column(children: [
-        _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _aboutSection(state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
+        _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _aboutSection(state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state, userName),
       ]))),
       bottomNavigationBar: argName != null
           ? const EmployerNav(currentIndex: 0)
@@ -248,8 +249,10 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
         child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 12, color: AppColors.primary), const SizedBox(width: 4), Text(b, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primary))]))).toList()),
     ]));
 
-  Widget _actions(BuildContext ctx, AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Row(children: [
-    Expanded(child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.ios_share, size: 18), const SizedBox(width: 8), Text(state.tr('share'))]))),
+  Widget _actions(BuildContext ctx, AppState state, String userName) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Row(children: [
+    Expanded(child: OutlinedButton(onPressed: () {
+      Share.share("Check out $userName's profile on EmployMe! Find trusted local workers for your needs. #EmployMe #HireLocal");
+    }, style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.ios_share, size: 18), const SizedBox(width: 8), Text(state.tr('share'))]))),
     const SizedBox(width: 10),
     Expanded(child: SizedBox(height: 48, child: ElevatedButton(onPressed: () => Navigator.pushNamed(ctx, '/trust'), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.shield, size: 18), const SizedBox(width: 8), Text(state.tr('trust_score'))])))),
   ]));

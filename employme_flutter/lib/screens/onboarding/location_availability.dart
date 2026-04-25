@@ -210,35 +210,6 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
     ),
   ));
 
-  Widget _floatingPin(double? top, double? bottom, double? right, double? left, String emoji, String label) {
-    return Positioned(
-      top: top, bottom: bottom, right: right, left: left,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 1)],
-            ),
-            child: Text(emoji, style: const TextStyle(fontSize: 16)),
-          ),
-          const SizedBox(height: 2),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget _locationCard(AppState state) => Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: Container(
     padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.primary, width: 1.5)),
     child: Row(children: [
