@@ -16,14 +16,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+    final notifs = state.notifications;
+    
     return Scaffold(
       backgroundColor: AppColors.bg,
-      body: SafeArea(child: Column(children: [_header(context.watch<AppState>()), Expanded(child: ListView(padding: const EdgeInsets.only(bottom: 16), children: [
+      body: SafeArea(child: Column(children: [_header(state), Expanded(child: ListView(padding: const EdgeInsets.only(bottom: 16), children: [
         _groupLabel('Today'),
-        ...DemoData.notifications.where((n) => n['group'] == 'Today').map(_notifCard),
+        ...notifs.where((n) => n['group'] == 'Today').map((n) => _notifCard(context, state, n)),
         _groupLabel('Yesterday'),
-        ...DemoData.notifications.where((n) => n['group'] == 'Yesterday').map(_notifCard),
-        Padding(padding: const EdgeInsets.all(16), child: Center(child: Text(context.watch<AppState>().tr('more_coming_soon'), style: const TextStyle(fontSize: 13, color: AppColors.caption)))),
+        ...notifs.where((n) => n['group'] == 'Yesterday').map((n) => _notifCard(context, state, n)),
+        Padding(padding: const EdgeInsets.all(16), child: Center(child: Text(state.tr('more_coming_soon'), style: const TextStyle(fontSize: 13, color: AppColors.caption)))),
       ]))])),
       bottomNavigationBar: const WorkerNav(currentIndex: 0),
     );
@@ -44,10 +47,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget _groupLabel(String label) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
     child: Text(label.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.caption, letterSpacing: 1)));
 
-  Widget _notifCard(Map<String, dynamic> n) {
+  Widget _notifCard(BuildContext context, AppState state, Map<String, dynamic> n) {
     Color bg = AppColors.card; Color? borderColor;
     if (n['type'] == 'urgent') { bg = AppColors.primaryLight; borderColor = AppColors.alert; }
     else if (n['type'] == 'offer') bg = AppColors.primaryLight;
+
+    final String? chatId = n['chatId'];
+    final String offerStatus = chatId != null ? state.getOfferStatus(chatId) : 'none';
+
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       decoration: BoxDecoration(
@@ -66,12 +73,52 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Padding(
             padding: const EdgeInsets.all(14),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(width: 40, height: 40, decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.bg.withOpacity(0.5)), alignment: Alignment.center, child: Text(n['icon'] as String, style: const TextStyle(fontSize: 16))),
+              Container(
+                width: 40, height: 40, 
+                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.bg.withOpacity(0.5)), 
+                alignment: Alignment.center, 
+                child: n['icon'] is IconData 
+                  ? Icon(n['icon'] as IconData, size: 20, color: AppColors.primary)
+                  : Text(n['icon'].toString(), style: const TextStyle(fontSize: 16))
+              ),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(n['title'] as String, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: n['type'] == 'urgent' ? AppColors.alert : (n['type'] == 'offer' ? AppColors.primary : AppColors.text))),
                 const SizedBox(height: 4), Text(n['body'] as String, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
                 const SizedBox(height: 4), Text(n['time'] as String, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
+                if (n['type'] == 'offer' && chatId != null) ...[
+                  const SizedBox(height: 12),
+                  if (offerStatus == 'pending')
+                    Row(children: [
+                      Expanded(child: SizedBox(height: 36, child: ElevatedButton(
+                        onPressed: () => state.acceptJobOffer(chatId),
+                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                        child: const Text('Accept Offer', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white)),
+                      ))),
+                      const SizedBox(width: 8),
+                      Expanded(child: SizedBox(height: 36, child: OutlinedButton(
+                        onPressed: () => state.declineJobOffer(chatId),
+                        style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.border), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                        child: const Text('Decline', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+                      ))),
+                    ])
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: offerStatus == 'accepted' ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        offerStatus == 'accepted' ? 'Accepted' : 'Declined',
+                        style: TextStyle(
+                          fontSize: 12, 
+                          fontWeight: FontWeight.w600, 
+                          color: offerStatus == 'accepted' ? Colors.green : Colors.red
+                        ),
+                      ),
+                    ),
+                ],
               ])),
             ])),
         ],
