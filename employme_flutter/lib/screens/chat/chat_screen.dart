@@ -50,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final argName = ModalRoute.of(context)?.settings.arguments as String?;
     final userName = argName ?? (state.isEmployer ? 'Raju Kumar' : 'Sri Ganesh Store');
     final chatId = state.getChatId(userName);
+    state.listenToMessages(chatId); // Sync with Firestore
     final messages = state.getMessages(chatId);
     
     final userInitials = userName.split(' ').map((e) => e[0]).take(2).join().toUpperCase();

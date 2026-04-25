@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 import 'theme/app_theme.dart';
 import 'providers/app_state.dart';
@@ -50,7 +51,9 @@ import 'screens/demo/impact_dashboard.dart';
 import 'screens/demo/feature_highlights.dart';
 import 'screens/demo/sms_fallback.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppState(),

@@ -59,13 +59,13 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       _currentLocation = loc;
       _isLoadingLocation = false;
       
-      final source = state.jobPostings.map((j) => {
-              'icon': _getIconForCategory(j.category),
-              'title': j.title,
-              'company': state.userName.isNotEmpty && state.isEmployer ? state.userName : 'Local Business',
-              'salary': '₹${j.pay}/${j.payPeriod}',
-              'urgent': j.isUrgent,
-              'verified': true,
+      final source = state.workerFeedJobs.map((j) => {
+              'emoji': j['emoji'],
+              'title': j['title'],
+              'company': j['company'],
+              'salary': '${j['salary']}${j['period']}',
+              'urgent': j['isUrgent'],
+              'verified': j['verified'],
             }).toList();
 
       _dynamicJobs = source.asMap().entries.map((e) {

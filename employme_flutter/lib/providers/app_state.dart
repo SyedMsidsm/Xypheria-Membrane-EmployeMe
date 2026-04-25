@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/localization_service.dart';
 import '../models/job_posting.dart';
 import '../services/demo_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState extends ChangeNotifier {
   // ── Auth & User ──
@@ -9,6 +11,32 @@ class AppState extends ChangeNotifier {
   String _role = ''; // 'worker' or 'employer'
   String _phone = '';
   bool _isLoggedIn = false;
+  final Map<String, dynamic> _chatSubscriptions = {}; // Changed to a dummy map to avoid errors elsewhere if any
+
+  AppState() {
+    _loadPersistedState();
+  }
+
+  Future<void> _loadPersistedState() async {
+    final prefs = await SharedPreferences.getInstance();
+    _role = prefs.getString('role') ?? '';
+    _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    _phone = prefs.getString('phone') ?? '';
+    
+    if (_role == 'employer') {
+      _userName = 'Sri Ganesh Store';
+    } else if (_role == 'worker') {
+      _userName = 'Raju Kumar';
+    }
+    notifyListeners();
+  }
+
+  Future<void> _savePersistedState() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('role', _role);
+    await prefs.setBool('isLoggedIn', _isLoggedIn);
+    await prefs.setString('phone', _phone);
+  }
 
   String get language => _language;
   String get role => _role;
@@ -25,6 +53,7 @@ class AppState extends ChangeNotifier {
     } else {
       _userName = 'Raju Kumar';
     }
+    _savePersistedState();
     notifyListeners(); 
   }
   void login(String phone) { _phone = phone; _isLoggedIn = true; notifyListeners(); }
@@ -175,9 +204,28 @@ class AppState extends ChangeNotifier {
   List<Map<String, dynamic>> getMessages(String chatId) => _messagesByChatId[chatId] ?? [];
 
   void sendMessage(String chatId, String text) {
-    if (!_messagesByChatId.containsKey(chatId)) _messagesByChatId[chatId] = [];
-    _messagesByChatId[chatId]!.add({'text': text, 'sender': _userName, 'time': 'Now'});
+    if (text.trim().isEmpty) return;
+    
+    final msg = {
+      'text': text,
+      'sender': _userName,
+      'time': 'Just now',
+    };
+
+    if (!_messagesByChatId.containsKey(chatId)) {
+      _messagesByChatId[chatId] = [];
+    }
+    _messagesByChatId[chatId]!.add(msg);
     notifyListeners();
+  }
+
+  void listenToMessages(String chatId) {
+    // Purely local now, no-op
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   // ── My Jobs & Offers ──
@@ -196,7 +244,7 @@ class AppState extends ChangeNotifier {
 
   // Combine Employer Job Postings for Feed
   List<Map<String, dynamic>> get workerFeedJobs {
-    return _jobPostings.map((p) => {
+    final postedAsMaps = _jobPostings.map((p) => {
       'emoji': _getEmojiForCategory(p.category),
       'title': p.title,
       'company': _userName.isNotEmpty && isEmployer ? _userName : 'Local Business',
@@ -212,6 +260,13 @@ class AppState extends ChangeNotifier {
       'timing': p.timing,
       'peopleNeeded': p.peopleNeeded,
     }).toList();
+
+    final demoJobs = DemoData.jobs.map((j) => {
+      ...j, 
+      'isUrgent': false,
+    }).toList();
+    
+    return [...postedAsMaps, ...demoJobs];
   }
 
   String _getEmojiForCategory(String cat) {
