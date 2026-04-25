@@ -74,7 +74,12 @@ class _ChatListState extends State<ChatList> {
   Widget _chatItem(AppState state, Map<String, dynamic> chat) {
     final unread = (chat['unread'] as int) > 0;
     return TapScale(
-      onTap: () => Navigator.pushNamed(context, '/chat', arguments: chat['name']),
+      onTap: () {
+        if (unread) {
+          setState(() => chat['unread'] = 0);
+        }
+        Navigator.pushNamed(context, '/chat', arguments: chat['name']);
+      },
       child: Container(
         color: unread ? AppColors.primaryLight.withOpacity(0.3) : Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),

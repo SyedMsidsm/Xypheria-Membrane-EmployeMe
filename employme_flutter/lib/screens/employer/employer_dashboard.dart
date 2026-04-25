@@ -102,7 +102,11 @@ class EmployerDashboard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.primary,
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2563EB), Color(0xFF60A5FA)], // Primary to a softer blue
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: AppShadows.elevated,
             ),
@@ -245,21 +249,37 @@ class EmployerDashboard extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         childAspectRatio: 1.9,
         children: [
-          _actionTile(Icons.add, state.tr('post_new_job'), AppColors.primary, Colors.white, onTap: () => Navigator.pushNamed(context, '/post-job')),
-          _actionTile(Icons.people, state.tr('applicants_label'), AppColors.navyLight, Colors.white, onTap: () => Navigator.pushNamed(context, '/applicants')),
-          _actionTile(Icons.star, state.tr('reviews'), AppColors.card, AppColors.navy, hasBorder: true, onTap: () => Navigator.pushNamed(context, '/reviews')),
-          _actionTile(Icons.bar_chart, state.tr('analytics'), AppColors.card, AppColors.navy, hasBorder: true, onTap: () => Navigator.pushNamed(context, '/analytics')),
+          _actionTile(
+            Icons.add, state.tr('post_new_job'), Colors.white,
+            gradient: const LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF3B82F6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            onTap: () => Navigator.pushNamed(context, '/post-job')
+          ),
+          _actionTile(
+            Icons.people, state.tr('applicants_label'), Colors.white,
+            gradient: const LinearGradient(colors: [Color(0xFF111827), Color(0xFF374151)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            onTap: () => Navigator.pushNamed(context, '/applicants')
+          ),
+          _actionTile(
+            Icons.star, state.tr('reviews'), AppColors.navy,
+            gradient: const LinearGradient(colors: [Colors.white, Color(0xFFF3F4F6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            hasBorder: true, onTap: () => Navigator.pushNamed(context, '/reviews')
+          ),
+          _actionTile(
+            Icons.bar_chart, state.tr('analytics'), AppColors.navy,
+            gradient: const LinearGradient(colors: [Colors.white, Color(0xFFF3F4F6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            hasBorder: true, onTap: () => Navigator.pushNamed(context, '/analytics')
+          ),
         ],
       ),
     );
   }
 
-  Widget _actionTile(IconData icon, String label, Color bg, Color fg, {bool hasBorder = false, VoidCallback? onTap}) {
+  Widget _actionTile(IconData icon, String label, Color fg, {Gradient? gradient, bool hasBorder = false, VoidCallback? onTap}) {
     return TapScale(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: bg,
+          gradient: gradient,
           borderRadius: BorderRadius.circular(16),
           border: hasBorder ? Border.all(color: AppColors.border) : null,
           boxShadow: AppShadows.card,
@@ -417,30 +437,16 @@ class EmployerDashboard extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(children: [
-            for (int i = 0; i < 3; i++) ...[
+            for (int i = 0; i < state.applicants.length; i++) ...[
               _applicantRow(
                 context,
                 state,
-                state.userName,
-                state.tr('shop_clean'),
-                '6 min',
+                state.applicants[i]['name'],
+                (state.applicants[i]['skills'] as List<String>).join(' • '),
+                state.applicants[i]['distance'],
               ),
-              const Divider(height: 1, color: AppColors.border),
-              _applicantRow(
-                context,
-                state,
-                'Suresh Mallya',
-                state.tr('delivery_partner'),
-                '12 min',
-              ),
-              const Divider(height: 1, color: AppColors.border),
-              _applicantRow(
-                context,
-                state,
-                'Priya Devi',
-                state.tr('cook_shop'),
-                '8 min',
-              ),
+              if (i < state.applicants.length - 1)
+                const Divider(height: 1, color: AppColors.border),
             ],
           ]),
         ),

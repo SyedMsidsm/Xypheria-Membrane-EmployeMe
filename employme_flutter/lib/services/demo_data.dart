@@ -128,7 +128,7 @@ class DemoData {
     },
   ];
 
-  static const List<Map<String, dynamic>> chatList = [
+  static List<Map<String, dynamic>> chatList = [
     {
       'initials': 'SG',
       'name': 'Sri Ganesh Store',

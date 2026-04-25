@@ -70,9 +70,9 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
       ])),
       bottomNavigationBar: Container(color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          GestureDetector(onTap: () => Navigator.pushReplacementNamed(context, '/worker-home'),
+          GestureDetector(onTap: () => Navigator.pushNamedAndRemoveUntil(context, '/worker-home', (route) => false),
             child: const Padding(padding: EdgeInsets.only(bottom: 16), child: Text('Skip for now', style: TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w600)))),
-          SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () => Navigator.pushReplacementNamed(context, '/worker-home'), child: const Text('Save Profile'))),
+          SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/worker-home', (route) => false), child: const Text('Save Profile'))),
         ]),
       ),
     );

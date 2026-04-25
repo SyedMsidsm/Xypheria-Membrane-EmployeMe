@@ -160,7 +160,37 @@ class EmployerProfile extends StatelessWidget {
   Widget _logoutButton(BuildContext context, AppState state) => SizedBox(
     width: double.infinity,
     child: TextButton.icon(
-      onPressed: () => Navigator.pushReplacementNamed(context, '/role-selection'),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: AppColors.card,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.w600)),
+            content: const Text('Are you sure you want to logout of your business account?', style: TextStyle(color: AppColors.textSecondary)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx), 
+                style: TextButton.styleFrom(minimumSize: const Size(80, 48)),
+                child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  Navigator.pushNamedAndRemoveUntil(context, '/phone', (route) => false);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.alert, 
+                  foregroundColor: Colors.white, 
+                  elevation: 0,
+                  minimumSize: const Size(120, 48),
+                ),
+                child: const Text('Logout'),
+              ),
+            ],
+          ),
+        );
+      },
       icon: const Icon(Icons.logout, size: 20, color: AppColors.alert),
       label: const Text('Logout Business Account', style: TextStyle(color: AppColors.alert, fontWeight: FontWeight.w500)),
       style: TextButton.styleFrom(

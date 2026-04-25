@@ -39,7 +39,11 @@ class _PhoneEntryState extends State<PhoneEntry> {
                   if (_showOtp) {
                     setState(() => _showOtp = false);
                   } else {
-                    Navigator.pop(context);
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pushReplacementNamed(context, '/role');
+                    }
                   }
                 },
                 child: Container(
@@ -219,9 +223,9 @@ class _PhoneEntryState extends State<PhoneEntry> {
               final state = context.read<AppState>();
               state.login(_phoneCtrl.text);
               if (state.role == 'worker') {
-                Navigator.pushReplacementNamed(context, '/skills');
+                Navigator.pushNamedAndRemoveUntil(context, '/skills', (route) => false);
               } else {
-                Navigator.pushReplacementNamed(context, '/employer-business-type');
+                Navigator.pushNamedAndRemoveUntil(context, '/employer-business-type', (route) => false);
               }
             }
           : null,
