@@ -251,7 +251,10 @@ class _PostJobState extends State<PostJob> {
     const SizedBox(width: 12),
     Expanded(flex: 2, child: SizedBox(height: 56, child: ElevatedButton(onPressed: () {
       final state = context.read<AppState>();
+      final String emoji = _getEmojiForCategory(_category);
       final newJob = JobPosting(
+        emoji: emoji,
+        company: state.userName,
         title: _titleController.text,
         category: _category,
         pay: _payController.text,
@@ -272,5 +275,14 @@ class _PostJobState extends State<PostJob> {
     }, child: const Text('Post Job ✓')))),
   ]));
 
-  Widget _label(String t) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)));
+  String _getEmojiForCategory(String cat) {
+    if (cat.contains('Shop') || cat.contains('Retail')) return '🏪';
+    if (cat.contains('Delivery')) return '🚚';
+    if (cat.contains('Cook') || cat.contains('Food') || cat.contains('Restaurant')) return '🍳';
+    if (cat.contains('Construction')) return '👷';
+    if (cat.contains('Security')) return '🛡️';
+    return '💼';
+  }
+
+  Widget _label(String t) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)));
 }

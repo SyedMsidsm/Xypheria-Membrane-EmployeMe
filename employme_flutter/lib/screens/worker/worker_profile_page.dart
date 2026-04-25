@@ -102,7 +102,9 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
       body: SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 16), child: Column(children: [
         _profileHeader(state, userName, initials), _trustCard(context, state), _statsRow(context, state), _aboutSection(state), _skillsSection(state), _availabilitySection(state), _reviewsSection(state), _actions(context, state),
       ]))),
-      bottomNavigationBar: const WorkerNav(currentIndex: 4),
+      bottomNavigationBar: argName != null
+          ? const EmployerNav(currentIndex: 0)
+          : const WorkerNav(currentIndex: 4),
     );
   }
 

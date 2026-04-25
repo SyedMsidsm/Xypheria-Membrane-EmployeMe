@@ -1,4 +1,6 @@
 class JobPosting {
+  final String emoji;
+  final String company;
   final String title;
   final String category;
   final String pay;
@@ -12,6 +14,8 @@ class JobPosting {
   final DateTime postedAt;
 
   JobPosting({
+    required this.emoji,
+    required this.company,
     required this.title,
     required this.category,
     required this.pay,

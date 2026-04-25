@@ -358,22 +358,38 @@ class AppState extends ChangeNotifier {
   ];
   List<Map<String, dynamic>> get applicants => _applicants;
 
-  void shortlistApplicant(String applicantName) {
-    // 1. Find applicant and set status
+
+  // ── Notifications ──
+  final List<Map<String, dynamic>> _notifications = List.from(DemoData.notifications);
+  List<Map<String, dynamic>> get notifications => _notifications;
+
+  void inviteApplicant(String applicantName) {
     final index = _applicants.indexWhere((a) => a['name'] == applicantName);
     if (index != -1) {
       _applicants[index] = {
         ..._applicants[index],
-        'status': 'Shortlisted',
+        'status': 'Invited',
       };
+      
+      // Add notification for the worker
+      _notifications.insert(0, {
+        'id': DateTime.now().millisecondsSinceEpoch.toString(),
+        'type': 'offer',
+        'icon': Icons.mail_outline,
+        'title': 'New Job Invite!',
+        'body': '$_userName invited you to join as Shop Assistant',
+        'time': 'Just now',
+        'group': 'Today',
+        'chatId': getChatId(applicantName),
+      });
+      
+      // Update offer status
+      _offerStatusByChatId[getChatId(applicantName)] = 'pending';
+      
+      notifyListeners();
     }
-    
-    // 2. Automate a chat message
-    final chatId = getChatId(applicantName);
-    sendMessage(chatId, "Congratulations! You have been shortlisted for the Shop Assistant role. I will contact you soon.");
-    
-    notifyListeners();
   }
+
 
   // ── Localization ──
   String tr(String key, {Map<String, dynamic>? args}) {

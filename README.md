@@ -1,159 +1,160 @@
-# EmployMe — Hyperlocal Job Platform for India's Informal Workforce
+# 🚀 Xypheria Membrane EmployeMe
 
-> 🏆 Built for National Hackathon | Team Xypheria Membrane
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
-</p>
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Runtime-339933?logo=node.js&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-Mobile-02569B?logo=flutter&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
----
+**A modern employee management platform combining a Vite web app and Flutter module.**
 
-## 🎯 Problem Statement
-
-**400 million+ informal workers** in India — daily wage earners, domestic helpers, delivery partners, shop assistants — have **no structured way** to find hyperlocal jobs. Employers in local markets, restaurants, and households struggle to find trustworthy workers nearby.
-
-**EmployMe bridges this gap** with a mobile-first, bilingual (English + Kannada), trust-verified job platform that connects workers and employers within walking distance.
+</div>
 
 ---
 
-## 💡 Key Features
+## 📌 Overview
 
-### For Workers 👷
-- **AI-Matched Job Feed** — Personalized job recommendations based on skills, location, and availability
-- **Nearby Jobs Map** — Uber-inspired hyperlocal map showing jobs within walking distance with salary pins
-- **Quick Apply** — 2-tap application flow with availability and timing preferences
-- **Trust Score Dashboard** — Fintech-grade credit score visualization (87/100) with verification badges
-- **Earnings Wallet** — CRED-inspired earnings dashboard with weekly charts and transaction history
-- **Bilingual UI** — Full English + Kannada support throughout
+**Xypheria Membrane EmployeMe** is a multi-platform employee management project with:
 
-### For Employers 🏢
-- **Post Jobs in 60 seconds** — Guided job posting with AI-generated descriptions
-- **View Applicants** — Trust-score ranked applicant list with skill matching
-- **Nearby Workers Map** — Find available verified workers in your area
-- **Chat & Hire** — In-app messaging with job offer cards
-
-### Trust & Safety 🛡️
-- **Multi-Layer Verification** — Phone OTP → Community → NGO Ground Verification
-- **Trust Score System** — Composite score from verification, reviews, and reliability
-- **Employer Ratings** — Star ratings + badge system (On Time, Honest, Hardworking)
+- 🌐 **Web interface** (Vite + JavaScript/TypeScript frontend)
+- 📱 **Flutter module** for mobile-first workflows
+- ⚡ Fast development workflow and scalable structure
 
 ---
 
-## 📱 App Screens (27 Screens)
+## ✨ Features
 
-| Flow | Screens |
-|------|---------|
-| **Auth** | Splash → Language Selection → Role Selection → Phone + OTP |
-| **Onboarding** | Skills Selection → Location & Availability → Profile Setup |
-| **Worker** | Job Feed → Nearby Map → Job Detail → Quick Apply → My Jobs → Earnings Wallet → Profile → Notifications |
-| **Employer** | Dashboard → Post Job → View Applicants |
-| **Chat** | Chat List → Chat Screen (with job offer cards) |
-| **Trust** | Trust Score Dashboard → NGO Verification |
-| **Demo** | Impact Dashboard → Feature Highlights → SMS Fallback |
+- Employee profile management
+- Department / role organization
+- Responsive frontend experience
+- Multi-platform codebase (Web + Flutter)
+- Extendable architecture for HR workflows
+
+> Update this section with your actual implemented features for best impact.
 
 ---
 
-## 🏗️ Tech Stack
+## 🏗️ Project Structure
 
-### Flutter Mobile App (Primary)
-```
-employme_flutter/
-├── lib/
-│   ├── main.dart              # App entry + routing (27 routes)
-│   ├── theme/app_theme.dart   # Design system (colors, shadows, typography)
-│   ├── providers/app_state.dart # State management (Provider)
-│   ├── screens/
-│   │   ├── auth/              # Splash, Language, Role, Phone+OTP
-│   │   ├── onboarding/        # Skills, Location, Profile Setup
-│   │   ├── worker/            # Feed, Map, Detail, Apply, Jobs, Wallet, Profile
-│   │   ├── employer/          # Dashboard, Post Job, Applicants
-│   │   ├── chat/              # Chat List, Chat Screen
-│   │   ├── trust/             # Trust Score, NGO Verification
-│   │   └── demo/              # Impact, Features, SMS Fallback
-│   ├── widgets/               # Reusable components (JobCard, BottomNav, etc.)
-│   └── services/demo_data.dart # Demo data for hackathon
-└── pubspec.yaml
-```
-
-### MERN Web Prototype (Reference)
-```
-src/
-├── screens/          # 24 React screens
-├── App.jsx           # Router + screen navigation
-├── index.css         # Design system (CSS variables)
-└── main.jsx          # Entry point
+```txt
+.
+├── src/                     # Web app source (Vite)
+├── employme_flutter/        # Flutter app/module
+├── index.html
+├── package.json
+├── vite.config.js
+├── README.md
+└── ...
 ```
 
 ---
 
-## 🎨 Design System
+## 🛠️ Tech Stack
 
-| Token | Value |
-|-------|-------|
-| **Primary** | `#10B981` (Emerald Green — trust, growth) |
-| **Navy** | `#1E293B` (Deep trust blue — headers, dark cards) |
-| **Background** | `#F9FAFB` (Warm off-white) |
-| **Card** | `#FFFFFF` with soft shadow |
-| **Alert** | `#EF4444` (Urgent jobs) |
-| **Warning** | `#F59E0B` (Pending verification) |
-| **Font** | Inter (Google Fonts) |
-| **Border Radius** | 8px–24px (consistent) |
+### Web
+- **Vite**
+- **Node.js**
+- **JavaScript/TypeScript** (depending on your source)
+
+### Mobile
+- **Flutter**
+- **Dart**
 
 ---
 
-## 🚀 Getting Started
+## ⚙️ Getting Started
 
-### Prerequisites
-- Flutter SDK 3.x+
-- Android Studio / VS Code
-- Android device or emulator
+## Prerequisites
 
-### Run Flutter App
+- Node.js 18+
+- npm or yarn
+- Flutter SDK (stable channel)
+
+---
+
+### 1) Clone repository
+
+```bash
+git clone https://github.com/SyedMsidsm/Xypheria-Membrane-EmployeMe.git
+cd Xypheria-Membrane-EmployeMe
+```
+
+---
+
+### 2) Run Web App (Vite)
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+### 3) Run Flutter Module
+
 ```bash
 cd employme_flutter
 flutter pub get
 flutter run
 ```
 
-### Run Web Prototype (Reference)
+Run static analysis / tests:
+
 ```bash
-npm install
-npm run dev
-# Opens at http://localhost:5173
+flutter analyze
+flutter test
 ```
 
 ---
 
-## 🏆 Hero Screens for Demo
+## 🧪 Scripts (Web)
 
-1. **🗺️ Nearby Jobs Map** — Uber-inspired hyperlocal map with salary pins, radius controls, draggable bottom sheet
-2. **🛡️ Trust Score** — Animated gradient arc (fintech credit score style), badge grid, comparison charts
-3. **💰 Earnings Wallet** — Dark balance card, weekly bar chart, transaction history
-4. **📱 Job Feed** — AI-matched recommendations with category filters, urgent banners, search
-5. **⚡ Quick Apply** — 2-step form with animated transitions, success celebration
+From root `package.json`:
 
----
-
-## 🌍 Innovation Highlights
-
-- **Bilingual-first** — English + Kannada throughout (not an afterthought)
-- **Trust Score** — Multi-layer verification unique to informal workforce
-- **Walking Distance Jobs** — Hyperlocal radius-based matching
-- **SMS Fallback** — Works even without internet (feature phone compatible)
-- **Community Verification** — Neighbor-based identity verification
-- **NGO Ground Verification** — Partnership model for deep trust
+- `npm run dev` – start development server
+- `npm run build` – production build
+- `npm run preview` – preview production build
 
 ---
 
-## 👥 Team Xypheria Membrane
+## 🤝 Contributing
 
-Built with ❤️ for India's 400M+ informal workforce.
+Contributions are welcome!  
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
+
+---
+
+## 🔐 Security
+
+If you discover a vulnerability, please report it via [SECURITY.md](SECURITY.md).
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Add authentication & role-based access
+- [ ] Add employee attendance module
+- [ ] Add analytics dashboard
+- [ ] Add CI quality gates (lint, tests, build)
+- [ ] Improve docs and architecture diagrams
 
 ---
 
 ## 📄 License
 
-This project is built for hackathon demonstration purposes.
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 👤 Maintainer
+
+**SyedMsidsm**  
+GitHub: [@SyedMsidsm](https://github.com/SyedMsidsm)
