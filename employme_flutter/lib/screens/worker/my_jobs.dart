@@ -121,8 +121,9 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
     itemCount: jobs.length,
     itemBuilder: (_, i) {
       final job = jobs[i];
-      final status = job['status']!;
+      final status = job['status'] ?? 'pending';
       final color = _statusColor(status);
+      final emoji = job['emoji'] as String?;
       return Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: TapScale(
@@ -139,17 +140,21 @@ class _MyJobsState extends State<MyJobs> with SingleTickerProviderStateMixin {
                 padding: const EdgeInsets.all(20),
                 child: Row(children: [
                   Container(width: 44, height: 44, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md)),
-                    alignment: Alignment.center, child: Icon(job['icon']! as IconData, size: 24, color: AppColors.primaryDark)),
+                    alignment: Alignment.center,
+                    child: emoji != null
+                      ? Text(emoji, style: const TextStyle(fontSize: 22))
+                      : const Icon(Icons.work_outline, size: 24, color: AppColors.primaryDark),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(job['title']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+                    Text(job['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
                     const SizedBox(height: 2),
-                    Text(job['company']!, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+                    Text(job['company'] ?? '', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
                     const SizedBox(height: 4),
-                    Text(job['started']!, style: const TextStyle(fontSize: 11, color: AppColors.caption)),
+                    Text(job['started'] ?? '', style: const TextStyle(fontSize: 11, color: AppColors.caption)),
                   ])),
                   Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    Text(job['salary']!, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
+                    Text(job['salary'] ?? '', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
                     const SizedBox(height: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
