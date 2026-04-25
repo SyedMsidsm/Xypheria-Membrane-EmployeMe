@@ -376,7 +376,7 @@ class AppState extends ChangeNotifier {
   }
 
   // ── Localization ──
-  String tr(String key, {Map<String, String>? args}) {
-    return LocalizationService.translate(key, _language, args: args);
+  String tr(String key, {Map<String, dynamic>? args}) {
+    return LocalizationService.translate(key, language, args: args);
   }
 }

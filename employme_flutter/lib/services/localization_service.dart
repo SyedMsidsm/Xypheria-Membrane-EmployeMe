@@ -558,11 +558,11 @@ class LocalizationService {
     },
   };
 
-  static String translate(String key, String lang, {Map<String, String>? args}) {
+  static String translate(String key, String lang, {Map<String, dynamic>? args}) {
     String text = _translations[lang]?[key] ?? _translations['en']?[key] ?? key;
     if (args != null) {
       args.forEach((k, v) {
-        text = text.replaceAll('{$k}', v);
+        text = text.replaceAll('{$k}', v.toString());
       });
     }
     return text;
