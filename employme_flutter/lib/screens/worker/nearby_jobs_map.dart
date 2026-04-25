@@ -61,6 +61,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       
       final source = state.workerFeedJobs.map((j) => {
               'emoji': j['emoji'],
+              'icon': _getIconForCategory(j['title']),
               'title': j['title'],
               'company': j['company'],
               'salary': '${j['salary']}${j['period']}',
@@ -106,6 +107,24 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     if (cat.contains('Delivery')) return Icons.local_shipping;
     if (cat.contains('Cook') || cat.contains('Food')) return Icons.restaurant;
     return Icons.construction;
+  }
+
+  List<Map<String, dynamic>> get _filteredJobs {
+    if (_filter == 'All') return _dynamicJobs;
+    return _dynamicJobs.where((j) {
+      if (_filter == 'Urgent') return j['urgent'] == true;
+      if (_filter == 'Verified') return j['verified'] == true;
+      if (_filter == 'Walking') return j['mode'] == 'walk';
+      if (_filter == '<') {
+        final s = j['salary'].toString();
+        return s.contains('500') || s.contains('400') || s.contains('300') || s.contains('200');
+      }
+      if (_filter == '₹500+/day') {
+        final s = j['salary'].toString();
+        return !s.contains('500') && !s.contains('400') && !s.contains('300') && !s.contains('200') && s.contains('day');
+      }
+      return true;
+    }).toList();
   }
 
   @override
@@ -201,9 +220,9 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
               ),
             ),
             // Job/Worker Pins
-            ..._dynamicJobs.map((j) => Marker(
+            ..._filteredJobs.map((j) => Marker(
               point: LatLng(j['lat'] as double, j['lng'] as double),
-              width: 60, height: 60,
+              width: 80, height: 80,
               alignment: Alignment.topCenter,
               child: _itemPin(j),
             )),
@@ -219,7 +238,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     final bool isUrgent = (item['urgent'] ?? false) as bool;
 
     return TapScale(
-      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : null),
+      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : item),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
@@ -256,6 +275,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
   Widget _topBar() {
     final state = context.watch<AppState>();
     final isEmployer = state.isEmployer;
+    final count = _filteredJobs.length;
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -265,7 +285,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
         const SizedBox(width: 12),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(isEmployer ? 'Your Job Locations' : 'Nearby Jobs', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Text(isEmployer ? '${_dynamicJobs.length} active postings on map' : '${_dynamicJobs.length} opportunities in commute zone', style: const TextStyle(fontSize: 12, color: AppColors.caption)),
+          Text(isEmployer ? '$count active postings on map' : '$count opportunities in commute zone', style: const TextStyle(fontSize: 12, color: AppColors.caption)),
         ])),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -340,7 +360,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(context.read<AppState>().isEmployer ? 'Your Postings' : '${_dynamicJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(context.read<AppState>().isEmployer ? 'Your Postings' : '${_filteredJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
@@ -352,9 +372,9 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       Expanded(child: ListView.separated(
         controller: scrollCtrl,
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        itemCount: _dynamicJobs.length,
+        itemCount: _filteredJobs.length,
         separatorBuilder: (_, __) => const SizedBox(height: 10),
-        itemBuilder: (_, i) => _sheetJobCard(_dynamicJobs[i]),
+        itemBuilder: (_, i) => _sheetJobCard(_filteredJobs[i]),
       )),
     ]),
   );
@@ -365,7 +385,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     final bool isUrgent = (item['urgent'] ?? false) as bool;
 
     return TapScale(
-      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : null),
+      onTap: () => Navigator.pushNamed(context, isEmployer ? '/worker-profile' : '/job-detail', arguments: isEmployer ? item['title'] : item),
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md), border: Border.all(color: AppColors.border)),

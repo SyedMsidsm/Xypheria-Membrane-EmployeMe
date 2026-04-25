@@ -153,59 +153,60 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
     Text(state.tr('location_subtitle'), style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w500)),
   ]));
 
-  Widget _map() => Padding(padding: const EdgeInsets.all(20), child: Container(
-    width: double.infinity,
-    height: 180, 
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1.5),
-      boxShadow: [
-        BoxShadow(color: AppColors.primary.withOpacity(0.15), blurRadius: 10, offset: const Offset(0, 4)),
-      ]
-    ),
-    clipBehavior: Clip.antiAlias,
-    child: Stack(
-      children: [
-        FlutterMap(
-          options: MapOptions(
-            initialCenter: LatLng(_currentLat, _currentLng),
-            initialZoom: 15.0,
-            interactionOptions: const InteractionOptions(flags: InteractiveFlag.none), // Static preview
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.xypheria.employeme',
+  Widget _map() => Padding(padding: const EdgeInsets.all(20), child: GestureDetector(
+    onTap: _showMapPicker,
+    child: Container(
+      width: double.infinity,
+      height: 180, 
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1.5),
+        boxShadow: [
+          BoxShadow(color: AppColors.primary.withOpacity(0.15), blurRadius: 10, offset: const Offset(0, 4)),
+        ]
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: LatLng(_currentLat, _currentLng),
+              initialZoom: 15.0,
+              interactionOptions: const InteractionOptions(flags: InteractiveFlag.none), // Static preview
             ),
-          ],
-        ),
-        // Overlay a gradient to make it look a bit stylized and match the theme
-        Container(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [AppColors.primary.withOpacity(0.1), AppColors.primary.withOpacity(0.3)],
-              center: Alignment.center,
-              radius: 0.8,
-            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.xypheria.employeme',
+              ),
+            ],
           ),
-        ),
-        // Center Pin
-        Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: 44, height: 44,
+          // Overlay a gradient to make it look a bit stylized and match the theme
+          Container(
             decoration: BoxDecoration(
-              shape: BoxShape.circle, 
-              color: AppColors.primary, 
-              border: Border.all(color: Colors.white, width: 3),
-              boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 8, spreadRadius: 2)],
+              gradient: RadialGradient(
+                colors: [AppColors.primary.withOpacity(0.1), AppColors.primary.withOpacity(0.3)],
+                center: Alignment.center,
+                radius: 0.8,
+              ),
             ),
-            child: const Center(child: Icon(Icons.location_pin, color: Colors.white, size: 24)),
           ),
-        ),
-        // Worker pins scattered around the real map
-
-      ],
+          // Center Pin
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 44, height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle, 
+                color: AppColors.primary, 
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 8, spreadRadius: 2)],
+              ),
+              child: const Center(child: Icon(Icons.location_pin, color: Colors.white, size: 24)),
+            ),
+          ),
+        ],
+      ),
     ),
   ));
 
@@ -249,21 +250,20 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
       ])),
       GestureDetector(
         onTap: _showMapPicker,
-        child: Text(state.tr('change'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
+        child: const Text('Adjust Pin', style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
       ),
     ]),
   ));
 
   void _showMapPicker() {
     Timer? _debounce;
-    List<Map<String, dynamic>> _searchResults = [];
     bool _isLoading = false;
-    final String initialName = _currentLocationName;
-    final String initialSub = _currentLocationSub;
 
     // Pending location - only committed on Confirm
     String _pendingName = _currentLocationName;
     String _pendingSub = _currentLocationSub;
+    double _pendingLat = _currentLat;
+    double _pendingLng = _currentLng;
 
     final MapController mapController = MapController();
 
@@ -287,156 +287,115 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                   width: 40, height: 4,
                   decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2)),
                 ),
-                const Text('Select Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                const Text('Refine Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 16),
-                // Search field
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                    autofocus: false,
-                    decoration: InputDecoration(
-                      hintText: 'Search area, street, city...',
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: _isLoading ? const Padding(padding: EdgeInsets.all(12.0), child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))) : null,
-                      filled: true,
-                      fillColor: AppColors.card,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                
+                // Map
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8F5E9),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
+                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
                     ),
-                    onChanged: (val) {
-                      if (_debounce?.isActive ?? false) _debounce!.cancel();
-                      _debounce = Timer(const Duration(milliseconds: 500), () async {
-                        if (val.trim().isEmpty) {
-                          setModalState(() { _searchResults = []; _isLoading = false; });
-                          return;
-                        }
-                        setModalState(() { _isLoading = true; });
-                        final results = await OlaMapsService.getAutocomplete(val);
-                        setModalState(() { _searchResults = results; _isLoading = false; });
-                      });
-                    },
+                    child: Stack(
+                      children: [
+                        FlutterMap(
+                          mapController: mapController,
+                          options: MapOptions(
+                            initialCenter: LatLng(_pendingLat, _pendingLng),
+                            initialZoom: 16.0,
+                            onMapEvent: (MapEvent event) {
+                              if (event is MapEventMoveEnd) {
+                                final center = event.camera.center;
+                                _pendingLat = center.latitude;
+                                _pendingLng = center.longitude;
+                                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                                _debounce = Timer(const Duration(milliseconds: 800), () async {
+                                  setModalState(() { _isLoading = true; });
+                                  final res = await OlaMapsService.reverseGeocode(center.latitude, center.longitude);
+                                  if (res != null) {
+                                    setModalState(() {
+                                      _pendingName = res['name'] ?? 'Selected Location';
+                                      _pendingSub = res['formatted_address'] ?? '';
+                                      _isLoading = false;
+                                    });
+                                  } else {
+                                    setModalState(() { _isLoading = false; });
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              userAgentPackageName: 'com.xypheria.employeme',
+                            ),
+                          ],
+                        ),
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 40.0),
+                            child: Icon(Icons.location_on, size: 48, color: AppColors.primary),
+                          ),
+                        ),
+                        // Locate Me Button
+                        Positioned(
+                          top: 16, right: 16,
+                          child: FloatingActionButton.small(
+                            backgroundColor: Colors.white,
+                            onPressed: () async {
+                                setModalState(() { _isLoading = true; });
+                                try {
+                                  final pos = await Geolocator.getCurrentPosition(locationSettings: const LocationSettings(accuracy: LocationAccuracy.high));
+                                  mapController.move(LatLng(pos.latitude, pos.longitude), 16.0);
+                                } catch (_) {}
+                                setModalState(() { _isLoading = false; });
+                            },
+                            child: const Icon(Icons.my_location, color: AppColors.primary),
+                          ),
+                        ),
+                        // Bottom overlay showing current pin location
+                        Positioned(
+                          bottom: 16,
+                          left: 16, right: 16,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.location_on, color: AppColors.primary, size: 22),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: _isLoading
+                                    ? const Text('Fetching address...', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontStyle: FontStyle.italic))
+                                    : Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(_pendingName, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                          if (_pendingSub.isNotEmpty)
+                                            Text(_pendingSub, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                        ],
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                // Map or search results
-                if (_searchResults.isEmpty)
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE8F5E9),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.border),
-                        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                      ),
-                      child: Stack(
-                        children: [
-                          FlutterMap(
-                            mapController: mapController,
-                            options: MapOptions(
-                              initialCenter: LatLng(_currentLat, _currentLng),
-                              initialZoom: 14.0,
-                              onMapEvent: (MapEvent event) {
-                                if (event is MapEventMoveEnd) {
-                                  final center = event.camera.center;
-                                  if (_debounce?.isActive ?? false) _debounce!.cancel();
-                                  _debounce = Timer(const Duration(milliseconds: 800), () async {
-                                    setModalState(() { _isLoading = true; });
-                                    final res = await OlaMapsService.reverseGeocode(center.latitude, center.longitude);
-                                    if (res != null) {
-                                      setModalState(() {
-                                        _pendingName = res['name'] ?? 'Selected Location';
-                                        _pendingSub = res['formatted_address'] ?? '';
-                                        _isLoading = false;
-                                      });
-                                    } else {
-                                      setModalState(() { _isLoading = false; });
-                                    }
-                                  });
-                                }
-                              },
-                            ),
-                            children: [
-                              TileLayer(
-                                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName: 'com.xypheria.employeme',
-                              ),
-                            ],
-                          ),
-                          const Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 40.0),
-                              child: Icon(Icons.location_on, size: 48, color: AppColors.primary),
-                            ),
-                          ),
-                          // Bottom overlay showing current pin location
-                          Positioned(
-                            bottom: 16,
-                            left: 16, right: 16,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.location_on, color: AppColors.primary, size: 22),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: _isLoading
-                                      ? const Text('Fetching address...', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontStyle: FontStyle.italic))
-                                      : Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(_pendingName, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
-                                            if (_pendingSub.isNotEmpty)
-                                              Text(_pendingSub, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
-                                          ],
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                else
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _searchResults.length,
-                      itemBuilder: (context, index) {
-                        final item = _searchResults[index];
-                        final mainText = item['structured_formatting']?['main_text'] ?? item['description'] ?? '';
-                        final subText = item['structured_formatting']?['secondary_text'] ?? '';
-                        return ListTile(
-                          leading: const Icon(Icons.location_on, color: AppColors.primary),
-                          title: Text(mainText, style: const TextStyle(fontWeight: FontWeight.w600)),
-                          subtitle: subText.isNotEmpty ? Text(subText, maxLines: 2, overflow: TextOverflow.ellipsis) : null,
-                          onTap: () {
-                            // Update pending location and move the map
-                            final lat = double.tryParse(item['lat']?.toString() ?? '');
-                            final lon = double.tryParse(item['lon']?.toString() ?? '');
-                            setModalState(() {
-                              _pendingName = mainText;
-                              _pendingSub = subText;
-                              _searchResults = [];
-                            });
-                            if (lat != null && lon != null) {
-                              try {
-                                mapController.move(LatLng(lat, lon), 16.0);
-                              } catch (_) {}
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ),
                 const SizedBox(height: 16),
                 // Cancel / Confirm buttons
                 Padding(
@@ -451,14 +410,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                               side: const BorderSide(color: AppColors.primary),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
-                            onPressed: () {
-                              // Revert to original
-                              setState(() {
-                                _currentLocationName = initialName;
-                                _currentLocationSub = initialSub;
-                              });
-                              Navigator.pop(context);
-                            },
+                            onPressed: () => Navigator.pop(context),
                             child: const Text('Cancel', style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w500)),
                           ),
                         ),
@@ -477,6 +429,8 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                               setState(() {
                                 _currentLocationName = _pendingName;
                                 _currentLocationSub = _pendingSub;
+                                _currentLat = _pendingLat;
+                                _currentLng = _pendingLng;
                               });
                               Navigator.pop(context);
                             },
@@ -494,6 +448,8 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
       ),
     );
   }
+
+
 
   Widget _travelSection(AppState state) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     _label(state.tr('travel_distance_title')),
