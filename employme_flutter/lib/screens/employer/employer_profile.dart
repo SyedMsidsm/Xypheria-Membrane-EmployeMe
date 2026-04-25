@@ -74,7 +74,7 @@ class EmployerProfile extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Text(state.tr('business_name'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white)),
+        Text(state.businessName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white)),
         const SizedBox(height: 4),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -149,9 +149,9 @@ class EmployerProfile extends StatelessWidget {
       Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
-        child: const Text(
-          'Xypheria Retail is a leading local business in Mangalore specializing in high-quality retail services and delivery. We pride ourselves on creating a great work environment for our helpers.',
-          style: TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.6),
+        child: Text(
+          '${state.businessName} is a leading local business in Mangalore specializing in high-quality retail services and delivery. We pride ourselves on creating a great work environment for our helpers.',
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.6),
         ),
       ),
     ],
