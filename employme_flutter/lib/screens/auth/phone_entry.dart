@@ -221,7 +221,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
               if (state.role == 'worker') {
                 Navigator.pushReplacementNamed(context, '/skills');
               } else {
-                Navigator.pushReplacementNamed(context, '/employer-home');
+                Navigator.pushReplacementNamed(context, '/employer-business-type');
               }
             }
           : null,

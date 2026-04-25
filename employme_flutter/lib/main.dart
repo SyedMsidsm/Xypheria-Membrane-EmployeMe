@@ -15,6 +15,8 @@ import 'screens/auth/phone_entry.dart';
 import 'screens/onboarding/skills_selection.dart';
 import 'screens/onboarding/location_availability.dart';
 import 'screens/onboarding/worker_profile_setup.dart';
+import 'screens/onboarding/business_selection.dart';
+import 'screens/onboarding/business_verification.dart';
 
 // Worker
 import 'screens/worker/job_feed.dart';
@@ -109,6 +111,8 @@ class EmployMeApp extends StatelessWidget {
         '/skills': (_) => const SkillsSelection(),
         '/location': (_) => const LocationAvailability(),
         '/profile-setup': (_) => const WorkerProfileSetup(),
+        '/employer-business-type': (_) => const BusinessSelection(),
+        '/employer-verification': (_) => const BusinessVerification(),
 
         // Worker Flow
         '/worker-home': (_) => const JobFeed(),
