@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
-import '../../services/demo_data.dart';
+import 'package:provider/provider.dart';
+import '../../providers/app_state.dart';
 
 class ViewApplicants extends StatefulWidget {
   const ViewApplicants({super.key});
@@ -14,9 +15,10 @@ class _ViewApplicantsState extends State<ViewApplicants> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
     final filtered = _tab == 'All' 
-        ? DemoData.applicants 
-        : DemoData.applicants.where((a) => a['status'] == _tab).toList();
+        ? state.applicants 
+        : state.applicants.where((a) => a['status'] == _tab).toList();
 
     return Scaffold(backgroundColor: AppColors.bg,
       body: SafeArea(child: Column(children: [_header(), Expanded(child: SingleChildScrollView(padding: const EdgeInsets.only(bottom: 120), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -95,7 +97,9 @@ class _ViewApplicantsState extends State<ViewApplicants> {
                   onPressed: () => Navigator.pushNamed(context, '/chat', arguments: a['name']), 
                   style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: const Text('💬 Message')))),
                 const SizedBox(width: 8),
-                Expanded(flex: 2, child: SizedBox(height: 40, child: ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: isShortlisted ? AppColors.border : AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Text(isShortlisted ? 'Shortlisted' : '✅ Shortlist')))),
+                Expanded(flex: 2, child: SizedBox(height: 40, child: ElevatedButton(
+                  onPressed: isShortlisted ? null : () => context.read<AppState>().shortlistApplicant(a['name']), 
+                  style: ElevatedButton.styleFrom(backgroundColor: isShortlisted ? AppColors.border : AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), child: Text(isShortlisted ? 'Shortlisted' : '✅ Shortlist')))),
               ]),
             ]),
           ),

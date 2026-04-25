@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/localization_service.dart';
 import '../models/job_posting.dart';
+import '../services/demo_data.dart';
 
 class AppState extends ChangeNotifier {
   // ── Auth & User ──
@@ -220,6 +221,36 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Combine Employer Job Postings with Demo Jobs for Worker Feed
+  List<Map<String, dynamic>> get workerFeedJobs {
+    final postedAsMaps = _jobPostings.map((p) => {
+      'emoji': _getEmojiForCategory(p.category),
+      'title': p.title,
+      'company': _userName.isNotEmpty && isEmployer ? _userName : 'Local Business',
+      'type': p.type,
+      'location': _location.isNotEmpty ? _location.split(',')[0] : 'Nearby',
+      'salary': '₹${p.pay}',
+      'period': p.payPeriod == 'per day' ? '/day' : '/mo',
+      'distance': 'Just added',
+      'verified': true,
+      'isUrgent': p.isUrgent,
+    }).toList();
+    
+    final demoJobs = DemoData.jobs.map((j) => {
+      ...j, 
+      'isUrgent': false,
+    }).toList();
+    
+    return [...postedAsMaps, ...demoJobs];
+  }
+
+  String _getEmojiForCategory(String cat) {
+    if (cat.contains('Shop') || cat.contains('Retail')) return '🏪';
+    if (cat.contains('Delivery')) return '🚚';
+    if (cat.contains('Cook') || cat.contains('Food')) return '🍳';
+    return '👷';
+  }
+
   // ── Worker Jobs ──
   final List<Map<String, String>> _jobs = [
     {'emoji': '🏪', 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'status': 'active', 'started': 'Started Aug 1'},
@@ -255,6 +286,67 @@ class AppState extends ChangeNotifier {
 
   void declineJobOffer(String chatId) {
     _offerStatusByChatId[chatId] = 'declined';
+    notifyListeners();
+  }
+
+  // ── Applicants ──
+  final List<Map<String, dynamic>> _applicants = [
+    {
+      'name': 'Raju Kumar',
+      'initial': 'R',
+      'trustScore': 87,
+      'skills': ['Shop Helper', 'Cleaning'],
+      'distance': '6 min walk',
+      'rating': 4.8,
+      'jobsDone': 12,
+      'showUp': '100%',
+      'available': 'Immediately',
+      'bestMatch': true,
+      'status': 'New',
+    },
+    {
+      'name': 'Suresh Mallya',
+      'initial': 'S',
+      'trustScore': 72,
+      'skills': ['Delivery', 'Shop'],
+      'distance': '18 min walk',
+      'rating': 4.2,
+      'jobsDone': 5,
+      'showUp': '90%',
+      'available': 'Tomorrow',
+      'bestMatch': false,
+      'status': 'Shortlisted',
+    },
+    {
+      'name': 'Priya Devi',
+      'initial': 'P',
+      'trustScore': 65,
+      'skills': ['Cook', 'Shop'],
+      'distance': '8 min walk',
+      'rating': 4.5,
+      'jobsDone': 3,
+      'showUp': '100%',
+      'available': 'Immediately',
+      'bestMatch': false,
+      'status': 'Contacted',
+    },
+  ];
+  List<Map<String, dynamic>> get applicants => _applicants;
+
+  void shortlistApplicant(String applicantName) {
+    // 1. Find applicant and set status
+    final index = _applicants.indexWhere((a) => a['name'] == applicantName);
+    if (index != -1) {
+      _applicants[index] = {
+        ..._applicants[index],
+        'status': 'Shortlisted',
+      };
+    }
+    
+    // 2. Automate a chat message
+    final chatId = getChatId(applicantName);
+    sendMessage(chatId, "Congratulations! You have been shortlisted for the Shop Assistant role. I will contact you soon.");
+    
     notifyListeners();
   }
 
