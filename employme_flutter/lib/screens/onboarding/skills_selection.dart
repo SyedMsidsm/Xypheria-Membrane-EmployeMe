@@ -79,7 +79,7 @@ class SkillsSelection extends StatelessWidget {
 
               // Skills Grid
               Builder(builder: (context) {
-                    final allSkills = List<Map<String, String>>.from(DemoData.skills);
+                    final allSkills = List<Map<String, dynamic>>.from(DemoData.skills);
                     for (var skill in state.selectedSkills) {
                       if (skill == 'Other') continue;
                       if (!allSkills.any((s) => s['name'] == skill)) {
