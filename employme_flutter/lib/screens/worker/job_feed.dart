@@ -15,6 +15,7 @@ class _JobFeedState extends State<JobFeed> {
   final _searchController = TextEditingController();
   String _activeCategoryKey = 'all_jobs_cat';
   bool _showOnlyUrgent = false;
+  double _radiusKm = 2.5; // default 2.5 km = 2500m
 
   @override
   void initState() {
@@ -57,6 +58,21 @@ class _JobFeedState extends State<JobFeed> {
         (j['type'] as String).toLowerCase().contains(q)
       ).toList();
     }
+    // Filter by radius — parse distance string like '6 min walk' / '1.2 km'
+    jobs = jobs.where((j) {
+      final distStr = (j['distance'] as String? ?? '').toLowerCase();
+      // Estimate: 1 min walk ≈ 80m
+      if (distStr.contains('min walk')) {
+        final mins = double.tryParse(distStr.split(' ')[0]) ?? 99;
+        final estimatedKm = mins * 80 / 1000;
+        return estimatedKm <= _radiusKm;
+      } else if (distStr.contains('km')) {
+        final km = double.tryParse(distStr.split(' ')[0]) ?? 99;
+        return km <= _radiusKm;
+      }
+      return true; // show if distance unknown
+    }).toList();
+
     return jobs;
   }
 
@@ -77,6 +93,7 @@ class _JobFeedState extends State<JobFeed> {
                 _searchBar(state),
                 _urgentBanner(state),
                 _categories(context, state),
+                _radiusSlider(state),
                 _sectionHeader(state, filteredJobs.length),
                 ...filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -278,6 +295,71 @@ class _JobFeedState extends State<JobFeed> {
             );
           }).toList(),
         ),
+      ),
+    );
+  }
+
+  Widget _radiusSlider(AppState state) {
+    final int radiusM = (_radiusKm * 1000).round();
+    final String label = radiusM >= 1000
+        ? '${(radiusM / 1000).toStringAsFixed(1)} km'
+        : '${radiusM}m';
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border),
+          boxShadow: AppShadows.soft,
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(children: [
+              const Icon(Icons.radar, size: 16, color: AppColors.primary),
+              const SizedBox(width: 6),
+              const Text('Nearby Radius', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            ]),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
+            ),
+          ]),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+              activeTrackColor: AppColors.primary,
+              inactiveTrackColor: AppColors.border,
+              thumbColor: AppColors.primary,
+              overlayColor: AppColors.primary.withOpacity(0.15),
+            ),
+            child: Slider(
+              min: 0.5,
+              max: 5.0,
+              divisions: 9, // steps: 0.5, 1.0, 1.5 ... 5.0 (each = 500m)
+              value: _radiusKm,
+              onChanged: (v) => setState(() => _radiusKm = v),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('500m', style: TextStyle(fontSize: 10, color: AppColors.caption)),
+              Text('1.5km', style: TextStyle(fontSize: 10, color: AppColors.caption)),
+              Text('2.5km', style: TextStyle(fontSize: 10, color: AppColors.caption)),
+              Text('3.5km', style: TextStyle(fontSize: 10, color: AppColors.caption)),
+              Text('5km', style: TextStyle(fontSize: 10, color: AppColors.caption)),
+            ],
+          ),
+        ]),
       ),
     );
   }
