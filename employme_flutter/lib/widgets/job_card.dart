@@ -4,7 +4,8 @@ import '../../theme/app_theme.dart';
 import '../../providers/app_state.dart';
 
 class JobCard extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? emoji;
   final String title;
   final String company;
   final String type;
@@ -20,7 +21,8 @@ class JobCard extends StatelessWidget {
 
   const JobCard({
     super.key,
-    required this.icon,
+    this.icon,
+    this.emoji,
     required this.title,
     required this.company,
     this.type = '',
@@ -59,7 +61,9 @@ class JobCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 alignment: Alignment.center,
-                child: Icon(icon, size: 24, color: AppColors.primaryDark),
+                child: emoji != null 
+                  ? Text(emoji!, style: const TextStyle(fontSize: 24))
+                  : Icon(icon ?? Icons.work_outline, size: 24, color: AppColors.primaryDark),
               ),
               const SizedBox(width: 12),
               // Content

@@ -65,9 +65,6 @@ class _JobFeedState extends State<JobFeed> {
     final state = context.watch<AppState>();
     final filteredJobs = _getFilteredJobs(state);
 
-    // Safety check: if somehow an employer lands here, redirect them or show worker UI
-    // But since routes are separate now, this is mostly for the Worker role.
-
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -84,7 +81,8 @@ class _JobFeedState extends State<JobFeed> {
                 ...filteredJobs.map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                   child: JobCard(
-                    icon: j['icon'] as IconData,
+                    icon: j['icon'] as IconData?,
+                    emoji: j['emoji'] as String?,
                     title: state.language == 'kn' ? (j['title_kn'] ?? j['title']) : j['title'] as String,
                     company: j['company'] as String,
                     type: state.language == 'kn' ? (j['type_kn'] ?? j['type']) : j['type'] as String,
