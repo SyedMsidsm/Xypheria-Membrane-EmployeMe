@@ -40,7 +40,7 @@ class SkillChip extends StatelessWidget {
             const SizedBox(height: 3),
             Text(
               name,
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: selected ? Colors.white : AppColors.text),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: selected ? Colors.white : AppColors.text),
               textAlign: TextAlign.center,
             ),
             Text(

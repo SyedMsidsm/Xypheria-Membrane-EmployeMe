@@ -24,11 +24,11 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
   final String _olaMapsApiKey = ''; 
 
   final _baseJobs = [
-    {'emoji': '🏪', 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'urgent': true, 'verified': true},
-    {'emoji': '🍳', 'title': 'Kitchen Helper', 'company': 'Hotel Udupi', 'salary': '₹500/day', 'urgent': false, 'verified': true},
-    {'emoji': '🚚', 'title': 'Delivery Partner', 'company': 'QuickMart', 'salary': '₹600/day', 'urgent': false, 'verified': false},
-    {'emoji': '🧹', 'title': 'House Cleaner', 'company': 'CleanHome Services', 'salary': '₹400/day', 'urgent': true, 'verified': true},
-    {'emoji': '👷', 'title': 'Construction Helper', 'company': 'BuildRight', 'salary': '₹700/day', 'urgent': false, 'verified': false},
+    {'icon': Icons.storefront, 'title': 'Shop Assistant', 'company': 'Sri Ganesh Store', 'salary': '₹12,000/mo', 'urgent': true, 'verified': true},
+    {'icon': Icons.restaurant, 'title': 'Kitchen Helper', 'company': 'Hotel Udupi', 'salary': '₹500/day', 'urgent': false, 'verified': true},
+    {'icon': Icons.local_shipping, 'title': 'Delivery Partner', 'company': 'QuickMart', 'salary': '₹600/day', 'urgent': false, 'verified': false},
+    {'icon': Icons.cleaning_services, 'title': 'House Cleaner', 'company': 'CleanHome Services', 'salary': '₹400/day', 'urgent': true, 'verified': true},
+    {'icon': Icons.construction, 'title': 'Construction Helper', 'company': 'BuildRight', 'salary': '₹700/day', 'urgent': false, 'verified': false},
   ];
 
   List<Map<String, dynamic>> _dynamicJobs = [];
@@ -212,7 +212,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
           children: [
             Icon(job['mode'] == 'walk' ? Icons.directions_walk : Icons.directions_bus, size: 10, color: (job['urgent'] as bool) ? Colors.white : AppColors.text),
             const SizedBox(width: 2),
-            Text('${job['time']}m', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: (job['urgent'] as bool) ? Colors.white : AppColors.text)),
+            Text('${job['time']}m', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: (job['urgent'] as bool) ? Colors.white : AppColors.text)),
           ],
         ),
       ),
@@ -225,7 +225,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
           border: Border.all(color: AppColors.primary, width: 2),
         ),
         alignment: Alignment.center,
-        child: Text(job['emoji'] as String, style: const TextStyle(fontSize: 16)),
+        child: Icon(job['icon'] as IconData, size: 18, color: AppColors.primaryDark),
       ),
     ]),
   );
@@ -238,7 +238,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       GestureDetector(onTap: () => Navigator.pop(context), child: const Icon(Icons.arrow_back, size: 20)),
       const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Nearby Jobs', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        const Text('Nearby Jobs', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         Text('${_dynamicJobs.length} opportunities in commute zone', style: const TextStyle(fontSize: 12, color: AppColors.caption)),
       ])),
       Container(
@@ -247,7 +247,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
           const SizedBox(width: 4),
-          const Text('Live', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+          const Text('Live', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
         ]),
       ),
     ]),
@@ -256,7 +256,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
   Widget _filterChips() => Padding(
     padding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
     child: SizedBox(height: 34, child: ListView(scrollDirection: Axis.horizontal, children: [
-      'All', 'Urgent 🔥', 'Verified ✓', 'Walking', '< ₹500/day', '₹500+/day',
+      'All', 'Urgent', 'Verified', 'Walking', '< ₹500/day', '₹500+/day',
     ].map((f) {
       final active = _filter == f.split(' ')[0];
       return Padding(padding: const EdgeInsets.only(right: 8), child: TapScale(
@@ -313,7 +313,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('${_dynamicJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+          Text('${_dynamicJobs.length} jobs nearby', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.sm)),
@@ -344,26 +344,26 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
               width: 44, height: 44,
               decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.sm)),
               alignment: Alignment.center,
-              child: Text(job['emoji'] as String, style: const TextStyle(fontSize: 22)),
+              child: Icon(job['icon'] as IconData, size: 24, color: AppColors.primaryDark),
             ),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Text(job['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(job['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 if (job['urgent'] as bool) ...[const SizedBox(width: 6),
                   Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1), decoration: BoxDecoration(color: AppColors.alert.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
-                    child: const Text('URGENT', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.alert)))],
+                    child: const Text('URGENT', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: AppColors.alert)))],
               ]),
               const SizedBox(height: 2),
               Text(job['company'] as String, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
             ])),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(job['salary'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.primary)),
+              Text(job['salary'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
               const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(color: AppColors.primaryLight.withOpacity(0.5), borderRadius: BorderRadius.circular(4)),
-                child: Text('AI Match: ${job['score']}%', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+                child: Text('AI Match: ${job['score']}%', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
               ),
             ]),
           ]),
@@ -404,7 +404,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
             ),
             const SizedBox(width: 12),
             const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('High Demand Zone Entered', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+              Text('High Demand Zone Entered', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
               SizedBox(height: 2),
               Text('3 urgent shifts nearby offering ₹600+/day. Apply now!', style: TextStyle(fontSize: 11, color: AppColors.text)),
             ])),

@@ -119,18 +119,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
             padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
             decoration: BoxDecoration(
               color: AppColors.card,
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
             ),
             child: Row(children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back, size: 22),
                 onPressed: () => Navigator.pop(context),
               ),
-              const Expanded(child: Text('Edit Profile', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700))),
+              const Expanded(child: Text('Edit Profile', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
               if (_hasChanges)
                 TextButton(
                   onPressed: _saveProfile,
-                  child: const Text('Save', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                  child: const Text('Save', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.primary)),
                 ),
             ]),
           ),
@@ -161,7 +161,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         decoration: BoxDecoration(
           color: AppColors.card,
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, -4))],
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, -4))],
         ),
         child: SizedBox(
           width: double.infinity, height: 56,
@@ -172,7 +172,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 0,
             ),
-            child: const Text('Save Changes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+            child: const Text('Save Changes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
           ),
         ),
       ),
@@ -193,7 +193,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               shape: BoxShape.circle,
               color: AppColors.primary,
               border: Border.all(color: AppColors.primary, width: 3),
-              boxShadow: [BoxShadow(color: AppColors.primary.withValues(alpha: 0.25), blurRadius: 16, spreadRadius: 2)],
+              boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.25), blurRadius: 16, spreadRadius: 2)],
             ),
             clipBehavior: Clip.antiAlias,
             child: state.profileImagePath != null
@@ -225,7 +225,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget _initials(AppState state) => Center(
     child: Text(
       state.userName.isNotEmpty ? state.userName[0].toUpperCase() : 'U',
-      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white),
+      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white),
     ),
   );
 
@@ -240,7 +240,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 20),
-            const Text('Update Profile Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const Text('Update Profile Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
             const SizedBox(height: 16),
             _photoOption(Icons.camera_alt, 'Take Photo', 'Open camera', () {
               Navigator.pop(context);
@@ -291,7 +291,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         onChanged: (_) => _markChanged(),
         decoration: InputDecoration(
           hintText: 'Tell employers about yourself...',
-          hintStyle: TextStyle(color: AppColors.caption.withValues(alpha: 0.6)),
+          hintStyle: TextStyle(color: AppColors.caption.withOpacity(0.6)),
           prefixIcon: const Padding(
             padding: EdgeInsets.only(bottom: 40),
             child: Icon(Icons.info_outline, size: 20, color: AppColors.caption),
@@ -345,7 +345,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               color: selected ? AppColors.primary : AppColors.card,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: selected ? AppColors.primary : AppColors.border, width: 1.5),
-              boxShadow: selected ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.2), blurRadius: 8)] : [],
+              boxShadow: selected ? [BoxShadow(color: AppColors.primary.withOpacity(0.2), blurRadius: 8)] : [],
             ),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               if (selected) ...[
@@ -377,7 +377,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               color: selected ? const Color(0xFF6366F1) : AppColors.card,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: selected ? const Color(0xFF6366F1) : AppColors.border, width: 1.5),
-              boxShadow: selected ? [BoxShadow(color: const Color(0xFF6366F1).withValues(alpha: 0.2), blurRadius: 8)] : [],
+              boxShadow: selected ? [BoxShadow(color: const Color(0xFF6366F1).withOpacity(0.2), blurRadius: 8)] : [],
             ),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               if (selected) ...[
@@ -411,10 +411,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               shape: BoxShape.circle,
               color: selected ? AppColors.primary : AppColors.card,
               border: Border.all(color: selected ? AppColors.primary : AppColors.border, width: 1.5),
-              boxShadow: selected ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.25), blurRadius: 6)] : [],
+              boxShadow: selected ? [BoxShadow(color: AppColors.primary.withOpacity(0.25), blurRadius: 6)] : [],
             ),
             alignment: Alignment.center,
-            child: Text(day, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: selected ? Colors.white : AppColors.caption)),
+            child: Text(day, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: selected ? Colors.white : AppColors.caption)),
           ),
         );
       }).toList()),
@@ -472,7 +472,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: SizedBox(width: 100, child: Text(
             '$_experience ${_experience == 1 ? 'year' : 'years'}',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           )),
         ),
         _counterBtn(Icons.add, () {
@@ -517,7 +517,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: Icon(icon, size: 18, color: AppColors.primary),
     ),
     const SizedBox(width: 10),
-    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
   ]);
 
   Widget _label(String t) => Padding(
@@ -527,6 +527,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _divider() => Padding(
     padding: const EdgeInsets.symmetric(vertical: 12),
-    child: Divider(color: AppColors.border.withValues(alpha: 0.5), height: 1),
+    child: Divider(color: AppColors.border.withOpacity(0.5), height: 1),
   );
 }

@@ -21,13 +21,13 @@ class NGOVerification extends StatelessWidget {
 
   Widget _header(BuildContext ctx, AppState state) => Container(color: AppColors.card, padding: const EdgeInsets.all(16), child: Row(children: [
     GestureDetector(onTap: () => Navigator.pop(ctx), child: const Icon(Icons.arrow_back, size: 22)),
-    const SizedBox(width: 8), Text(state.tr('get_verified'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700))]));
+    const SizedBox(width: 8), Text(state.tr('get_verified'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))]));
 
   Widget _hero(AppState state) => Container(margin: const EdgeInsets.all(20), padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF1E3A5F), Color(0xFF2D5986)]), borderRadius: BorderRadius.circular(16)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text('🛡️', style: TextStyle(fontSize: 28)),
-      const SizedBox(height: 8), Text(state.tr('become_ngo_verified'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white)),
+      const SizedBox(height: 8), Text(state.tr('become_ngo_verified'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white)),
       const SizedBox(height: 6), Text(state.tr('ngo_3x_text'), style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.8))),
     ]));
 
@@ -39,10 +39,10 @@ class NGOVerification extends StatelessWidget {
       {'num': '3', 'icon': '🏠', 'title': state.tr('quick_meet_step'), 'desc': state.tr('quick_meet_desc')},
     ].map((s) => Padding(padding: const EdgeInsets.only(bottom: 16), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(width: 36, height: 36, decoration: const BoxDecoration(color: AppColors.info, shape: BoxShape.circle),
-        alignment: Alignment.center, child: Text(s['num']!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white))),
+        alignment: Alignment.center, child: Text(s['num']!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white))),
       const SizedBox(width: 14),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('${s['icon']} ${s['title']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+        Text('${s['icon']} ${s['title']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
         const SizedBox(height: 4), Text(s['desc']!, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
       ])),
     ]))),
@@ -67,7 +67,7 @@ class NGOVerification extends StatelessWidget {
           Container(width: 48, height: 48, decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFFEFF6FF)), alignment: Alignment.center, child: const Text('🏛️', style: TextStyle(fontSize: 20))),
           const SizedBox(width: 12),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(n['name']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+            Text(n['name']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             const SizedBox(height: 4), Wrap(spacing: 8, children: [
               Text('📍 ${n['dist']} from you', style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
               Text('⭐ ${n['rating']}', style: const TextStyle(fontSize: 12, color: Color(0xFFD97706))),

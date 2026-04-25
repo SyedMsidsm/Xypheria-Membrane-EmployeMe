@@ -75,7 +75,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
             ),
             Expanded(child: Column(children: [
               Text(state.tr('applying_for'), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
-              const Text('Shop Assistant', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+              const Text('Shop Assistant', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               const Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
             ])),
             const SizedBox(width: 22), // Balance the back button
@@ -94,7 +94,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(_step == 0 ? state.tr('confirm_details') : state.tr('confirm_details'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+          Text(_step == 0 ? state.tr('confirm_details') : state.tr('confirm_details'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
           const SizedBox(height: 4),
           Text(state.tr('share_with_employer'), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
           const SizedBox(height: 24),
@@ -121,28 +121,31 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
               width: 52, height: 52,
               decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
               alignment: Alignment.center,
-              child: Text(state.userName[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+              child: Text(state.userName[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white)),
             ),
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(state.userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              Text(state.userName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
               const SizedBox(height: 6),
-              Wrap(spacing: 6, children: ['🧹 ${state.tr('Cleaning')}', '🏪 ${state.tr('Shop Helper')}'].map((s) => Container(
+              Wrap(spacing: 6, children: [
+                Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.cleaning_services, size: 12, color: AppColors.primary), const SizedBox(width: 4), Text(state.tr('Cleaning'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary))]),
+                Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.storefront, size: 12, color: AppColors.primary), const SizedBox(width: 4), Text(state.tr('Shop Helper'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary))])
+              ].map((s) => Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-                child: Text(s, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
+                child: s,
               )).toList()),
             ]),
           ]),
           Positioned(top: 0, right: 0, child: Text(state.tr('change'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
         ]),
         const SizedBox(height: 10),
-        const Text('📍 Kodialbail — 🚶 6 min away', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
+        Row(children: [const Icon(Icons.location_on, size: 14, color: AppColors.primary), const SizedBox(width: 4), const Text('Kodialbail — ', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)), const Icon(Icons.directions_walk, size: 14, color: AppColors.primary), const Text(' 6 min away', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))]),
         const SizedBox(height: 8),
-        Wrap(spacing: 8, children: ['✅ Phone Verified', '✅ Community Verified'].map((b) => Container(
+        Wrap(spacing: 8, children: ['Phone Verified', 'Community Verified'].map((b) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
-          child: Text(b, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 12, color: AppColors.primary), const SizedBox(width: 4), Text(b, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary))]),
         )).toList()),
       ]),
     ),
@@ -168,7 +171,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
               const Icon(Icons.check, size: 18, color: AppColors.primary),
               const SizedBox(width: 8),
             ],
-            Text(opt, style: TextStyle(fontSize: 15, fontWeight: _availability == opt ? FontWeight.w700 : FontWeight.w500)),
+            Text(opt, style: TextStyle(fontSize: 15, fontWeight: _availability == opt ? FontWeight.w500 : FontWeight.w500)),
           ]),
         ),
       ),
@@ -208,26 +211,26 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
         Container(width: 48, height: 48, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(AppRadius.md)),
-          alignment: Alignment.center, child: const Text('🏪', style: TextStyle(fontSize: 24))),
+          alignment: Alignment.center, child: const Icon(Icons.storefront, size: 24, color: AppColors.primaryDark)),
         const SizedBox(width: 12),
         const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Shop Assistant', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+          Text('Shop Assistant', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           Text('Sri Ganesh Provision Store', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
         ])),
       ]),
       const Divider(height: 24),
-      _detailRow('💰 Salary', '₹12,000/mo'),
-      _detailRow('📍 Location', 'Kodialbail (6 min walk)'),
-      _detailRow('🕐 Start', _availability),
-      _detailRow('⏰ Timing', _timing),
-      _detailRow('🛡️ Trust Score', '87 / 100'),
+      _detailRow(Icons.payments, 'Salary', '₹12,000/mo'),
+      _detailRow(Icons.location_on, 'Location', 'Kodialbail (6 min walk)'),
+      _detailRow(Icons.access_time, 'Start', _availability),
+      _detailRow(Icons.schedule, 'Timing', _timing),
+      _detailRow(Icons.shield, 'Trust Score', '87 / 100'),
     ]),
   );
 
-  Widget _detailRow(String label, String value) => Padding(
+  Widget _detailRow(IconData icon, String label, String value) => Padding(
     padding: const EdgeInsets.only(bottom: 8),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+      Row(children: [Icon(icon, size: 16, color: AppColors.textSecondary), const SizedBox(width: 6), Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSecondary))]),
       Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
     ]),
   );
@@ -250,7 +253,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
           ),
         ),
         const SizedBox(height: 20),
-        Text(state.tr('application_sent'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
+        Text(state.tr('application_sent'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.primary)),
         const SizedBox(height: 12),
         Text(state.tr('contact_soon', args: {'company': 'Sri Ganesh Provision Store'}),
           style: const TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
@@ -275,7 +278,7 @@ class _QuickApplyState extends State<QuickApply> with SingleTickerProviderStateM
           Expanded(child: SizedBox(height: 48, child: ElevatedButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
             style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            child: Text(state.tr('find_more_jobs'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            child: Text(state.tr('find_more_jobs'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
           ))),
         ]),
         const SizedBox(height: 20),

@@ -81,12 +81,12 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
   Widget _banner() => Container(color: AppColors.navy, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     GestureDetector(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: Colors.white12, shape: BoxShape.circle), child: const Icon(Icons.arrow_back, size: 20, color: Colors.white))),
     const SizedBox(height: 16),
-    const Text('Complete your profile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
-    const SizedBox(height: 4), Text('Get 3x more job views!', style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.7))),
+    const Text('Complete your profile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white)),
+    const SizedBox(height: 4), Text('Get 3x more job views!', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
     const SizedBox(height: 16),
     Row(children: [Expanded(child: Container(height: 6, decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.white24),
       child: FractionallySizedBox(alignment: Alignment.centerLeft, widthFactor: _localImagePath != null ? 0.8 : 0.6, child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: AppColors.primary))))),
-      const SizedBox(width: 12), Text(_localImagePath != null ? '80%' : '60%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white)),
+      const SizedBox(width: 12), Text(_localImagePath != null ? '80%' : '60%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white)),
     ]),
   ]));
 
@@ -103,7 +103,7 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
           border: Border.all(color: AppColors.primary, width: 2),
           color: AppColors.primaryLight,
           boxShadow: _localImagePath != null
-              ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 16, spreadRadius: 2)]
+              ? [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 16, spreadRadius: 2)]
               : [],
         ),
         clipBehavior: Clip.antiAlias,
@@ -175,7 +175,7 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
     const SizedBox(height: 12),
     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       _counterBtn(Icons.remove, () { if (_exp > 0) setState(() => _exp--); }),
-      Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: SizedBox(width: 80, child: Text('$_exp years', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)))),
+      Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: SizedBox(width: 80, child: Text('$_exp years', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)))),
       _counterBtn(Icons.add, () => setState(() => _exp++)),
     ]),
   ]));
@@ -196,5 +196,5 @@ class _WorkerProfileSetupState extends State<WorkerProfileSetup> {
   ]));
 
   Widget _inputLabel(String t) => Padding(padding: const EdgeInsets.only(bottom: 8),
-    child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text)));
+    child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.text)));
 }

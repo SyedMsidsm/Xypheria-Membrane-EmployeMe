@@ -61,7 +61,7 @@ class _JobFeedState extends State<JobFeed> {
                 ..._getFilteredJobs(state).map((j) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                   child: JobCard(
-                    emoji: j['emoji'] as String,
+                    icon: j['icon'] as IconData,
                     title: state.language == 'kn' ? (j['title_kn'] ?? j['title']) : j['title'] as String,
                     company: j['company'] as String,
                     type: state.language == 'kn' ? (j['type_kn'] ?? j['type']) : j['type'] as String,
@@ -80,7 +80,7 @@ class _JobFeedState extends State<JobFeed> {
                   Padding(
                     padding: const EdgeInsets.all(40),
                     child: Column(children: [
-                      const Text('🔍', style: TextStyle(fontSize: 40)),
+                      const Icon(Icons.search_off_rounded, size: 48, color: AppColors.caption),
                       const SizedBox(height: 12),
                       Text(state.tr('no_jobs_found'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
                       const SizedBox(height: 4),
@@ -119,10 +119,10 @@ class _JobFeedState extends State<JobFeed> {
             width: 36, height: 36,
             decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle),
             alignment: Alignment.center,
-            child: Text(state.userName.isNotEmpty ? state.userName[0] : 'U', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+            child: Text(state.userName.isNotEmpty ? state.userName[0] : 'U', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
           ),
           const SizedBox(width: 10),
-          Text('${state.tr('hi')}, ${state.userName.split(' ')[0]}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+          Text('${state.tr('hi')}, ${state.userName.split(' ')[0]}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         ]),
       ),
       const Spacer(),
@@ -148,7 +148,7 @@ class _JobFeedState extends State<JobFeed> {
               width: 18, height: 18,
               decoration: BoxDecoration(color: AppColors.alert, shape: BoxShape.circle, border: Border.all(color: AppColors.card, width: 2)),
               alignment: Alignment.center,
-              child: Text('${state.unreadNotifications}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white)),
+              child: Text('${state.unreadNotifications}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white)),
             ),
           ),
         ]),
@@ -217,11 +217,11 @@ class _JobFeedState extends State<JobFeed> {
             Container(
               width: 40, height: 40,
               decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
-              child: const Center(child: Text('🔥', style: TextStyle(fontSize: 20))),
+              child: const Center(child: Icon(Icons.local_fire_department, size: 20, color: Colors.white)),
             ),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(state.tr('urgent_hiring'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white)),
+              Text(state.tr('urgent_hiring'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
               const SizedBox(height: 2),
               Text(state.tr('jobs_near_you', args: {'count': '$urgentCount'}), style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7))),
             ])),
@@ -276,7 +276,7 @@ class _JobFeedState extends State<JobFeed> {
   Widget _sectionHeader(AppState state, int count) => Padding(
     padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+      Text(state.tr('recommended'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
       GestureDetector(child: Text(state.tr('view_all', args: {'count': '$count'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
     ]),
   );

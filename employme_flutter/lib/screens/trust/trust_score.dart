@@ -48,7 +48,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
         child: const Icon(Icons.arrow_back, size: 20),
       )),
       const Expanded(child: Column(children: [
-        Text('Trust Score', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        Text('Trust Score', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         Text('ನಂಬಿಕೆ ಅಂಕ', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       ])),
       const SizedBox(width: 38),
@@ -74,7 +74,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
             child: Center(child: Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Text('${_scoreAnim.value.toInt()}', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w800, color: Colors.white, height: 1)),
+                Text('${_scoreAnim.value.toInt()}', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w500, color: Colors.white, height: 1)),
                 Text('/ 100', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5))),
               ]),
             )),
@@ -85,7 +85,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.2), borderRadius: BorderRadius.circular(AppRadius.xl)),
-        child: const Text('🛡️ Good Standing', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primary)),
+        child: const Text('🛡️ Good Standing', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primary)),
       ),
       const SizedBox(height: 8),
       Text('Better score = More job offers & higher pay', style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.6), height: 1.4), textAlign: TextAlign.center),
@@ -128,7 +128,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
   Widget _breakdown() => Padding(
     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Score Breakdown', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+      const Text('Score Breakdown', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
       const SizedBox(height: 12),
       ...[
         {'title': 'Phone Verified', 'points': 25, 'max': 25, 'status': 'done', 'icon': '📱'},
@@ -156,7 +156,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(f['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           ])),
-          Text('${f['points']}/${f['max']}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700,
+          Text('${f['points']}/${f['max']}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,
             color: done ? AppColors.primary : (pending ? AppColors.warning : AppColors.textSecondary))),
         ]),
         const SizedBox(height: 8),
@@ -173,7 +173,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
           padding: const EdgeInsets.only(top: 10),
           child: SizedBox(width: double.infinity, height: 36, child: ElevatedButton(
             onPressed: () => Navigator.pushNamed(context, '/ngo'),
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.warning, padding: EdgeInsets.zero, textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.warning, padding: EdgeInsets.zero, textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
             child: const Text('Request Verification'),
           )),
         ),
@@ -193,7 +193,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
       const Row(children: [
         Icon(Icons.trending_up, size: 18, color: AppColors.primaryDark),
         SizedBox(width: 6),
-        Text('Improve Your Score', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+        Text('Improve Your Score', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
       ]),
       const SizedBox(height: 12),
       _improveTip('🏛️ Get NGO verified', '+10 pts', AppColors.warning),
@@ -209,7 +209,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(AppRadius.xs)),
-        child: Text(pts, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+        child: Text(pts, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: color)),
       ),
     ]),
   );
@@ -219,7 +219,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.lg), border: Border.all(color: AppColors.border)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('You vs Average', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+      const Text('You vs Average', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       const SizedBox(height: 12),
       _comparisonBar('Your Score', 87, AppColors.primary),
       const SizedBox(height: 8),
@@ -232,7 +232,7 @@ class _TrustScoreScreenState extends State<TrustScoreScreen> with SingleTickerPr
   Widget _comparisonBar(String label, int score, Color color) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-      Text('$score/100', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+      Text('$score/100', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: color)),
     ]),
     const SizedBox(height: 4),
     ClipRRect(

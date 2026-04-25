@@ -18,7 +18,7 @@ class TrustGauge extends StatelessWidget {
       center: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('$score', style: TextStyle(fontSize: radius * 0.6, fontWeight: FontWeight.w800, color: AppColors.text)),
+          Text('$score', style: TextStyle(fontSize: radius * 0.6, fontWeight: FontWeight.w500, color: AppColors.text)),
           Text('/100', style: TextStyle(fontSize: radius * 0.25, color: AppColors.textSecondary)),
         ],
       ),

@@ -43,7 +43,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('EmployMe', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: -0.5)),
+        const Text('EmployMe', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white, letterSpacing: -0.5)),
         const SizedBox(height: 2),
         Text('Karnataka Pilot', style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.5))),
       ]),
@@ -69,7 +69,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
       builder: (_, __) {
         final value = (_countAnim.value * 10247).toInt();
         return Column(children: [
-          Text(_formatNumber(value), style: const TextStyle(fontSize: 64, fontWeight: FontWeight.w800, color: Colors.white, height: 1)),
+          Text(_formatNumber(value), style: const TextStyle(fontSize: 64, fontWeight: FontWeight.w500, color: Colors.white, height: 1)),
           const SizedBox(height: 8),
           const Text('Jobs Matched This Month', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.primary)),
           const SizedBox(height: 6),
@@ -110,7 +110,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
       border: Border.all(color: Colors.white.withOpacity(0.06)),
     ),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(value, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.white)),
+      Text(value, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500, color: Colors.white)),
       const SizedBox(height: 4),
       Text(sub, style: TextStyle(fontSize: 13, color: accent)),
       const SizedBox(height: 4),
@@ -156,7 +156,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(color: AppColors.alert.withOpacity(0.15), borderRadius: BorderRadius.circular(8)),
-              child: const Text('🔴 3 urgent', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.alert)),
+              child: const Text('🔴 3 urgent', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.alert)),
             ),
           ),
         ]),
@@ -227,7 +227,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
     decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
     child: Column(children: [
-      Text('$num', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
+      Text('$num', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white)),
       const SizedBox(height: 2),
       Text(title, style: TextStyle(fontSize: 9, color: Colors.white.withOpacity(0.8)), textAlign: TextAlign.center),
     ]),
@@ -263,7 +263,7 @@ class _ImpactDashboardState extends State<ImpactDashboard> with TickerProviderSt
   );
 
   Widget _logo() => Center(
-    child: Text('EmployMe', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white.withOpacity(0.3), letterSpacing: -0.5)),
+    child: Text('EmployMe', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white.withOpacity(0.3), letterSpacing: -0.5)),
   );
 }
 

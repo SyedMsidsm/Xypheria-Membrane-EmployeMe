@@ -87,7 +87,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
     key: const ValueKey('phone'),
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(context.watch<AppState>().tr('enter_phone'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+      Text(context.watch<AppState>().tr('enter_phone'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
       const SizedBox(height: 24),
       // Phone input
       Container(
@@ -148,7 +148,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
     key: const ValueKey('otp'),
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(context.watch<AppState>().tr('verify_otp'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+      Text(context.watch<AppState>().tr('verify_otp'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500)),
       const SizedBox(height: 4),
       Text('${context.watch<AppState>().tr('sent_to')} +91 ${_phoneCtrl.text}', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
       const SizedBox(height: 32),
@@ -171,7 +171,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           maxLength: 1,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
           decoration: const InputDecoration(
             counterText: '',
             border: InputBorder.none,

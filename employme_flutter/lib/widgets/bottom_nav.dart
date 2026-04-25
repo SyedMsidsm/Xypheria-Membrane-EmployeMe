@@ -157,7 +157,7 @@ class _NavItem extends StatelessWidget {
           const SizedBox(height: 4),
           Text(label, style: TextStyle(
             fontSize: 10,
-            fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+            fontWeight: active ? FontWeight.w500 : FontWeight.w500,
             color: active ? AppColors.primary : AppColors.caption,
             letterSpacing: 0.2,
           )),

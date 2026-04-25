@@ -74,7 +74,7 @@ class EmployerProfile extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Text(state.tr('business_name'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white)),
+        Text(state.tr('business_name'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white)),
         const SizedBox(height: 4),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -103,7 +103,7 @@ class EmployerProfile extends StatelessWidget {
       ),
       margin: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(children: [
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary)),
+        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.primary)),
         const SizedBox(height: 4),
         Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
       ]),
@@ -137,14 +137,14 @@ class EmployerProfile extends StatelessWidget {
     Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600)),
       const SizedBox(height: 2),
-      Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
     ])),
   ]);
 
   Widget _aboutSection(AppState state) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text('About the Business', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+      const Text('About the Business', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
       const SizedBox(height: 12),
       Container(
         padding: const EdgeInsets.all(20),
@@ -162,7 +162,7 @@ class EmployerProfile extends StatelessWidget {
     child: TextButton.icon(
       onPressed: () => Navigator.pushReplacementNamed(context, '/role-selection'),
       icon: const Icon(Icons.logout, size: 20, color: AppColors.alert),
-      label: const Text('Logout Business Account', style: TextStyle(color: AppColors.alert, fontWeight: FontWeight.w700)),
+      label: const Text('Logout Business Account', style: TextStyle(color: AppColors.alert, fontWeight: FontWeight.w500)),
       style: TextButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16),
         backgroundColor: AppColors.alert.withOpacity(0.1),

@@ -4,7 +4,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/app_state.dart';
 
 class JobCard extends StatelessWidget {
-  final String emoji;
+  final IconData icon;
   final String title;
   final String company;
   final String type;
@@ -20,7 +20,7 @@ class JobCard extends StatelessWidget {
 
   const JobCard({
     super.key,
-    required this.emoji,
+    required this.icon,
     required this.title,
     required this.company,
     this.type = '',
@@ -49,7 +49,7 @@ class JobCard extends StatelessWidget {
         ),
         child: Column(children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               // Emoji icon
               Container(
@@ -59,13 +59,13 @@ class JobCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 alignment: Alignment.center,
-                child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                child: Icon(icon, size: 24, color: AppColors.primaryDark),
               ),
               const SizedBox(width: 12),
               // Content
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
-                  Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
+                  Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.text))),
                   if (onBookmark != null)
                     GestureDetector(
                       onTap: onBookmark,
@@ -103,13 +103,13 @@ class JobCard extends StatelessWidget {
           ),
           // Divider + salary row
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
             decoration: const BoxDecoration(
               border: Border(top: BorderSide(color: AppColors.border)),
             ),
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-                Text(salary, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.text)),
+                Text(salary, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.text)),
                 Text(period, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
               ]),
               if (onApply != null)
@@ -121,7 +121,7 @@ class JobCard extends StatelessWidget {
                       color: AppColors.primaryLight,
                       borderRadius: BorderRadius.circular(AppRadius.sm),
                     ),
-                    child: Text(state.tr('apply_now'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+                    child: Text(state.tr('apply_now'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
                   ),
                 ),
             ]),
@@ -140,6 +140,10 @@ class JobCard extends StatelessWidget {
   Widget _distanceTag(String dist, AppState state) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xs)),
-    child: Text('🚶 ${state.tr('min_walk', args: {'count': dist.replaceAll(RegExp(r'[^0-9]'), '')})}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+    child: Row(mainAxisSize: MainAxisSize.min, children: [
+      const Icon(Icons.directions_walk, size: 12, color: AppColors.primaryDark),
+      const SizedBox(width: 4),
+      Text(state.tr('min_walk', args: {'count': dist.replaceAll(RegExp(r'[^0-9]'), '')}), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primaryDark)),
+    ]),
   );
 }

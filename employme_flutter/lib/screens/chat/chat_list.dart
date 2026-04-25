@@ -44,7 +44,7 @@ class _ChatListState extends State<ChatList> {
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
     color: AppColors.card,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(state.tr('messages'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+      Text(state.tr('messages'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppRadius.xl)),
@@ -84,7 +84,7 @@ class _ChatListState extends State<ChatList> {
               width: 48, height: 48,
               decoration: BoxDecoration(color: unread ? AppColors.primary : AppColors.primaryLight, shape: BoxShape.circle),
               alignment: Alignment.center,
-              child: Text(chat['initials'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: unread ? Colors.white : AppColors.primaryDark)),
+              child: Text(chat['initials'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: unread ? Colors.white : AppColors.primaryDark)),
             ),
             if (chat['verified'] == true) Positioned(
               bottom: 0, right: 0,
@@ -98,7 +98,7 @@ class _ChatListState extends State<ChatList> {
           const SizedBox(width: 12),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(chat['name'], style: TextStyle(fontSize: 15, fontWeight: unread ? FontWeight.w700 : FontWeight.w600, color: AppColors.text)),
+              Text(chat['name'], style: TextStyle(fontSize: 15, fontWeight: unread ? FontWeight.w500 : FontWeight.w600, color: AppColors.text)),
               Text(chat['time'], style: TextStyle(fontSize: 12, color: unread ? AppColors.primary : AppColors.caption, fontWeight: unread ? FontWeight.w600 : FontWeight.w400)),
             ]),
             const SizedBox(height: 4),
@@ -110,7 +110,7 @@ class _ChatListState extends State<ChatList> {
                   width: 20, height: 20,
                   decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
                   alignment: Alignment.center,
-                  child: Text('${chat['unread']}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
+                  child: Text('${chat['unread']}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white)),
                 ),
               ],
             ]),

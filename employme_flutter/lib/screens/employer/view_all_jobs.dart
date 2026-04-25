@@ -52,11 +52,11 @@ class ViewAllJobs extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Expanded(child: Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+                Expanded(child: Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
-                  child: Text(job.type, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+                  child: Text(job.type, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
                 ),
               ]),
               const SizedBox(height: 8),
@@ -76,7 +76,7 @@ class ViewAllJobs extends StatelessWidget {
                 child: Row(children: [
                   const Icon(Icons.people, size: 16, color: AppColors.primary),
                   const SizedBox(width: 6),
-                  Text('$applicants applicants', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                  Text('$applicants applicants', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
                   const Spacer(),
                   Text('Expires in $expires days', style: TextStyle(fontSize: 12, color: highInterest ? AppColors.alert : AppColors.textSecondary, fontWeight: FontWeight.w600)),
                 ]),

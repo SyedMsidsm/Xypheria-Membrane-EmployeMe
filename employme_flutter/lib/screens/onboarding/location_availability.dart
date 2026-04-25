@@ -137,7 +137,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
             color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
             child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/profile-setup'),
-              child: Text(state.tr('continue_party'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              child: Text(state.tr('continue_party'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             )),
           ),
         ]),
@@ -148,7 +148,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
 
 
   Widget _title(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(state.tr('location_title'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.text)),
+    Text(state.tr('location_title'), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.text)),
     const SizedBox(height: 8), 
     Text(state.tr('location_subtitle'), style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w500)),
   ]));
@@ -231,7 +231,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
               color: Colors.white.withOpacity(0.9),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+            child: Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
           )
         ],
       ),
@@ -244,7 +244,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
       Container(width: 40, height: 40, decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle), child: const Center(child: Icon(Icons.location_on, color: AppColors.primary, size: 20))),
       const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(_currentLocationName, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)), 
+        Text(_currentLocationName, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)), 
         Text(_currentLocationSub, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
       ])),
       GestureDetector(
@@ -287,7 +287,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                   width: 40, height: 4,
                   decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2)),
                 ),
-                const Text('Select Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                const Text('Select Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 16),
                 // Search field
                 Padding(
@@ -392,7 +392,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(_pendingName, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                            Text(_pendingName, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
                                             if (_pendingSub.isNotEmpty)
                                               Text(_pendingSub, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
                                           ],
@@ -459,7 +459,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                               });
                               Navigator.pop(context);
                             },
-                            child: const Text('Cancel', style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.bold)),
+                            child: const Text('Cancel', style: TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w500)),
                           ),
                         ),
                       ),
@@ -480,7 +480,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
                               });
                               Navigator.pop(context);
                             },
-                            child: const Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                            child: const Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
                           ),
                         ),
                       ),
@@ -522,7 +522,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
       final sel = _days.contains(d);
       return GestureDetector(onTap: () => setState(() { if (sel) _days.remove(d); else _days.add(d); }),
         child: Container(width: 40, height: 40, decoration: BoxDecoration(shape: BoxShape.circle, color: sel ? AppColors.primary : AppColors.card, border: Border.all(color: sel ? AppColors.primary : AppColors.border)),
-          alignment: Alignment.center, child: Text(state.tr(d.toLowerCase()), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: sel ? Colors.white : AppColors.text))));
+          alignment: Alignment.center, child: Text(state.tr(d.toLowerCase()), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: sel ? Colors.white : AppColors.text))));
     }).toList())),
   ]);
 
@@ -545,7 +545,7 @@ class _LocationAvailabilityState extends State<LocationAvailability> {
     padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(16)),
     child: Row(children: [
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(state.tr('available_right_now'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+        Text(state.tr('available_right_now'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
         if (_available) Padding(padding: const EdgeInsets.only(top: 6), child: Row(children: [
           Container(width: 8, height: 8, decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary)),
           const SizedBox(width: 6), Expanded(child: Text(state.tr('employers_see_ready'), style: const TextStyle(fontSize: 12, color: AppColors.primary))),

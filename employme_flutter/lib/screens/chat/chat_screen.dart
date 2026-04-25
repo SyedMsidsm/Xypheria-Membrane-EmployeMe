@@ -107,12 +107,12 @@ class _ChatScreenState extends State<ChatScreen> {
         width: 44, height: 44,
         decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.navy),
         alignment: Alignment.center,
-        child: Text(initials, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+        child: Text(initials, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
       ),
       const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Flexible(child: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800), overflow: TextOverflow.ellipsis)),
+          Flexible(child: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis)),
           const SizedBox(width: 6),
           const Icon(Icons.check_circle, size: 14, color: AppColors.primary),
         ]),
@@ -182,14 +182,14 @@ class _ChatScreenState extends State<ChatScreen> {
     child: Row(children: [
       const Text('🏪', style: TextStyle(fontSize: 16)),
       const SizedBox(width: 8),
-      const Flexible(child: Text('Shop Assistant', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700), overflow: TextOverflow.ellipsis)),
+      const Flexible(child: Text('Shop Assistant', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis)),
       const SizedBox(width: 8),
-      const Text('₹12,000/mo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.primary)),
+      const Text('₹12,000/mo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
       const Spacer(),
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
-        child: const Text('Active', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white)),
+        child: const Text('Active', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white)),
       ),
     ]),
   );
@@ -224,7 +224,7 @@ class _ChatScreenState extends State<ChatScreen> {
               width: 32, height: 32,
               decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.navyLighter),
               alignment: Alignment.center,
-              child: Text(initials, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.navy)),
+              child: Text(initials, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.navy)),
             ),
             const SizedBox(width: 8),
           ],
@@ -283,10 +283,10 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             color: status == 'accepted' ? Colors.green : (status == 'declined' ? AppColors.alert : AppColors.primary),
             child: Text(status == 'accepted' ? '✅ OFFER ACCEPTED' : (status == 'declined' ? '❌ OFFER DECLINED' : '🎉 JOB OFFER'), textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5)),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white, letterSpacing: 0.5)),
           ),
           Padding(padding: const EdgeInsets.all(20), child: Column(children: [
-            const Text('Shop Assistant', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+            const Text('Shop Assistant', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
             const SizedBox(height: 6),
             const Text('₹12,000/month • Full Time', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
             const SizedBox(height: 12),
@@ -297,12 +297,12 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: const [
                   Text('Start: ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
-                  Text('Monday, Nov 14', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                  Text('Monday, Nov 14', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
                 ]),
                 const SizedBox(height: 4),
                 Row(children: const [
                   Text('Hours: ', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
-                  Text('9 AM – 6 PM, Mon–Sat', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                  Text('9 AM – 6 PM, Mon–Sat', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
                 ]),
               ]),
             ),
@@ -327,7 +327,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ))),
               ]),
               const SizedBox(height: 12),
-              const Text('Offer expires in 24 hours', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.alert)),
+              const Text('Offer expires in 24 hours', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.alert)),
             ] else if (state.isEmployer && status == 'pending') ...[
               const Text('You sent this offer. Waiting for reply...', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textSecondary), textAlign: TextAlign.center),
             ] else ...[
@@ -355,7 +355,7 @@ class _ChatScreenState extends State<ChatScreen> {
       Row(children: const [
         Text('🔒', style: TextStyle(fontSize: 16)),
         SizedBox(width: 8),
-        Text('Share your phone number?', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+        Text('Share your phone number?', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       ]),
       const SizedBox(height: 8),
       Text('$companyName wants to contact you directly.', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
@@ -369,7 +369,7 @@ class _ChatScreenState extends State<ChatScreen> {
             context.read<AppState>().sendMessage(chatId, '📞 My phone number is +91 98765 43210');
           },
           style: ElevatedButton.styleFrom(minimumSize: Size.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-          child: const Text('Share Number', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          child: const Text('Share Number', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
         ))),
         const SizedBox(width: 12),
         Expanded(child: SizedBox(height: 44, child: OutlinedButton(
@@ -379,7 +379,7 @@ class _ChatScreenState extends State<ChatScreen> {
             foregroundColor: AppColors.textSecondary,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          child: const Text('Keep Hidden', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          child: const Text('Keep Hidden', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
         ))),
       ]),
     ]),

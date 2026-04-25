@@ -47,7 +47,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
                     child: const Icon(Icons.handshake_rounded, size: 18, color: Colors.white),
                   ),
                   const SizedBox(width: 8),
-                  const Text('EmployMe', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text)),
+                  const Text('EmployMe', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.text)),
                 ]),
                 // Progress dots
                 const SizedBox(height: 16),
@@ -65,7 +65,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
               child: Column(children: [
-                Text(LocalizationService.translate('choose_language', _selected), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.text), textAlign: TextAlign.center),
+                Text(LocalizationService.translate('choose_language', _selected), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.text), textAlign: TextAlign.center),
                 const SizedBox(height: 6),
                 Text(LocalizationService.translate('choose_language_subtitle', _selected), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
               ]),
@@ -91,7 +91,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
                         border: Border.all(color: active ? AppColors.primary : AppColors.border, width: active ? 2 : 1),
                       ),
                       child: Stack(children: [
-                        Center(child: Text(lang['script']!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: active ? AppColors.primaryDark : AppColors.text))),
+                        Center(child: Text(lang['script']!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: active ? AppColors.primaryDark : AppColors.text))),
                         // Checkmark in top-right
                         Positioned(top: 8, right: 8, child: Container(
                           width: 20, height: 20,
@@ -122,7 +122,7 @@ class _LanguageSelectionState extends State<LanguageSelection> with SingleTicker
                       context.read<AppState>().setLanguage(_selected);
                       Navigator.pushNamed(context, '/role');
                     },
-                    child: Text(LocalizationService.translate('continue', _selected), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    child: Text(LocalizationService.translate('continue', _selected), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ]),

@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF10B981), Color(0xFF059669), Color(0xFF047857)],
+            colors: [Color(0xFF10B981), Color(0xFF2563EB), Color(0xFF047857)],
           ),
         ),
         child: SafeArea(
@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text('EmployMe', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: -1)),
+                  const Text('EmployMe', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white, letterSpacing: -1)),
                   const SizedBox(height: 8),
                   Text('Hyperlocal Jobs for All', style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w500)),
                   const SizedBox(height: 6),

@@ -54,19 +54,19 @@ class JobDetail extends StatelessWidget {
     decoration: BoxDecoration(color: AppColors.card, borderRadius: const BorderRadius.vertical(top: Radius.circular(24)), border: const Border(bottom: BorderSide(color: AppColors.border))),
     transform: Matrix4.translationValues(0, -24, 0), padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(j['title'] ?? '', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+      Text(j['title'] ?? '', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
       const SizedBox(height: 8),
       Row(children: [
-        Text(j['company'] ?? '', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        Text(j['company'] ?? '', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         const SizedBox(width: 8),
         if (j['verified'] == true)
           Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 10, color: AppColors.primaryDark), const SizedBox(width: 4), Text(state.tr('verified'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primaryDark))])),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 10, color: AppColors.primaryDark), const SizedBox(width: 4), Text(state.tr('verified'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryDark))])),
       ]),
       const SizedBox(height: 6), Text('📍 ${j['location'] ?? ''}', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
       const SizedBox(height: 20),
       Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-        Text(j['salary'] ?? '', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)), Text(j['period'] ?? '', style: const TextStyle(fontSize: 16, color: AppColors.caption)),
+        Text(j['salary'] ?? '', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w500)), Text(j['period'] ?? '', style: const TextStyle(fontSize: 16, color: AppColors.caption)),
       ]),
     ]));
 
@@ -84,14 +84,14 @@ class JobDetail extends StatelessWidget {
     child: Column(children: [Icon(icon, size: 20, color: AppColors.primary), const SizedBox(height: 4), Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textSecondary))]));
 
   Widget _about(AppState state, Map<String, dynamic> j) => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(state.tr('about_job'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), const SizedBox(height: 12),
+    Text(state.tr('about_job'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)), const SizedBox(height: 12),
     Text(j['description'] ?? 'Help manage a busy provision store in the heart of Kodialbail. Responsibilities include assisting customers, organizing shelves, handling billing, and maintaining cleanliness.', style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.6)),
   ]));
 
   Widget _requirements(AppState state, Map<String, dynamic> j) {
     final reqs = j['requirements'] as List<dynamic>? ?? [state.tr('no_degree'), state.tr('basic_comm'), state.tr('honest_punctual'), state.tr('lifting')];
     return Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(state.tr('requirements'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), const SizedBox(height: 16),
+      Text(state.tr('requirements'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)), const SizedBox(height: 16),
       ...reqs.map((r) =>
         Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Icon(Icons.check_circle, size: 16, color: AppColors.primary), const SizedBox(width: 12), Expanded(child: Text(r.toString(), style: const TextStyle(fontSize: 14)))]))),
@@ -99,7 +99,7 @@ class JobDetail extends StatelessWidget {
   }
 
   Widget _perks(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(state.tr('what_you_get'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)), const SizedBox(height: 16),
+    Text(state.tr('what_you_get'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)), const SizedBox(height: 16),
     Wrap(spacing: 8, runSpacing: 8, children: [state.tr('free_lunch'), state.tr('weekly_pay'), state.tr('hike'), state.tr('bonus')].map((p) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(20), border: Border.all(color: AppColors.border)),
       child: Text(p, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)))).toList()),
@@ -109,10 +109,10 @@ class JobDetail extends StatelessWidget {
     padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
     child: Row(children: [
       Container(width: 48, height: 48, decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(12)),
-        alignment: Alignment.center, child: Text((j['company'] ?? 'S')[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
+        alignment: Alignment.center, child: Text((j['company'] ?? 'S')[0], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
       const SizedBox(width: 16),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(j['company'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+        Text(j['company'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
         const SizedBox(height: 4), Text('${state.tr('hired', args: {'count': '47'})} • ${state.tr('since', args: {'year': '2022'})}', style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
       ])),
     ])));

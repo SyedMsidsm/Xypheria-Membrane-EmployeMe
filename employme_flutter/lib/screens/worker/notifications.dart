@@ -31,7 +31,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _header(AppState state) => Container(color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(state.tr('notifications'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+      Text(state.tr('notifications'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       GestureDetector(onTap: () => state.markAllRead(), child: Text(state.tr('mark_all_read'), style: const TextStyle(fontSize: 13, color: AppColors.textSecondary))),
     ]),
     const SizedBox(height: 12),
@@ -42,7 +42,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   ]));
 
   Widget _groupLabel(String label) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-    child: Text(label.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.caption, letterSpacing: 1)));
+    child: Text(label.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.caption, letterSpacing: 1)));
 
   Widget _notifCard(Map<String, dynamic> n) {
     Color bg = AppColors.card; Color? borderColor;
@@ -69,7 +69,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               Container(width: 40, height: 40, decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.bg.withOpacity(0.5)), alignment: Alignment.center, child: Text(n['icon'] as String, style: const TextStyle(fontSize: 16))),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(n['title'] as String, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: n['type'] == 'urgent' ? AppColors.alert : (n['type'] == 'offer' ? AppColors.primary : AppColors.text))),
+                Text(n['title'] as String, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: n['type'] == 'urgent' ? AppColors.alert : (n['type'] == 'offer' ? AppColors.primary : AppColors.text))),
                 const SizedBox(height: 4), Text(n['body'] as String, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
                 const SizedBox(height: 4), Text(n['time'] as String, style: const TextStyle(fontSize: 12, color: AppColors.caption)),
               ])),

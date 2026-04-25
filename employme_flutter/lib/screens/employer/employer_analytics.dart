@@ -12,7 +12,7 @@ class EmployerAnalytics extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(state.tr('analytics'), style: const TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(state.tr('analytics'), style: const TextStyle(fontWeight: FontWeight.w500)),
         backgroundColor: AppColors.card,
         foregroundColor: AppColors.navy,
         elevation: 0,
@@ -49,10 +49,10 @@ class EmployerAnalytics extends StatelessWidget {
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Icon(icon, size: 16, color: AppColors.primary),
-        const Text('+12%', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.green)),
+        const Text('+12%', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.green)),
       ]),
       const Spacer(),
-      Text(val, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+      Text(val, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
       Text(label, style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
     ]),
   );
@@ -61,7 +61,7 @@ class EmployerAnalytics extends StatelessWidget {
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
       Text(sub, style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       const SizedBox(height: 24),
       Container(height: 100, decoration: BoxDecoration(color: color.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),

@@ -40,7 +40,7 @@ class RoleSelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Column(children: [
-              Text(LocalizationService.translate('welcome', lang), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.text, letterSpacing: -0.5), textAlign: TextAlign.center),
+              Text(LocalizationService.translate('welcome', lang), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500, color: AppColors.text, letterSpacing: -0.5), textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Text(LocalizationService.translate('welcome_desc', lang),
                 style: const TextStyle(fontSize: 15, color: AppColors.textSecondary, fontWeight: FontWeight.w500, height: 1.5),
@@ -70,7 +70,7 @@ class RoleSelection extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20)),
-                      child: const Text('FREE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
+                      child: const Text('FREE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white)),
                     ),
                     const SizedBox(width: 6),
                     const Text('➔', style: TextStyle(fontSize: 18, color: AppColors.primary)),
@@ -104,7 +104,7 @@ class RoleSelection extends StatelessWidget {
                 Text(LocalizationService.translate('already_have_account', lang), style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/phone'),
-                  child: Text(LocalizationService.translate('sign_in', lang), style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w700)),
+                  child: Text(LocalizationService.translate('sign_in', lang), style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w500)),
                 ),
               ]),
               const SizedBox(height: 8),
@@ -150,7 +150,7 @@ class _RoleCard extends StatelessWidget {
           iconWidget,
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.text)),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.text)),
             const SizedBox(height: 4),
             Text(subtitle, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
           ])),

@@ -30,7 +30,7 @@ class _JobSearchState extends State<JobSearch> {
 
   Widget _header(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(16, 16, 16, 0), child: Row(children: [
     GestureDetector(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: AppColors.card, shape: BoxShape.circle, border: Border.all(color: AppColors.border)), child: const Icon(Icons.arrow_back, size: 20))),
-    Expanded(child: Center(child: Text(state.tr('search_jobs_title'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)))),
+    Expanded(child: Center(child: Text(state.tr('search_jobs_title'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)))),
     const SizedBox(width: 42),
   ]));
 
@@ -45,7 +45,7 @@ class _JobSearchState extends State<JobSearch> {
       child: Row(mainAxisSize: MainAxisSize.min, children: [Text(state.tr(key), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)), const SizedBox(width: 6), const Icon(Icons.close, size: 12, color: AppColors.caption)]))).toList()),
   ]));
 
-  Widget _distanceFilter(AppState state) => _filterCard('📍 ${state.tr('distance_from_you')}', Column(children: [
+  Widget _distanceFilter(AppState state) => _filterCard(Icons.location_on, state.tr('distance_from_you'), Column(children: [
     const SizedBox(height: 8), SliderTheme(data: SliderThemeData(activeTrackColor: AppColors.primary, inactiveTrackColor: AppColors.border, thumbColor: AppColors.primary, overlayColor: AppColors.primary.withOpacity(0.1)),
       child: Slider(value: _distance == '500m' ? 0.05 : _distance == '1km' ? 0.1 : _distance == '2km' ? 0.2 : 0.5, onChanged: (v) {
         setState(() {
@@ -65,13 +65,13 @@ class _JobSearchState extends State<JobSearch> {
 
   Widget _jobTypeFilter(AppState state) {
     final types = [state.tr('full_time'), state.tr('part_time'), state.tr('daily_wage'), state.tr('weekend_only')];
-    return _filterCard('💼 ${state.tr('job_type_label')}', Wrap(spacing: 8, runSpacing: 8, children: types.asMap().entries.map((e) =>
+    return _filterCard(Icons.work, state.tr('job_type_label'), Wrap(spacing: 8, runSpacing: 8, children: types.asMap().entries.map((e) =>
       Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8), decoration: BoxDecoration(
         color: e.key < 2 ? AppColors.primary : AppColors.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: e.key < 2 ? AppColors.primary : AppColors.border)),
         child: Text('${e.key < 2 ? '✓ ' : ''}${e.value}', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: e.key < 2 ? Colors.white : AppColors.text)))).toList()));
   }
 
-  Widget _payFilter(AppState state) => _filterCard('💰 ${state.tr('pay_range')}', Column(children: [
+  Widget _payFilter(AppState state) => _filterCard(Icons.payments, state.tr('pay_range'), Column(children: [
     Row(children: [_payBox('Min ₹', '300'), const SizedBox(width: 10), _payBox('Max ₹', '800')]),
     const SizedBox(height: 12),
     Container(decoration: BoxDecoration(border: Border.all(color: AppColors.border), borderRadius: BorderRadius.circular(10)), child: Row(children:
@@ -87,16 +87,20 @@ class _JobSearchState extends State<JobSearch> {
     color: AppColors.bg, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)),
     child: Row(children: [Text(l, style: const TextStyle(color: AppColors.caption)), const SizedBox(width: 4), Text(v, style: const TextStyle(fontWeight: FontWeight.w600))])));
 
-  Widget _availabilityToggle(AppState state) => _filterCard('📅 ${state.tr('match_availability')}', Row(children: [
+  Widget _availabilityToggle(AppState state) => _filterCard(Icons.calendar_month, state.tr('match_availability'), Row(children: [
     Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(state.tr('show_jobs_on'), style: const TextStyle(fontSize: 13, color: AppColors.textSecondary))])),
     Switch(value: state.availableNow, onChanged: (v) => state.setAvailableNow(v), activeColor: AppColors.primary),
   ]));
 
-  Widget _filterCard(String title, Widget child) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Container(
-    padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border),
-      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)]),
+  Widget _filterCard(IconData icon, String title, Widget child) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Container(
+    padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border),
+      boxShadow: AppShadows.card),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+      Row(children: [
+        Icon(icon, size: 20, color: AppColors.primary),
+        const SizedBox(width: 8),
+        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+      ]),
       const SizedBox(height: 16), child,
     ]),
   ));

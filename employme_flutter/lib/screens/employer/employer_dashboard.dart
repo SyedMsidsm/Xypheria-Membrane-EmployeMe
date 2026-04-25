@@ -36,7 +36,7 @@ class EmployerDashboard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('${state.tr('good_morning')}, ${state.userName.split(' ')[0]}!',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
           Row(children: [
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/notifications'),
@@ -48,7 +48,7 @@ class EmployerDashboard extends StatelessWidget {
                 width: 36, height: 36,
                 decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
                 alignment: Alignment.center,
-                child: Text(state.userName[0], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white)),
+                child: Text(state.userName[0], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white)),
               ),
             ),
           ]),
@@ -64,12 +64,12 @@ class EmployerDashboard extends StatelessWidget {
           Expanded(child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/employer-profile'),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(state.tr('business_name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+              Text(state.tr('business_name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white)),
               const SizedBox(height: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
-                child: Text(state.tr('verified_business'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
+                child: Text(state.tr('verified_business'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white)),
               ),
             ]),
           )),
@@ -114,14 +114,14 @@ class EmployerDashboard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(state.tr('find_workers_now'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+                Text(state.tr('find_workers_now'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
                 const SizedBox(height: 4),
                 Text(state.tr('post_in_seconds'), style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.8))),
               ])),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-                child: Text(state.tr('free'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.white)),
+                child: Text(state.tr('free'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white)),
               ),
               const SizedBox(width: 6),
               const Icon(Icons.chevron_right, size: 20, color: Colors.white),
@@ -165,7 +165,7 @@ class EmployerDashboard extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, size: 24, color: fg),
           const SizedBox(height: 8),
-          Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: fg)),
+          Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: fg)),
         ]),
       ),
     );
@@ -177,7 +177,7 @@ class EmployerDashboard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(state.tr('active_postings'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          Text(state.tr('active_postings'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/view-all-jobs'),
             child: Text(state.tr('view_all', args: {'count': '${jobs.length}'}), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary))),
@@ -201,7 +201,7 @@ class EmployerDashboard extends StatelessWidget {
     final expires = highInterest ? '3' : '7';
     
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
@@ -219,7 +219,7 @@ class EmployerDashboard extends StatelessWidget {
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                  Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 6),
                   Row(children: [
                     Icon(Icons.access_time, size: 14, color: highInterest ? AppColors.alert : AppColors.textSecondary),
@@ -230,7 +230,7 @@ class EmployerDashboard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-                  child: Text(state.tr('active'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+                  child: Text(state.tr('active'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
                 ),
               ]),
               const SizedBox(height: 16),
@@ -240,12 +240,12 @@ class EmployerDashboard extends StatelessWidget {
                 child: Row(children: [
                   const Icon(Icons.people, size: 16, color: AppColors.primary),
                   const SizedBox(width: 6),
-                  Text('$applicants ${state.tr('applicants_label').toLowerCase()}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                  Text('$applicants ${state.tr('applicants_label').toLowerCase()}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
                   if (highInterest) ...[
                     const SizedBox(width: 12),
                     const Icon(Icons.local_fire_department, size: 16, color: AppColors.alert),
                     const SizedBox(width: 6),
-                    Text(state.tr('high_interest'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.alert)),
+                    Text(state.tr('high_interest'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.alert)),
                   ],
                 ]),
               ),
@@ -257,7 +257,7 @@ class EmployerDashboard extends StatelessWidget {
                     side: const BorderSide(color: AppColors.border),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: Text('${state.tr('view')} ${state.tr('applicants_label')} ($applicants)', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text)),
+                  child: Text('${state.tr('view')} ${state.tr('applicants_label')} ($applicants)', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.text)),
                 ))),
                 const SizedBox(width: 8),
                 SizedBox(height: 44, child: ElevatedButton(
@@ -287,7 +287,7 @@ class EmployerDashboard extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text(state.tr('boost'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                    Text(state.tr('boost'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
                     const SizedBox(width: 6),
                     const Icon(Icons.local_fire_department, size: 14),
                   ]),
@@ -304,7 +304,7 @@ class EmployerDashboard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 32, 20, 0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(state.tr('recent_applicants'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+        Text(state.tr('recent_applicants'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
@@ -356,11 +356,11 @@ class EmployerDashboard extends StatelessWidget {
             width: 44, height: 44,
             decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
             alignment: Alignment.center,
-            child: Text(name[0], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.primaryDark)),
+            child: Text(name[0], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.primaryDark)),
           ),
           const SizedBox(width: 16),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+            Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             const SizedBox(height: 2),
             Text(skills, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary)),
           ])),
@@ -372,7 +372,7 @@ class EmployerDashboard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 decoration: BoxDecoration(color: AppColors.bg, borderRadius: BorderRadius.circular(8), border: Border.all(color: AppColors.border)),
-                child: Text(state.tr('view'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                child: Text(state.tr('view'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
               ),
             ),
           ]),

@@ -53,7 +53,7 @@ class SkillsSelection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(LocalizationService.translate('skills_title', lang), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.text)),
+              Text(LocalizationService.translate('skills_title', lang), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.text)),
               const SizedBox(height: 6),
               Text(LocalizationService.translate('skills_subtitle', lang), style: const TextStyle(fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w600)),
               const SizedBox(height: 12),
@@ -69,7 +69,7 @@ class SkillsSelection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(LocalizationService.translate('skills_selected', lang, args: {'count': state.selectedSkills.where((s) => s != 'Other').length.toString()}),
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
                   ),
                   Text(LocalizationService.translate('max_skills', lang),
                     style: const TextStyle(fontSize: 12, color: AppColors.caption, fontWeight: FontWeight.w600)),
@@ -122,7 +122,7 @@ class SkillsSelection extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                                   child: Text(LocalizationService.translate(nameKey, lang), style: TextStyle(
-                                    fontSize: 11, fontWeight: FontWeight.w700,
+                                    fontSize: 11, fontWeight: FontWeight.w500,
                                     color: active ? Colors.white : AppColors.text,
                                   ), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
                                 ),
@@ -163,7 +163,7 @@ class SkillsSelection extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 elevation: 0,
               ),
-              child: Text(LocalizationService.translate('continue', lang), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              child: Text(LocalizationService.translate('continue', lang), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ),
           ),
         ]),
@@ -178,7 +178,7 @@ class SkillsSelection extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.card,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
-        title: Text(state.tr('enter_custom_skill'), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+        title: Text(state.tr('enter_custom_skill'), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -213,7 +213,7 @@ class SkillsSelection extends StatelessWidget {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
                 ),
-                child: Text(state.tr('add'), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                child: Text(state.tr('add'), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
               ),
             ),
             const SizedBox(height: 12),

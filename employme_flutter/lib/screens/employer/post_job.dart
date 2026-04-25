@@ -51,13 +51,13 @@ class _PostJobState extends State<PostJob> {
 
   Widget _header() => Container(color: AppColors.card, padding: const EdgeInsets.fromLTRB(20, 16, 20, 16), child: Column(children: [
     Row(children: [GestureDetector(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: AppColors.bg, shape: BoxShape.circle, border: Border.all(color: AppColors.border)), child: const Icon(Icons.arrow_back, size: 20))),
-      const Expanded(child: Text('Post a Job', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800))), const SizedBox(width: 38)]),
+      const Expanded(child: Text('Post a Job', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))), const SizedBox(width: 38)]),
   ]));
 
   Widget _sectionNum(int n, String title) => Padding(padding: EdgeInsets.only(top: n == 1 ? 0 : 40, bottom: 20), child: Row(children: [
     Container(width: 24, height: 24, decoration: const BoxDecoration(color: AppColors.primaryLight, shape: BoxShape.circle), alignment: Alignment.center,
-      child: Text('$n', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.primaryDark))),
-    const SizedBox(width: 8), Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))]));
+      child: Text('$n', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.primaryDark))),
+    const SizedBox(width: 8), Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))]));
 
   Widget _titleInput() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     _label('Job Title *'), 
@@ -74,7 +74,7 @@ class _PostJobState extends State<PostJob> {
             borderRadius: BorderRadius.circular(12), 
             border: Border.all(color: isActive ? AppColors.primary : AppColors.border, width: isActive ? 2 : 1)
           ),
-          child: Text(s, style: TextStyle(fontSize: 13, color: isActive ? AppColors.primary : AppColors.textSecondary, fontWeight: FontWeight.w700))
+          child: Text(s, style: TextStyle(fontSize: 13, color: isActive ? AppColors.primary : AppColors.textSecondary, fontWeight: FontWeight.w500))
         ),
       );
     }).toList()),
@@ -90,7 +90,7 @@ class _PostJobState extends State<PostJob> {
           builder: (ctx) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              const Text('Select Category', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text('Select Category', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
               const SizedBox(height: 20),
               ..._categories.map((c) => ListTile(
                 title: Text(c, style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -115,7 +115,7 @@ class _PostJobState extends State<PostJob> {
   Widget _peopleCounter() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const SizedBox(height: 24), _label('Number of people needed'), const SizedBox(height: 16),
     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       _counterBtn(Icons.remove, () { if (_people > 1) setState(() => _people--); }),
-      SizedBox(width: 80, child: Text('$_people', textAlign: TextAlign.center, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800))),
+      SizedBox(width: 80, child: Text('$_people', textAlign: TextAlign.center, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500))),
       _counterBtn(Icons.add, () => setState(() => _people++)),
     ])]);
 
@@ -125,13 +125,13 @@ class _PostJobState extends State<PostJob> {
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border), color: AppColors.card), 
     child: Row(children: [
       Container(width: 48, padding: const EdgeInsets.symmetric(vertical: 16), decoration: const BoxDecoration(color: AppColors.bg, border: Border(right: BorderSide(color: AppColors.border))),
-        child: const Text('₹', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary))),
+        child: const Text('₹', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.primary))),
       Expanded(child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16), 
         child: TextFormField(
           controller: _payController,
           keyboardType: TextInputType.number,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           decoration: const InputDecoration(border: InputBorder.none, isDense: true, contentPadding: EdgeInsets.zero),
         )
       )),
@@ -142,7 +142,7 @@ class _PostJobState extends State<PostJob> {
           child: DropdownButton<String>(
             value: _payPeriod,
             icon: const Icon(Icons.keyboard_arrow_down, size: 18),
-            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w700, fontFamily: 'Inter'),
+            style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500, fontFamily: 'Inter'),
             onChanged: (v) => setState(() => _payPeriod = v!),
             items: ['per hour', 'per day', 'per month'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
           ),
@@ -162,7 +162,7 @@ class _PostJobState extends State<PostJob> {
           );
           if (time != null) setState(() => _fromTime = time.format(context));
         },
-        child: Container(height: 56, decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)), alignment: Alignment.center, child: Text(_fromTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)))
+        child: Container(height: 56, decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)), alignment: Alignment.center, child: Text(_fromTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)))
       )])),
     const SizedBox(width: 12),
     Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('To', style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w600)), const SizedBox(height: 8),
@@ -175,7 +175,7 @@ class _PostJobState extends State<PostJob> {
           );
           if (time != null) setState(() => _toTime = time.format(context));
         },
-        child: Container(height: 56, decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)), alignment: Alignment.center, child: Text(_toTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)))
+        child: Container(height: 56, decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)), alignment: Alignment.center, child: Text(_toTime, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)))
       )])),
   ]));
 
@@ -194,7 +194,7 @@ class _PostJobState extends State<PostJob> {
             )
           ),
           alignment: Alignment.center, 
-          child: Text(e.value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: isActive ? Colors.white : AppColors.textSecondary))
+          child: Text(e.value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: isActive ? Colors.white : AppColors.textSecondary))
         ),
       ));
     }).toList())));
@@ -208,7 +208,7 @@ class _PostJobState extends State<PostJob> {
     Wrap(spacing: 8, runSpacing: 8, children: [
       ..._requirementsList.map((r) => Container(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(20)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Text(r, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primaryDark)), 
+          Text(r, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.primaryDark)), 
           const SizedBox(width: 8), 
           GestureDetector(onTap: () => setState(() => _requirementsList.remove(r)), child: const Icon(Icons.close, size: 14, color: AppColors.primaryDark))
         ]))),
@@ -233,14 +233,14 @@ class _PostJobState extends State<PostJob> {
         GestureDetector(
           onTap: () => setState(() => _isAddingReq = true),
           child: Container(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), border: Border.all(color: AppColors.border, style: BorderStyle.solid)),
-            child: const Text('+ Add requirement', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w700)))
+            child: const Text('+ Add requirement', style: TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w500)))
         ),
     ])]);
 
   Widget _urgency() => Container(margin: const EdgeInsets.only(top: 32), padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border),
     boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)]),
     child: Row(children: [Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Need someone urgently? ⚡', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+      const Text('Need someone urgently? ⚡', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       const SizedBox(height: 4), const Text('Your job shows as 🔴 HIRING TODAY', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
     ])), Switch(value: _urgent, onChanged: (v) => setState(() => _urgent = v), activeColor: AppColors.alert)]));
 
@@ -272,5 +272,5 @@ class _PostJobState extends State<PostJob> {
     }, child: const Text('Post Job ✓')))),
   ]));
 
-  Widget _label(String t) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)));
+  Widget _label(String t) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(t, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)));
 }

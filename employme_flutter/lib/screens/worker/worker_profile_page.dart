@@ -28,7 +28,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 20),
-            const Text('Update Profile Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const Text('Update Profile Photo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
             const SizedBox(height: 20),
             ListTile(
               leading: Container(
@@ -112,7 +112,7 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     child: Column(children: [
       Align(alignment: Alignment.topRight, child: GestureDetector(
         onTap: () => Navigator.pushNamed(context, '/edit-profile'),
-        child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white)),
+        child: Container(width: 36, height: 36, decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), shape: BoxShape.circle), child: const Icon(Icons.edit, size: 16, color: Colors.white)),
       )),
       // Profile photo — tap to change
       GestureDetector(
@@ -125,13 +125,13 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
                 shape: BoxShape.circle,
                 color: AppColors.primary,
                 border: Border.all(color: Colors.white, width: 3),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 12)],
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 12)],
               ),
               clipBehavior: Clip.antiAlias,
               child: state.profileImagePath != null
                   ? Image.file(File(state.profileImagePath!), fit: BoxFit.cover, width: 88, height: 88,
-                      errorBuilder: (_, __, ___) => Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))))
-                  : Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white))),
+                      errorBuilder: (_, __, ___) => Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white))))
+                  : Center(child: Text(initials, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500, color: Colors.white))),
             ),
             // Camera badge
             Positioned(
@@ -151,18 +151,18 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
       ),
       const SizedBox(height: 8), Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
         child: Text(state.tr('available_now'), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white))),
-      const SizedBox(height: 8), Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white)),
-      const SizedBox(height: 2), Text('📍 ${state.location} • ${state.gender}, ${state.age}', style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.7))),
-      Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.5))),
+      const SizedBox(height: 8), Text(name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white)),
+      const SizedBox(height: 2), Text('📍 ${state.location} • ${state.gender}, ${state.age}', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
+      Text(state.tr('member_since', args: {'date': 'April 2025'}), style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.5))),
     ]));
 
   Widget _trustCard(BuildContext context, AppState state) => Transform.translate(offset: const Offset(0, -20), child: GestureDetector(
     onTap: () => Navigator.pushNamed(context, '/trust'),
     child: Container(margin: const EdgeInsets.symmetric(horizontal: 20),
-    padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20)]),
+    padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20)]),
     child: Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text('${state.tr('trust_score')} 🛡️', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+        Row(children: [Text(state.tr('trust_score'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), const SizedBox(width: 6), const Icon(Icons.shield, size: 18, color: AppColors.text)]),
         GestureDetector(onTap: () => Navigator.pushNamed(context, '/trust'), child: Text(state.tr('what_is_this'), style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600))),
       ]),
       const SizedBox(height: 12),
@@ -170,10 +170,10 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
         const TrustGauge(score: 87),
         const SizedBox(width: 20),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(state.tr('good'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primary)),
-          const SizedBox(height: 8), Text('✅ ${state.tr('verified')}', style: const TextStyle(fontSize: 12, color: AppColors.primary)),
-          const SizedBox(height: 4), Text('✅ ${state.tr('community_verified')}', style: const TextStyle(fontSize: 12, color: AppColors.primary)),
-          const SizedBox(height: 4), Text('⏳ ${state.tr('ngo_verification')} — Get verified →', style: const TextStyle(fontSize: 12, color: Color(0xFFF97316))),
+          Text(state.tr('good'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary)),
+          Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 14, color: AppColors.primary), const SizedBox(width: 6), Text(state.tr('verified'), style: const TextStyle(fontSize: 12, color: AppColors.primary))]),
+          const SizedBox(height: 4), Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 14, color: AppColors.primary), const SizedBox(width: 6), Text(state.tr('community_verified'), style: const TextStyle(fontSize: 12, color: AppColors.primary))]),
+          const SizedBox(height: 4), Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.hourglass_empty, size: 14, color: Color(0xFFF97316)), const SizedBox(width: 6), Text('${state.tr('ngo_verification')} — Get verified →', style: const TextStyle(fontSize: 12, color: Color(0xFFF97316)))]),
         ])),
       ]),
     ]))));
@@ -184,8 +184,8 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
     _statBox('100%', state.tr('show_up'), () => Navigator.pushNamed(context, '/trust')),
   ].map((w) => Expanded(child: Padding(padding: const EdgeInsets.only(right: 8), child: w))).toList()));
 
-  Widget _statBox(String n, String l, [VoidCallback? onTap]) => GestureDetector(onTap: onTap, child: Container(padding: const EdgeInsets.symmetric(vertical: 12), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4)]),
-    child: Column(children: [Text(n, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary)), const SizedBox(height: 2), Text(l, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary))])));
+  Widget _statBox(String n, String l, [VoidCallback? onTap]) => GestureDetector(onTap: onTap, child: Container(padding: const EdgeInsets.symmetric(vertical: 12), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)]),
+    child: Column(children: [Text(n, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.primary)), const SizedBox(height: 2), Text(l, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary))])));
 
   Widget _skillsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(state.tr('my_skills'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), GestureDetector(onTap: () => Navigator.pushNamed(context, '/edit-profile'), child: Text(state.tr('edit'), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)))]),
@@ -212,43 +212,43 @@ class _WorkerProfilePageState extends State<WorkerProfilePage> {
         final selected = state.availableDays.contains(day);
         return Padding(padding: const EdgeInsets.only(right: 6),
         child: Container(width: 36, height: 36, decoration: BoxDecoration(shape: BoxShape.circle, color: selected ? AppColors.primary : AppColors.border),
-          alignment: Alignment.center, child: Text(day, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: selected ? Colors.white : AppColors.caption))));
+          alignment: Alignment.center, child: Text(day, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: selected ? Colors.white : AppColors.caption))));
       }).toList()),
       const SizedBox(height: 10),
       Wrap(spacing: 8, children: [Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-        child: Text('${_getTimingIcon(state.preferredTiming)} ${state.preferredTiming}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary))),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [Icon(_getTimingIconData(state.preferredTiming), size: 14, color: AppColors.primary), const SizedBox(width: 4), Text(state.tr(state.preferredTiming.toLowerCase()), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary))])),
         Text('Available: ${state.availableNow ? state.tr('immediately') : 'Not right now'}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary))]),
     ]));
 
-  String _getTimingIcon(String timing) {
+  IconData _getTimingIconData(String timing) {
     switch (timing) {
-      case 'Morning': return '🌅';
-      case 'Afternoon': return '☀️';
-      case 'Evening': return '🌙';
-      case 'Night': return '🌃';
-      default: return '🕐';
+      case 'Morning': return Icons.wb_twilight;
+      case 'Afternoon': return Icons.wb_sunny_outlined;
+      case 'Evening': return Icons.wb_twilight_rounded;
+      case 'Night': return Icons.dark_mode_outlined;
+      default: return Icons.access_time;
     }
   }
 
   Widget _reviewsSection(AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text('${state.tr('work_history')} ⭐ 4.8 (12 reviews)', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    const SizedBox(height: 12), _reviewCard(state, '🏪', 'Sri Ganesh Store', 'Aug 2025', 5, 'Excellent worker, very punctual and honest', [state.tr('on_time'), state.tr('honest'), state.tr('hardworking')]),
-    const SizedBox(height: 10), _reviewCard(state, '🍳', 'Hotel Udupi', 'Jul 2025', 4, 'Good worker, reliable and quick to learn', [state.tr('reliable'), state.tr('would_rehire')]),
+    Row(children: [Text(state.tr('work_history'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), const SizedBox(width: 6), const Icon(Icons.star, size: 16, color: Color(0xFFF59E0B)), const Text(' 4.8 (12 reviews)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))]),
+    const SizedBox(height: 12), _reviewCard(state, Icons.storefront, 'Sri Ganesh Store', 'Aug 2025', 5, 'Excellent worker, very punctual and honest', [state.tr('on_time'), state.tr('honest'), state.tr('hardworking')]),
+    const SizedBox(height: 10), _reviewCard(state, Icons.restaurant, 'Hotel Udupi', 'Jul 2025', 4, 'Good worker, reliable and quick to learn', [state.tr('reliable'), state.tr('would_rehire')]),
     const SizedBox(height: 12), Center(child: Text(state.tr('view_all_reviews', args: {'count': '12'}), style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600))),
   ]));
 
-  Widget _reviewCard(AppState state, String emoji, String name, String date, int stars, String text, List<String> badges) => Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4)]),
+  Widget _reviewCard(AppState state, IconData icon, String name, String date, int stars, String text, List<String> badges) => Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)]),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Container(width: 36, height: 36, decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight), alignment: Alignment.center, child: Text(emoji, style: const TextStyle(fontSize: 14))), const SizedBox(width: 10), Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))]), Text(date, style: const TextStyle(fontSize: 12, color: AppColors.caption))]),
-      const SizedBox(height: 6), Text('⭐' * stars, style: const TextStyle(fontSize: 14)),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Container(width: 36, height: 36, decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight), alignment: Alignment.center, child: Icon(icon, size: 18, color: AppColors.primaryDark)), const SizedBox(width: 10), Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))]), Text(date, style: const TextStyle(fontSize: 12, color: AppColors.caption))]),
+      const SizedBox(height: 6), Row(children: List.generate(stars, (_) => const Icon(Icons.star, size: 14, color: Color(0xFFF59E0B)))),
       const SizedBox(height: 6), Text(text, style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5)),
       const SizedBox(height: 8), Wrap(spacing: 6, children: badges.map((b) => Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
-        child: Text('✅ $b', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primary)))).toList()),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.check_circle, size: 12, color: AppColors.primary), const SizedBox(width: 4), Text(b, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.primary))]))).toList()),
     ]));
 
   Widget _actions(BuildContext ctx, AppState state) => Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Row(children: [
-    Expanded(child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))), child: Text('📤 ${state.tr('share')}'))),
+    Expanded(child: OutlinedButton(onPressed: () {}, style: OutlinedButton.styleFrom(minimumSize: const Size(0, 48), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.ios_share, size: 18), const SizedBox(width: 8), Text(state.tr('share'))]))),
     const SizedBox(width: 10),
-    Expanded(child: SizedBox(height: 48, child: ElevatedButton(onPressed: () => Navigator.pushNamed(ctx, '/trust'), child: Text('🛡️ ${state.tr('trust_score')}')))),
+    Expanded(child: SizedBox(height: 48, child: ElevatedButton(onPressed: () => Navigator.pushNamed(ctx, '/trust'), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.shield, size: 18), const SizedBox(width: 8), Text(state.tr('trust_score'))])))),
   ]));
 }

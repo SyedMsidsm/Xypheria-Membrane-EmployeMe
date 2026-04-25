@@ -12,7 +12,7 @@ class EmployerReviews extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(state.tr('reviews'), style: const TextStyle(fontWeight: FontWeight.w700)),
+        title: Text(state.tr('reviews'), style: const TextStyle(fontWeight: FontWeight.w500)),
         backgroundColor: AppColors.card,
         foregroundColor: AppColors.navy,
         elevation: 0,
@@ -36,7 +36,7 @@ class EmployerReviews extends StatelessWidget {
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
     child: Row(children: [
       Column(children: [
-        const Text('4.8', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: AppColors.navy)),
+        const Text('4.8', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w500, color: AppColors.navy)),
         Text('out of 5', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       ]),
       const SizedBox(width: 24),
@@ -61,15 +61,15 @@ class EmployerReviews extends StatelessWidget {
     decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(16), border: Border.all(color: AppColors.border)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
+        Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
         Text(time, style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       ]),
       const SizedBox(height: 8),
       Row(children: [
-        Text('⭐ $rating', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.amber)),
+        Text('⭐ $rating', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.amber)),
         const SizedBox(width: 8),
         Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(8)),
-          child: const Text('Verified Worker', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.primaryDark))),
+          child: const Text('Verified Worker', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: AppColors.primaryDark))),
       ]),
       const SizedBox(height: 12),
       Text(text, style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.5)),

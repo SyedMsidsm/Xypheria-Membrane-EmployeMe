@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class DemoData {
   static const List<Map<String, String>> languages = [
     {'name': 'English', 'script': 'English', 'code': 'en'},
@@ -8,28 +10,28 @@ class DemoData {
     {'name': 'Tamil', 'script': 'தமிழ்', 'code': 'ta'},
   ];
 
-  static const List<Map<String, String>> skills = [
-    {'emoji': '🍳', 'name': 'Cooking', 'kn': 'ಅಡುಗೆ'},
-    {'emoji': '🧹', 'name': 'Cleaning', 'kn': 'ಸ್ವಚ್ಛತೆ'},
-    {'emoji': '🚚', 'name': 'Delivery', 'kn': 'ಡೆಲಿವರಿ'},
-    {'emoji': '🏪', 'name': 'Shop Helper', 'kn': 'ಅಂಗಡಿ'},
-    {'emoji': '👷', 'name': 'Labour', 'kn': 'ಕೂಲಿ'},
-    {'emoji': '🌱', 'name': 'Farming', 'kn': 'ಕೃಷಿ'},
-    {'emoji': '👶', 'name': 'Childcare', 'kn': 'ಮಕ್ಕಳ'},
-    {'emoji': '👵', 'name': 'Elder Care', 'kn': 'ವೃದ್ಧರು'},
-    {'emoji': '🔧', 'name': 'Repair', 'kn': 'ದುರಸ್ತಿ'},
-    {'emoji': '🚗', 'name': 'Driving', 'kn': 'ಚಾಲನೆ'},
-    {'emoji': '💇', 'name': 'Beauty', 'kn': 'ಸೌಂದರ್ಯ'},
-    {'emoji': '📦', 'name': 'Packing', 'kn': 'ಪ್ಯಾಕಿಂಗ್'},
-    {'emoji': '🛡️', 'name': 'Security', 'kn': 'ಭದ್ರತೆ'},
-    {'emoji': '📱', 'name': 'Data Entry', 'kn': 'ಡೇಟಾ'},
-    {'emoji': '🎨', 'name': 'Painting', 'kn': 'ಬಣ್ಣ'},
-    {'emoji': '🧵', 'name': 'Tailoring', 'kn': 'ಹೊಲಿಗೆ'},
+  static const List<Map<String, dynamic>> skills = [
+    {'icon': Icons.restaurant, 'name': 'Cooking', 'kn': 'ಅಡುಗೆ'},
+    {'icon': Icons.cleaning_services, 'name': 'Cleaning', 'kn': 'ಸ್ವಚ್ಛತೆ'},
+    {'icon': Icons.local_shipping, 'name': 'Delivery', 'kn': 'ಡೆಲಿವರಿ'},
+    {'icon': Icons.storefront, 'name': 'Shop Helper', 'kn': 'ಅಂಗಡಿ'},
+    {'icon': Icons.construction, 'name': 'Labour', 'kn': 'ಕೂಲಿ'},
+    {'icon': Icons.agriculture, 'name': 'Farming', 'kn': 'ಕೃಷಿ'},
+    {'icon': Icons.child_care, 'name': 'Childcare', 'kn': 'ಮಕ್ಕಳ'},
+    {'icon': Icons.elderly, 'name': 'Elder Care', 'kn': 'ವೃದ್ಧರು'},
+    {'icon': Icons.build, 'name': 'Repair', 'kn': 'ದುರಸ್ತಿ'},
+    {'icon': Icons.directions_car, 'name': 'Driving', 'kn': 'ಚಾಲನೆ'},
+    {'icon': Icons.face_retouching_natural, 'name': 'Beauty', 'kn': 'ಸೌಂದರ್ಯ'},
+    {'icon': Icons.inventory, 'name': 'Packing', 'kn': 'ಪ್ಯಾಕಿಂಗ್'},
+    {'icon': Icons.security, 'name': 'Security', 'kn': 'ಭದ್ರತೆ'},
+    {'icon': Icons.devices, 'name': 'Data Entry', 'kn': 'ಡೇಟಾ'},
+    {'icon': Icons.format_paint, 'name': 'Painting', 'kn': 'ಬಣ್ಣ'},
+    {'icon': Icons.checkroom, 'name': 'Tailoring', 'kn': 'ಹೊಲಿಗೆ'},
   ];
 
   static const List<Map<String, dynamic>> jobs = [
     {
-      'emoji': '🏪',
+      'icon': Icons.storefront,
       'title': 'Shop Assistant',
       'title_kn': 'ಅಂಗಡಿ ಸಹಾಯಕ',
       'company': 'Sri Ganesh Provision Store',
@@ -44,7 +46,7 @@ class DemoData {
       'verified': true,
     },
     {
-      'emoji': '🍳',
+      'icon': Icons.restaurant,
       'title': 'Kitchen Helper',
       'title_kn': 'ಅಡುಗೆ ಸಹಾಯಕ',
       'company': 'Hotel Udupi Delights',
@@ -59,7 +61,7 @@ class DemoData {
       'verified': true,
     },
     {
-      'emoji': '🚚',
+      'icon': Icons.local_shipping,
       'title': 'Delivery Partner',
       'title_kn': 'ಡೆಲಿವರಿ ಪಾಲುದಾರ',
       'company': 'QuickMart Grocery',
@@ -150,7 +152,7 @@ class DemoData {
   static const List<Map<String, dynamic>> notifications = [
     {
       'type': 'urgent',
-      'icon': '🔴',
+      'icon': Icons.warning_rounded,
       'title': 'URGENT JOB NEAR YOU!',
       'body': 'Sri Ganesh Store needs a Shop Helper within 500m — ₹500/day',
       'time': '5 min ago',
@@ -159,15 +161,15 @@ class DemoData {
     },
     {
       'type': 'offer',
-      'icon': '✅',
-      'title': 'Job Offer Received! 🎉',
+      'icon': Icons.check_circle_outline,
+      'title': 'Job Offer Received!',
       'body': 'Hotel Udupi Delights sent you an offer for Kitchen Helper',
       'time': '1 hour ago',
       'group': 'Today',
     },
     {
       'type': 'message',
-      'icon': '💬',
+      'icon': Icons.chat_bubble_outline,
       'title': 'New message from employer',
       'body': 'FreshMart: "Can you come for an interview tomorrow?"',
       'time': '3 hours ago',
@@ -175,7 +177,7 @@ class DemoData {
     },
     {
       'type': 'trust',
-      'icon': '🛡️',
+      'icon': Icons.shield_outlined,
       'title': 'Trust Score increased!',
       'body': 'Your score went from 82 to 87. Get NGO verified to reach 95+',
       'time': 'Yesterday 2:30 PM',
@@ -183,7 +185,7 @@ class DemoData {
     },
     {
       'type': 'profile',
-      'icon': '⏰',
+      'icon': Icons.account_circle_outlined,
       'title': 'Complete your profile',
       'body': 'Add a photo to get 3x more views',
       'time': 'Yesterday',
