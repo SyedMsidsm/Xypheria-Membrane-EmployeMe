@@ -390,22 +390,6 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void shortlistApplicant(String applicantName) {
-    // 1. Find applicant and set status
-    final index = _applicants.indexWhere((a) => a['name'] == applicantName);
-    if (index != -1) {
-      _applicants[index] = {
-        ..._applicants[index],
-        'status': 'Shortlisted',
-      };
-    }
-    
-    // 2. Automate a chat message
-    final chatId = getChatId(applicantName);
-    sendMessage(chatId, "Congratulations! You have been shortlisted for the Shop Assistant role. I will contact you soon.");
-    
-    notifyListeners();
-  }
 
   // ── Localization ──
   String tr(String key, {Map<String, dynamic>? args}) {
