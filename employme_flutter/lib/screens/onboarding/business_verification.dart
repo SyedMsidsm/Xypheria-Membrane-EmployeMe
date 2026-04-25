@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/app_state.dart';
 
@@ -14,6 +15,7 @@ class _BusinessVerificationState extends State<BusinessVerification> {
   final _nameCtrl = TextEditingController();
   final _gstCtrl = TextEditingController();
   bool _documentUploaded = false;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void dispose() {
@@ -26,6 +28,24 @@ class _BusinessVerificationState extends State<BusinessVerification> {
     _nameCtrl.text.trim().isNotEmpty && 
     _gstCtrl.text.trim().isNotEmpty && 
     _documentUploaded;
+
+  Future<void> _pickDocument() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null && mounted) {
+        setState(() => _documentUploaded = true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Document uploaded successfully!'), backgroundColor: AppColors.primary)
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open gallery.'), backgroundColor: AppColors.alert)
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +87,7 @@ class _BusinessVerificationState extends State<BusinessVerification> {
                 child: TextField(
                   controller: _nameCtrl,
                   onChanged: (_) => setState(() {}),
+                  textCapitalization: TextCapitalization.words,
                   decoration: const InputDecoration(
                     hintText: 'Enter legal business name',
                     border: InputBorder.none,
@@ -106,13 +127,7 @@ class _BusinessVerificationState extends State<BusinessVerification> {
               const SizedBox(height: 12),
               
               TapScale(
-                onTap: () {
-                  // Simulate document upload
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Document selected successfully!'), backgroundColor: AppColors.primary)
-                  );
-                  setState(() => _documentUploaded = true);
-                },
+                onTap: _pickDocument,
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 24),
@@ -156,6 +171,8 @@ class _BusinessVerificationState extends State<BusinessVerification> {
           child: ElevatedButton(
             onPressed: _isValid
                 ? () {
+                    // Save business name to AppState
+                    context.read<AppState>().updateProfile(name: _nameCtrl.text.trim());
                     // Verification complete! Go to employer dashboard
                     Navigator.pushReplacementNamed(context, '/employer-home');
                   }
