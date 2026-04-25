@@ -29,14 +29,9 @@ class RoleSelection extends StatelessWidget {
               border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
             child: Center(
-              child: Container(
-                width: 80, height: 80,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: AppShadows.card,
-                ),
-                child: const Icon(Icons.handshake_rounded, size: 48, color: Colors.white),
+              child: CustomPaint(
+                size: const Size(200, 150),
+                painter: _IllustrationPainter(),
               ),
             ),
           ),
@@ -67,7 +62,7 @@ class RoleSelection extends StatelessWidget {
                   iconWidget: Container(
                     width: 52, height: 52,
                     decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primaryLight),
-                    child: const Icon(Icons.person, size: 24, color: AppColors.primaryDark),
+                    child: const Center(child: Icon(Icons.person, size: 24, color: AppColors.primaryDark)),
                   ),
                   title: LocalizationService.translate('looking_for_work', lang),
                   subtitle: LocalizationService.translate('looking_for_work_desc', lang),
@@ -78,7 +73,7 @@ class RoleSelection extends StatelessWidget {
                       child: const Text('FREE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
                     ),
                     const SizedBox(width: 6),
-                    const Icon(Icons.chevron_right, size: 18, color: AppColors.primary),
+                    const Text('➔', style: TextStyle(fontSize: 18, color: AppColors.primary)),
                   ]),
                 ),
                 const SizedBox(height: 16),
@@ -91,11 +86,11 @@ class RoleSelection extends StatelessWidget {
                   iconWidget: Container(
                     width: 52, height: 52,
                     decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.info.withOpacity(0.1)),
-                    child: const Icon(Icons.business_center, size: 24, color: AppColors.info),
+                    child: const Center(child: Icon(Icons.business_center, size: 24, color: AppColors.info)),
                   ),
                   title: LocalizationService.translate('im_hiring', lang),
                   subtitle: LocalizationService.translate('im_hiring_desc', lang),
-                  trailing: const Icon(Icons.chevron_right, size: 18, color: AppColors.caption),
+                  trailing: const Text('➔', style: TextStyle(fontSize: 18, color: AppColors.caption)),
                 ),
               ]),
             ),
@@ -165,5 +160,31 @@ class _RoleCard extends StatelessWidget {
     );
   }
 }
+class _IllustrationPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
 
+    // Background circles
+    canvas.drawCircle(Offset(cx, cy), 60, Paint()..color = AppColors.primary.withOpacity(0.1));
+    canvas.drawCircle(Offset(cx, cy), 40, Paint()..color = AppColors.primary.withOpacity(0.2));
 
+    // Worker block
+    final workerPaint = Paint()..color = AppColors.primary;
+    canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(cx - 40, cy - 20, 30, 40), const Radius.circular(6)), workerPaint);
+
+    // Employer block
+    final employerPaint = Paint()..color = AppColors.info;
+    canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(cx + 10, cy - 30, 30, 50), const Radius.circular(6)), employerPaint);
+
+    // Dashed line connecting
+    final dashPaint = Paint()..color = AppColors.text..strokeWidth = 3..strokeCap = StrokeCap.round;
+    for (double x = cx - 10; x < cx + 10; x += 8) {
+      canvas.drawLine(Offset(x, cy), Offset(x + 4, cy), dashPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}

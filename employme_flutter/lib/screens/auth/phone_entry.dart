@@ -177,6 +177,7 @@ class _PhoneEntryState extends State<PhoneEntry> {
             border: InputBorder.none,
             fillColor: Colors.transparent,
             filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 14),
           ),
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           onChanged: (v) {
