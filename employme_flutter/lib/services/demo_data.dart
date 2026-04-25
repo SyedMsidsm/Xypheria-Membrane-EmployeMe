@@ -32,6 +32,7 @@ class DemoData {
   static const List<Map<String, dynamic>> jobs = [
     {
       'icon': Icons.storefront,
+      'emoji': '🏪',
       'title': 'Shop Assistant',
       'title_kn': 'ಅಂಗಡಿ ಸಹಾಯಕ',
       'company': 'Sri Ganesh Provision Store',
@@ -45,9 +46,14 @@ class DemoData {
       'distance': '6 min walk',
       'verified': true,
       'isUrgent': true,
+      'description': 'Help manage a busy provision store in the heart of Kodialbail. Responsibilities include assisting customers, organizing shelves, handling billing, and maintaining cleanliness.',
+      'requirements': ['Kannada speaking', 'Basic math for billing', 'Honest & punctual', 'Can lift 10kg boxes'],
+      'timing': '9:00 AM - 6:00 PM',
+      'peopleNeeded': 2,
     },
     {
       'icon': Icons.restaurant,
+      'emoji': '🍳',
       'title': 'Kitchen Helper',
       'title_kn': 'ಅಡುಗೆ ಸಹಾಯಕ',
       'company': 'Hotel Udupi Delights',
@@ -61,9 +67,14 @@ class DemoData {
       'distance': '12 min walk',
       'verified': true,
       'isUrgent': false,
+      'description': 'Assist the head chef at Hotel Udupi Delights with food preparation, washing utensils, maintaining kitchen hygiene, and serving meals during peak hours.',
+      'requirements': ['Basic cooking knowledge', 'Hygiene awareness', 'Available for morning shift', 'Team player'],
+      'timing': '6:00 AM - 2:00 PM',
+      'peopleNeeded': 3,
     },
     {
       'icon': Icons.local_shipping,
+      'emoji': '🚚',
       'title': 'Delivery Partner',
       'title_kn': 'ಡೆಲಿವರಿ ಪಾಲುದಾರ',
       'company': 'QuickMart Grocery',
@@ -77,6 +88,10 @@ class DemoData {
       'distance': '18 min walk',
       'verified': false,
       'isUrgent': true,
+      'description': 'Deliver grocery orders to customers within a 5km radius of the QuickMart store. Must have own bicycle or two-wheeler. Flexible hours with bonus for extra deliveries.',
+      'requirements': ['Own bicycle or two-wheeler', 'Know local area well', 'Smartphone with GPS', 'Physically fit'],
+      'timing': '10:00 AM - 8:00 PM (Flexible)',
+      'peopleNeeded': 5,
     },
     {
       'emoji': '🧹',

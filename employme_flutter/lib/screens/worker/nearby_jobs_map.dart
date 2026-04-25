@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../providers/app_state.dart';
-import '../../services/demo_data.dart';
 
 class NearbyJobsMap extends StatefulWidget {
   const NearbyJobsMap({super.key});
@@ -67,6 +66,13 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
               'salary': '${j['salary']}${j['period']}',
               'urgent': j['isUrgent'],
               'verified': j['verified'],
+              'description': j['description'],
+              'requirements': j['requirements'],
+              'timing': j['timing'],
+              'peopleNeeded': j['peopleNeeded'],
+              'location': j['location'],
+              'type': j['type'],
+              'period': j['period'],
             }).toList();
 
       _dynamicJobs = source.asMap().entries.map((e) {
@@ -102,13 +108,6 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
     });
   }
 
-  IconData _getIconForCategory(String cat) {
-    if (cat.contains('Shop') || cat.contains('Retail')) return Icons.storefront;
-    if (cat.contains('Delivery')) return Icons.local_shipping;
-    if (cat.contains('Cook') || cat.contains('Food')) return Icons.restaurant;
-    return Icons.construction;
-  }
-
   List<Map<String, dynamic>> get _filteredJobs {
     if (_filter == 'All') return _dynamicJobs;
     return _dynamicJobs.where((j) {
@@ -126,7 +125,6 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
       return true;
     }).toList();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,7 +264,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
             border: Border.all(color: AppColors.primary, width: 2),
           ),
           alignment: Alignment.center,
-          child: Icon(item['icon'] as IconData, size: 18, color: AppColors.primaryDark),
+          child: Text(item['emoji'] ?? '👷', style: const TextStyle(fontSize: 18)),
         ),
       ]),
     );
@@ -396,7 +394,7 @@ class _NearbyJobsMapState extends State<NearbyJobsMap> {
                 width: 44, height: 44,
                 decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(AppRadius.sm)),
                 alignment: Alignment.center,
-                child: Icon(item['icon'] as IconData, size: 24, color: AppColors.primaryDark),
+                child: Text(item['emoji'] ?? '👷', style: const TextStyle(fontSize: 24)),
               ),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

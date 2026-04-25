@@ -3,7 +3,6 @@ import '../services/localization_service.dart';
 import '../models/job_posting.dart';
 import '../services/demo_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState extends ChangeNotifier {
   // ── Auth & User ──
@@ -11,7 +10,6 @@ class AppState extends ChangeNotifier {
   String _role = ''; // 'worker' or 'employer'
   String _phone = '';
   bool _isLoggedIn = false;
-  final Map<String, dynamic> _chatSubscriptions = {}; // Changed to a dummy map to avoid errors elsewhere if any
 
   AppState() {
     _loadPersistedState();
